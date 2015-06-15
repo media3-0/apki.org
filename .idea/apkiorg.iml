@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?> 
 <module type="RUBY_MODULE" version="4">
   <component name="FacetManager">
     <facet type="RailsFacetType" name="Ruby on Rails">
@@ -117,7 +117,7 @@
     <orderEntry type="library" scope="PROVIDED" name="bootstrap-sass (v3.3.4.1, Remote:ruby-2.2.1-p85) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bson (v2.3.0, Remote:ruby-2.2.1-p85) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="builder (v3.2.2, Remote:ruby-2.2.1-p85) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.10.3, Remote:ruby-2.2.1-p85) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.8.4, Remote:ruby-2.2.1-p85) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="byebug (v5.0.0, Remote:ruby-2.2.1-p85) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coderay (v1.1.0, Remote:ruby-2.2.1-p85) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coffee-rails (v4.1.0, Remote:ruby-2.2.1-p85) [gem]" level="application" />
