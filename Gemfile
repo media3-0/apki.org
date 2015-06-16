@@ -22,11 +22,34 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-gem "mongoid", "~> 4"
+gem 'sprockets-rails', github: 'rails/sprockets-rails'
 
+# rails_admin
+gem 'rails_admin'
+
+# MongoDB
+gem 'mongoid', '~> 4'
+
+# kompilator typescript
 gem 'typescript-rails'
+
+#tłumaczenia dla rails
 gem 'rails-i18n'
+
+# logowanie/rejestracja github
 gem 'omniauth-github'
+
+# edytor markdown
+gem 'pagedown-bootstrap-rails'
+
+# edytor html do rails_admin
+gem 'bootstrap-wysihtml5-rails', '> 0.3.1.24'
+
+# elastyczne formularze
+gem 'simple_form'
+
+# FontAwsome
+gem 'font-awesome-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

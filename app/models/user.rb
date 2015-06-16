@@ -1,6 +1,8 @@
 class User
   include Mongoid::Document
 
+  validates :name, :uid, presence: true
+
   field :provider, type: String
   field :uid, type: String
   field :name, type: String
