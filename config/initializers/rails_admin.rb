@@ -37,13 +37,13 @@ RailsAdmin.config do |config|
 
   config.included_models = ['User']
 
-  config.model User do
-    edit do
-      field :name, :wysihtml5 do
-        config_options toolbar: { fa: true }, # use font-awesome instead of glyphicon
-                       html: true, # enables html editor
-                       parserRules: { tags: { p:1 } } # support for <p> in html mode
-      end
-    end
-  end
+  #config.model User do
+  #  edit do
+  #    field :name, :wysihtml5 do
+  #      config_options toolbar: { fa: true }, # use font-awesome instead of glyphicon
+  #                     html: true, # enables html editor
+  #                     parserRules: { tags: { p:1 } } # support for <p> in html mode
+  #    end
+  #  end
+  #end
 end

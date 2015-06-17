@@ -51,6 +51,9 @@ gem 'simple_form'
 # FontAwsome
 gem 'font-awesome-rails'
 
+# API GitHub - octokit (oficjalne)
+gem 'octokit', '~> 3'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
