@@ -54,6 +54,9 @@ gem 'font-awesome-rails'
 # API GitHub - octokit (oficjalne)
 gem 'octokit', '~> 3'
 
+# cachowanie zapytań http robiony przez faraday (używane przez octokit) https://github.com/plataformatec/faraday-http-cache
+gem 'faraday-http-cache'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -65,7 +68,7 @@ gem 'octokit', '~> 3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  # gem 'byebug'
 
   gem 'better_errors'
   gem 'quiet_assets'
