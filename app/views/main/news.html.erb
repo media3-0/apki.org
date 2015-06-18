@@ -1,0 +1,7 @@
+<h1>Aktualności</h1>
+<ul>
+<%- for single in @news -%>
+    <li><%= single.title -%></li>
+<%- end -%>
+</ul>
+<%= paginate @news -%>

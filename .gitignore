@@ -38,3 +38,5 @@ bower.json
 
 /app/assets/javascripts/src/*.js
 /app/assets/javascripts/src/*.js.map
+/public/assets
+/public/uploads

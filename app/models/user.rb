@@ -12,6 +12,14 @@ class User
   field :urls, type: Hash
   field :account_type, type: Symbol # :student :teacher :moderator :admin
 
+  has_many :news
+
+  after_initialize :init
+
+  def init
+    self.account_type ||= :student
+  end
+
   def self.create_with_omniauth(auth)
     create! do |user|
       user.provider = auth['provider']
@@ -31,6 +39,6 @@ class User
   end
 
   def account_type_enum
-    ['student', 'teacher', 'moderator', 'admin']
+    %w(student teacher moderator admin)
   end
 end
