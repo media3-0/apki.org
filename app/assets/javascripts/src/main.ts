@@ -8,7 +8,7 @@ module ApkiOrg {
 
         }
         initEditor(langId:string){
-            this.editor = new Editor.EditorManager('hello', langId);
+            this.editor = new Editor.EditorManager('editorTest', langId);
         }
         getEditor(): Editor.EditorManager{
             return this.editor;

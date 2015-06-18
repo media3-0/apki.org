@@ -15,3 +15,21 @@
 @import "bootstrap";
 @import "pagedown_bootstrap";
 @import "font-awesome";
+
+.code-editor {
+  position: absolute;
+  top: 0;
+  width:100%;
+  height:500px;
+  left: 0;
+  background-color: rgba(0, 0, 41, 0.86);
+}
+.readonly-highlight{
+  background-color: rgb(188, 25, 8) !important;
+  position: absolute;
+  z-index: 99999;
+  border: 1px black solid;
+}
+header{
+  margin-top:60px;
+}

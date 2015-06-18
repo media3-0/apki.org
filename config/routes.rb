@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   get 'main/index'
+  get 'main/test'
   root 'main#index'
 
   get '/auth/:provider/callback' => 'sessions#create'

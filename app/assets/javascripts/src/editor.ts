@@ -8,6 +8,8 @@ module Editor {
         private ace:any;
         private _disabled_ranges:any[] = Array();
         constructor(divId, langId: string) {
+            ace.config.set("basePath", "/ace");
+
             this.div = $('#'+divId);
             this.ace = ace.edit(divId);
             this.ace.setTheme("ace/theme/monokai");

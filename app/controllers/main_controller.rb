@@ -4,4 +4,6 @@ class MainController < ApplicationController
       @user = current_user
     end
   end
+  def test
+  end
 end
