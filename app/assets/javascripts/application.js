@@ -14,5 +14,9 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
-//= require src/app.js
-//= require vendor/ace/ace.js
+//= require pagedown_bootstrap
+//= require pagedown_init
+//= require vendor/ace/ace
+//
+//= require src/main
+//= require src/editor

@@ -36,6 +36,9 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+  # Jeżeli nie używamy dziedziczenia w MongoDB można ustawić na false (wzrost wydajności w dev)
+  config.mongoid.preload_models = false
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end

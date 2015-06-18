@@ -1,0 +1,12 @@
+<h1>Strona główna</h1>
+<p>Witaj na stronie głównej</p>
+<%- if current_user -%>
+    <p>Zalogowano jako: <%= current_user.name -%></p>
+    <p><%= link_to 'Wyloguj', signout_path -%></p>
+    <%= simple_form_for :user do |f| %>
+        <%= f.input :name, as: :pagedown, input_html: { preview: true, rows: 20 } %>
+        <%= f.button :submit %>
+    <% end %>
+<%- else -%>
+    <p><%= link_to 'Zaloguj za pomocą GitHub', '/auth/github' -%></p>
+<%- end -%>
