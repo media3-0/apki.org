@@ -1,7 +1,7 @@
 class User
   include Mongoid::Document
 
-  validates :name, :uid, presence: true
+  validates :name, :uid, :account_type, presence: true
 
   field :provider, type: String
   field :uid, type: String
@@ -10,6 +10,7 @@ class User
   field :image, type: String
   field :nickname, type: String
   field :urls, type: Hash
+  field :account_type, type: Symbol # :student :teacher :moderator :admin
 
   def self.create_with_omniauth(auth)
     create! do |user|
@@ -21,5 +22,15 @@ class User
       user.nickname = auth['info']['nickname']
       user.urls = auth['info']['urls']
     end
+  end
+
+  public
+
+  def is_admin?
+    self.account_type == :admin
+  end
+
+  def account_type_enum
+    ['student', 'teacher', 'moderator', 'admin']
   end
 end

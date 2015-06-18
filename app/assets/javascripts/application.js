@@ -18,5 +18,6 @@
 //= require pagedown_init
 //= require vendor/ace/ace
 //
-//= require src/main
 //= require src/editor
+//= require src/main
+
