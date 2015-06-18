@@ -39,15 +39,5 @@ RailsAdmin.config do |config|
     # history_show
   end
 
-  config.included_models = ['User']
-
-  #config.model User do
-  #  edit do
-  #    field :name, :wysihtml5 do
-  #      config_options toolbar: { fa: true }, # use font-awesome instead of glyphicon
-  #                     html: true, # enables html editor
-  #                     parserRules: { tags: { p:1 } } # support for <p> in html mode
-  #    end
-  #  end
-  #end
+  config.included_models = %w(User News)
 end

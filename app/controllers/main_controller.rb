@@ -1,8 +1,10 @@
 class MainController < ApplicationController
   def index
-    if current_user
-      @user = current_user
-    end
+    @user = current_user if current_user
+  end
+
+  def news
+    @news = News.order_by(created_at: 'desc').page params[:page]
   end
   def test
   end

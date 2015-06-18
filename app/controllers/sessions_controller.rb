@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   def create
     auth = request.env['omniauth.auth']
-    if User.where(provider: auth['provider'], uid: auth['uid']).exists? then
+    if User.where(provider: auth['provider'], uid: auth['uid']).exists?
       user = User.find_by(provider: auth['provider'], uid: auth['uid'])
     else
       user = User.create_with_omniauth(auth)

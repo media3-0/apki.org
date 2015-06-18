@@ -43,7 +43,13 @@ gem 'omniauth-github'
 gem 'pagedown-bootstrap-rails'
 
 # edytor html do rails_admin
-gem 'bootstrap-wysihtml5-rails', '> 0.3.1.24'
+gem 'ckeditor'
+# wgrywanie obrazków i plików
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+gem 'mini_magick'
+
+# paginator
+gem 'kaminari'
 
 # elastyczne formularze
 gem 'simple_form'
