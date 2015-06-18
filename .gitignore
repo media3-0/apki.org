@@ -38,3 +38,7 @@ bower.json
 /cookbooks
 
 /.idea
+/_tools
+
+/app/assets/javascripts/src/*.js
+/app/assets/javascripts/src/*.js.map

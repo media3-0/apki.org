@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
-//= require test
+//= require src/app.js
+//= require vendor/ace/ace.js
