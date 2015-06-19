@@ -22,7 +22,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Logo tutaj</a>
+                <a class="navbar-brand" href="#">apki.org</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -44,15 +44,22 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ikona Usera <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Moje konto</a></li>
-                            <li><a href="#">Moje projekty</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">Wyloguj</a></li>
-                        </ul>
-                    </li>
+                    <%- if current_user -%>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                              <%= current_user.name -%>
+                              <img src="<%= current_user.image -%>" height="32" alt="ikona użytkownika" style="margin-top: -7px; margin-bottom: -7px;"><span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Moje konto</a></li>
+                                <li><a href="#">Moje projekty</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><%= link_to 'Wyloguj', signout_path -%></li>
+                            </ul>
+                        </li>
+                    <%- else -%>
+                        <li><%= link_to 'Zaloguj się', '/auth/github' -%></li>
+                    <%- end -%>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

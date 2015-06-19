@@ -2,7 +2,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # ustawienia miniprofilera
-  Rack::MiniProfiler.config.position = 'right'
+  Rack::MiniProfiler.config.position = 'left'
   Rack::MiniProfiler.config.skip_paths ||= []
   Rack::MiniProfiler.config.skip_paths << '/admin'
 
