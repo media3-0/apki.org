@@ -1,7 +1,7 @@
 class User
   include Mongoid::Document
 
-  validates :name, :uid, :account_type, presence: true
+  validates :nickname, :uid, :account_type, presence: true
 
   field :provider, type: String
   field :uid, type: String
@@ -14,13 +14,7 @@ class User
   field :profile_description
 
   has_many :news
-  has_one :school
-
-  after_initialize :init
-
-  def init
-    self.account_type ||= :student
-  end
+  belongs_to :school
 
   def self.create_with_omniauth(auth)
     create! do |user|
@@ -31,6 +25,7 @@ class User
       user.image = auth['info']['image']
       user.nickname = auth['info']['nickname']
       user.urls = auth['info']['urls']
+      user.account_type ||= :student
     end
   end
 

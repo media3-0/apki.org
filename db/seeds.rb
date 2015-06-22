@@ -5,3 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+puts 'Tworzenie użytkowników'
+10.times do |n|
+  User.create!(uid: n.to_s, nickname: "nickname#{n}", account_type: :student)
+end
+puts 'Użytkownicy stworzeni'

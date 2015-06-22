@@ -9,7 +9,7 @@
 
         <!-- Author -->
         <p class="lead">
-          by <a href="#"><%= single.user.name -%></a>
+          autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a>
         </p>
 
         <hr>
