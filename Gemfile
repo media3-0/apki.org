@@ -76,6 +76,9 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   # gem 'byebug'
 
+  # wydajniejszy serwer lokalny
+  gem 'thin'
+
   gem 'better_errors'
   gem 'quiet_assets'
   gem 'rails-footnotes', '~> 4.0'

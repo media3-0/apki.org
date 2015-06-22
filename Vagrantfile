@@ -12,6 +12,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :forwarded_port, guest: 3000, host: 3000
   config.vm.network :forwarded_port, guest: 27017, host: 27018
+  config.vm.network :private_network, ip: '192.168.50.50'
+
+  # Dla niektórych przypadków wydajnościowo może pomóc wyłączenie DnsLookup (WEBrick only)
+  # http://stackoverflow.com/questions/19278596/running-rails-very-slow-inside-virtual-box-ubuntu-12-04/19284483#19284483
+
+  if !Gem.win_platform? # dla unixów ustawiamy system nfs zamiast shared folder. Znaczne zwiększenie wydajności
+    config.vm.synced_folder '.', '/vagrant', nfs: true 
+  end
 
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
