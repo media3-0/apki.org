@@ -1,0 +1,7 @@
+<h3>Edycja profilu użytkownika</h3>
+<%= simple_form_for @user,
+    url: url_for(action: 'edit_profile', controller: 'user'),
+    method: :post do |f| %>
+    <%= f.input :profile_description, label: 'Opis profilu:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
+    <%= f.button :submit, value: 'Aktualizuj' %>
+<% end %>

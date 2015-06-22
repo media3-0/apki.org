@@ -51,7 +51,7 @@
                               <img src="<%= current_user.image -%>" height="32" alt="ikona użytkownika" style="margin-top: -7px; margin-bottom: -7px;"><span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Moje konto</a></li>
+                                <li><%= link_to 'Mój profil', user_edit_profile_path -%></li>
                                 <li><a href="#">Moje projekty</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><%= link_to 'Wyloguj', signout_path -%></li>

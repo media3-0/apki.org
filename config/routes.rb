@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'user/profile'
+  get 'user/edit_profile'
+  post 'user/edit_profile'
+
   mount Ckeditor::Engine => '/ckeditor'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   get 'main/index'

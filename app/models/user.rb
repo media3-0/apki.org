@@ -11,6 +11,7 @@ class User
   field :nickname, type: String
   field :urls, type: Hash
   field :account_type, type: Symbol # :student :teacher :moderator :admin
+  field :profile_description
 
   has_many :news
 
