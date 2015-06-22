@@ -1,0 +1,9 @@
+<h3>Edycja profilu szkoły</h3>
+<%= simple_form_for @school,
+                    url: url_for(action: 'edit_profile', controller: 'school'),
+                    method: :post do |f| %>
+    <%= f.input :name, label: 'Nazwa szkoły:' %>
+    <%= f.input :description, label: 'Opis profilu:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
+    <%= f.association :users, collection: @users, label_method: :nickname, value_method: :id, label: 'Uczniowie' -%>
+    <%= f.button :submit, value: 'Aktualizuj' %>
+<% end %>

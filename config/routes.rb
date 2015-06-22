@@ -1,15 +1,18 @@
 Rails.application.routes.draw do
 
-  get 'user/profile'
+  get 'school/profile/:id', to: 'school#profile', as: 'school_profile_view'
+  get 'school/edit_profile'
+  post 'school/edit_profile'
+
+  get 'user/profile/:id', to: 'user#profile', as: 'profile_view'
   get 'user/edit_profile'
   post 'user/edit_profile'
 
   mount Ckeditor::Engine => '/ckeditor'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  get 'main/index'
   get 'main/test'
   root 'main#index'
-  get 'main/news'
+  get 'news', to: 'main#news'
   get 'main/forms_test'
 
   get '/auth/:provider/callback' => 'sessions#create'

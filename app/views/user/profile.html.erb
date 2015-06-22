@@ -1,2 +1,3 @@
-<h1>User#profile</h1>
-<p>Find me in app/views/user/profile.html.erb</p>
+<h3>Profil użytkownika: <%= @user.nickname -%></h3>
+
+<%= raw parse_markdown(@user.profile_description) -%>

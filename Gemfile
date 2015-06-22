@@ -42,6 +42,9 @@ gem 'omniauth-github'
 # edytor markdown
 gem 'pagedown-bootstrap-rails'
 
+# parser markdown
+gem 'kramdown'
+
 # edytor html do rails_admin
 gem 'ckeditor'
 # wgrywanie obrazków i plików

@@ -1,8 +1,9 @@
 class UserController < ApplicationController
 
-  before_filter :is_logged_in, only: [ 'edit_profile']
+  before_filter :current_user, only: [ :edit_profile ]
 
   def profile
+    @user = User.find(params[:id])
   end
 
   def edit_profile
@@ -13,10 +14,5 @@ class UserController < ApplicationController
       @user.update_attributes!(params[:user].permit(:profile_description))
       flash[:notice] = 'Zapisano'
     end
-  end
-
-  private
-  def is_logged_in
-    current_user
   end
 end
