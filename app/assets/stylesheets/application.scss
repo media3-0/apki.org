@@ -33,3 +33,84 @@
 header{
   margin-top:60px;
 }
+.circular {
+  border-radius: 10px;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  display: inline-block;
+  background-position: center center;
+  vertical-align: middle;
+}
+
+@mixin doMrgPad($padMrg, $border, $px){
+  #{$padMrg}#{$border}: $px+px !important;
+}
+
+$i: 25;
+@while $i >= 0 {
+  .mrg#{$i}t { @include doMrgPad(margin, -top, $i); }
+  .mrg#{$i}b { @include doMrgPad(margin, -bottom, $i); }
+  .mrg#{$i}l { @include doMrgPad(margin, -left, $i); }
+  .mrg#{$i}r { @include doMrgPad(margin, -right, $i); }
+  .mrg#{$i}a { @include doMrgPad(margin, '', $i); }
+  .pad#{$i}t { @include doMrgPad(padding, -top, $i); }
+  .pad#{$i}b { @include doMrgPad(padding, -bottom, $i); }
+  .pad#{$i}l { @include doMrgPad(padding, -left, $i); }
+  .pad#{$i}r { @include doMrgPad(padding, -right, $i); }
+  .pad#{$i}a { @include doMrgPad(padding, '', $i); }
+  $i: $i - 5;
+}
+
+footer{
+  @extend .mrg20t;
+  @extend .jumbotron;
+
+  text-align: center;
+}
+
+.buttons{
+  @extend .jumbotron;
+  @extend .pad10a;
+
+  text-align:right;
+}
+
+form{
+  .caption{
+    @extend .jumbotron;
+    @extend .col-md-12;
+    @extend .pad10a;
+    @extend .mrg0a;
+
+    font-size: 18px;
+  }
+  .field-name{
+    @extend .col-md-3;
+    @extend .pad10a;
+
+    font-weight: bold;
+    text-align: right;
+
+    @media screen and (max-width: 992px) {
+      text-align: left;
+    }
+
+
+    small{
+      @extend .help-block;
+    }
+  }
+  .field-value{
+    @extend .col-md-9;
+    @extend .pad5a;
+    * {
+      width: 100%;
+    }
+  }
+
+  input[type="checkbox"]{
+    opacity: 0.999;
+  }
+}

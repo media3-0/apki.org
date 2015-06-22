@@ -13,6 +13,14 @@ module ApkiOrg {
         getEditor(): Editor.EditorManager{
             return this.editor;
         }
+        helperImageCircle(element:any, imgSrc:string, widthAndHeight:number){
+            jQuery(element).addClass('circular').css({
+                'background-image':'url('+imgSrc+')',
+                'border-radius':Math.round(widthAndHeight/2)+'px',
+                'width':widthAndHeight+'px',
+                'height':widthAndHeight+'px'
+            });
+        }
     }
 
 }
@@ -21,4 +29,8 @@ declare var apkiOrg;
 
 jQuery(function(){
     apkiOrg = new ApkiOrg.ApkiOrg();
+
+    //Layout:
+    apkiOrg.helperImageCircle('#loginImage', jQuery('#loginImage').data('src'), 35);
+
 });

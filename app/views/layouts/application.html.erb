@@ -46,9 +46,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     <%- if current_user -%>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle pad0b" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top:8px">
+                                <span id="loginImage" data-src="<%= current_user.image -%>" style="margin-right: 5px"></span>
                               <%= current_user.name -%>
-                              <img src="<%= current_user.image -%>" height="32" alt="ikona użytkownika" style="margin-top: -7px; margin-bottom: -7px;"><span class="caret"></span>
+                              <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><%= link_to 'Mój profil', user_edit_profile_path -%></li>
@@ -67,15 +68,21 @@
 </header>
 
 <article id="content" class="col-md-10 col-md-offset-1">
+
     <% flash.each do |name, msg| -%>
-        <%= content_tag :div, msg, class: name %>
+        <%- if (name == 'notice') -%>
+            <%- name='info' -%>
+        <%- end -%>
+        <%= content_tag :div, msg, class: 'alert alert-'+name %>
     <% end -%>
 
     <%= yield %>
 
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
 </article>
+
+<div class="clearfix"></div>
+<footer>
+&copy; Apki.org by Fundacja Media 3.0
+</footer>
 </body>
 </html>

@@ -7,4 +7,6 @@ class MainController < ApplicationController
   end
   def test
   end
+  def forms_test
+  end
 end

@@ -1,0 +1,65 @@
+<h3>Nagłówek</h3>
+
+    <form>
+        <div class="caption">Wszystkie rodzaje inputów</div>
+
+        <div class="form-group">
+            <div class="field-name">
+                <label for="test1">Pole tekstowe:</label>
+                <small>Dowolny opis pola... Opis w tym miejscu może być długi, na prawdę długi, wszystko będzie działało jak oczekiwane, raz dwa trzy testy yoyoyo!</small>
+            </div>
+            <div class="field-value">
+                <input type="text" id="test1" class="form-control" placeholder="Placeholder...">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="tTextarea">Długie pole tekstowe:</label>
+                <small>Czyli textarea. Ten ma przykładowo ustawione height.</small>
+            </div>
+            <div class="field-value">
+                <textarea id="tTextarea" class="form-control" style="height:100px"></textarea>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="tPwd">Hasło:</label>
+                <small>No, podaj podaj hasełko!</small>
+            </div>
+            <div class="field-value">
+                <input type="password" id="tPwd" class="form-control">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="tChk">Checkbox:</label>
+            </div>
+            <div class="field-value">
+                <label class="btn btn-primary active">
+                    <input type="checkbox" id="tChk" autocomplete="off" checked> Jakaś tam opcja (domyślnie wybrany)
+                </label>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="tFile">Wybierz plik:</label>
+            </div>
+            <div class="field-value">
+                <input type="file" id="tFile" class="form-control">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="buttons">
+            <input type="submit" class="btn btn-secondary btn-cancel" value="Odrzuć">
+            <input type="submit" class="btn btn-primary btn-save" value="Zapisz">
+        </div>
+    </form>

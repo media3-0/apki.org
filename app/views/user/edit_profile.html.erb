@@ -3,5 +3,8 @@
     url: url_for(action: 'edit_profile', controller: 'user'),
     method: :post do |f| %>
     <%= f.input :profile_description, label: 'Opis profilu:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
-    <%= f.button :submit, value: 'Aktualizuj' %>
+
+    <div class="buttons">
+        <%= f.button :submit, value: 'Aktualizuj', class: 'btn-primary btn-save' %>
+    </div>
 <% end %>

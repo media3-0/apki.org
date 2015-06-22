@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'main/test'
   root 'main#index'
   get 'main/news'
+  get 'main/forms_test'
 
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
