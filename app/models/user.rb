@@ -14,6 +14,7 @@ class User
   field :profile_description
 
   has_many :news
+  has_one :school
 
   after_initialize :init
 
