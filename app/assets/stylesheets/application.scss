@@ -15,6 +15,7 @@
 @import "bootstrap";
 @import "pagedown_bootstrap";
 @import "font-awesome";
+@import "bootstrap-select.css";
 
 .code-editor {
   position: absolute;
@@ -32,6 +33,12 @@
 }
 header{
   margin-top:60px;
+
+  .user-profile{
+    @extend .pad0b;
+
+    padding-top:8px !important;
+  }
 }
 .circular {
   border-radius: 10px;
@@ -105,12 +112,27 @@ form{
   .field-value{
     @extend .col-md-9;
     @extend .pad5a;
-    * {
+    > * {
       width: 100%;
     }
   }
+}
 
-  input[type="checkbox"]{
-    opacity: 0.999;
+//Overwrite:
+.form-control-feedback{
+  text-align: right;
+  margin-top: 5px;
+  margin-right: 15px;
+}
+
+.form-group{
+  &.has-error .btn-group .btn-primary{
+    @extend .btn-danger;
+  }
+  &.has-warning .btn-group .btn-primary{
+    @extend .btn-warning;
+  }
+  &.has-success .btn-group .btn-primary{
+    @extend .btn-success;
   }
 }

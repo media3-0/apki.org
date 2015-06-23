@@ -41,9 +41,34 @@
                 <label for="tChk">Checkbox:</label>
             </div>
             <div class="field-value">
-                <label class="btn btn-primary active">
-                    <input type="checkbox" id="tChk" autocomplete="off" checked> Jakaś tam opcja (domyślnie wybrany)
-                </label>
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="checkbox" id="tChk" autocomplete="off" checked> Jakaś tam opcja (domyślnie wybrany)
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="checkbox" id="tChk2" autocomplete="off"> Jakaś inna opcja (domyślnie odznaczona)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                Radio:
+            </div>
+            <div class="field-value">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary">
+                        <input type="radio" id="tRadio" autocomplete="off"> Opcja A
+                    </label>
+                    <label class="btn btn-primary active">
+                        <input type="radio" id="tRadio2" autocomplete="off" checked> Opcja B (wybrana)
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" id="tRadio3" autocomplete="off"> Opcja C
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -58,8 +83,212 @@
         </div>
 
         <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="tSelSimple">Wybór pojedynczy:</label>
+                <small>Dokumentacja wszystkich opcji: <a href="http://silviomoreto.github.io/bootstrap-select/">http://silviomoreto.github.io/bootstrap-select/</a>.</small>
+            </div>
+            <div class="field-value">
+                <select class="selectpicker" id="tSelSimple" data-width="100%">
+                    <option>Mustard</option>
+                    <option selected>Ketchup (domyślnie wybrany)</option>
+                    <option>Relish</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="tSelGroups">Wybór z grupami:</label>
+            </div>
+            <div class="field-value">
+                <select class="selectpicker" id="tSelGroups" data-width="100%">
+                    <optgroup label="Picnic">
+                        <option>Mustard</option>
+                        <option>Ketchup</option>
+                        <option>Relish</option>
+                    </optgroup>
+                    <optgroup label="Camping">
+                        <option>Tent</option>
+                        <option>Flashlight</option>
+                        <option>Toilet Paper</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="tSelMultiple">Wybór wielokrotny:</label>
+                <small>Np. Uczniów?</small>
+            </div>
+            <div class="field-value">
+                <select class="selectpicker" id="tSelMultiple" multiple data-width="100%">
+                    <option selected>Aga (domyślnie wybrana)</option>
+                    <option>Kuba</option>
+                    <option>Kuba</option>
+                    <option>Sławek</option>
+                    <option>Kamil</option>
+                    <option>Kamil</option>
+                    <option>Łukasz</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="clearfix"></div>
+        <div class="caption">Statusy / walidacja pól</div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-success has-feedback">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Status: OK:</label>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" placeholder="Placeholder...">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-warning has-feedback">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Status: ostrzeżenie:</label>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" placeholder="Placeholder...">
+                <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error has-feedback">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Status: błąd:</label>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" placeholder="Placeholder...">
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error auto-status-removal">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Status: błąd:</label>
+                <small>Z automatycznym usuwaniem dowolnego statusu przy kliknięciu na kontrolkę</small>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" placeholder="Placeholder...">
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error has-feedback">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Status: błąd:</label>
+                <small>Z opisem błędu</small>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" placeholder="Placeholder...">
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span class="help-block">Gościu a co to za dane, hęęę?</span>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Długie pole tekstowe:</label>
+                <small>Z błędem.</small>
+            </div>
+            <div class="field-value">
+                <textarea class="form-control" style="height:100px"></textarea>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Hasło:</label>
+                <small>Z błędem.</small>
+            </div>
+            <div class="field-value">
+                <input type="password" class="form-control">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Checkbox:</label>
+                <small>Z błędem.</small>
+            </div>
+            <div class="field-value">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="checkbox" autocomplete="off" checked> Jakaś tam opcja (domyślnie wybrany)
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="checkbox" autocomplete="off"> Jakaś inna opcja (domyślnie odznaczona)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-warning auto-status-removal">
+            <div class="field-name">
+                Radio:
+                <small>Z ostrzeżeniem. I auto usuwaniem statusu.</small>
+            </div>
+            <div class="field-value">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary">
+                        <input type="radio" autocomplete="off"> Opcja A
+                    </label>
+                    <label class="btn btn-primary active">
+                        <input type="radio" autocomplete="off" checked> Opcja B (wybrana)
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" autocomplete="off"> Opcja C
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Wybierz plik:</label>
+                <small>Z błędem.</small>
+            </div>
+            <div class="field-value">
+                <input type="file" class="form-control">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group has-error">
+            <div class="field-name">
+                <label for="TuPowinnoBycIDElementuAleMiSieNieChce">Wybór pojedynczy:</label>
+                <small>Z błędem.</small>
+            </div>
+            <div class="field-value">
+                <select class="selectpicker" data-width="100%">
+                    <option>Mustard</option>
+                    <option selected>Ketchup (domyślnie wybrany)</option>
+                    <option>Relish</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
         <div class="buttons">
-            <input type="submit" class="btn btn-secondary btn-cancel" value="Odrzuć">
-            <input type="submit" class="btn btn-primary btn-save" value="Zapisz">
+            <input type="submit" class="btn btn-lg btn-secondary btn-cancel" value="Odrzuć">
+            <input type="submit" class="btn btn-lg btn-primary btn-save" value="Zapisz">
         </div>
     </form>

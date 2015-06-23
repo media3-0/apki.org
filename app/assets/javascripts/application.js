@@ -17,6 +17,7 @@
 //= require pagedown_bootstrap
 //= require pagedown_init
 //= require vendor/ace/ace
+//= require vendor/bootstrap-select/bootstrap-select
+//= require vendor/bootstrap-select/i18n/defaults-pl_PL.min
 //
 //= require src/main
-
