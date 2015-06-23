@@ -136,3 +136,7 @@ form{
     @extend .btn-success;
   }
 }
+
+#all_footnotes{
+  @extend .jumbotron;
+}

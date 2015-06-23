@@ -1,4 +1,4 @@
-///<reference path="../vendor/jquery.d.ts" />
+///<reference path="../vendor/jquery/jquery.d.ts" />
 ///<reference path="editor.ts" />
 
 module ApkiOrg {
