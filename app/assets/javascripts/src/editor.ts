@@ -1,5 +1,4 @@
 ///<reference path="../vendor/jquery/jquery.d.ts" />
-///<reference path="../vendor/angularjs/angular.d.ts" />
 
 declare var ace: any; //Reference to ACE
 
