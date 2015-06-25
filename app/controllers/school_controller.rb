@@ -19,9 +19,11 @@ class SchoolController < ApplicationController
       # zatwierdzony formularz POST
       params[:school][:user_ids] << current_user.id.to_s # dodaj obecnego użytkownika do listy użytkowników
       params[:school][:user_ids].reject! { |c| c.empty? } # wyczyść puste pola
-      @school.update_attributes!(params[:school].permit(:name, :description, :user_ids => []))
-
-      flash[:notice] = 'Zapisano'
+      if @school.update_attributes(params[:school].permit(:name, :description, :user_ids => []))
+        flash[:notice] = 'Zapisano'
+      else
+        flash[:error] = 'Błąd podczas zapisu'
+      end
     end
   end
 

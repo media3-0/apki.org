@@ -11,8 +11,12 @@ class UserController < ApplicationController
 
     if params.include?(:user)
       #zatwierdzony formularz POST
-      @user.update_attributes!(params[:user].permit(:profile_description))
-      flash[:notice] = 'Zapisano'
+      if @user.update_attributes(params[:user].permit(:profile_description))
+        flash[:notice] = 'Zapisano'
+      else
+        flash[:error] = 'Błąd podczas zapisu'
+      end
+
     end
   end
 end

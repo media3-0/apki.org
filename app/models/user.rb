@@ -3,15 +3,15 @@ class User
 
   validates :nickname, :uid, :account_type, presence: true
 
-  field :provider, type: String
-  field :uid, type: String
-  field :name, type: String
-  field :email, type: String
-  field :image, type: String
   field :nickname, type: String
-  field :urls, type: Hash
+  field :email, type: String
+  field :name, type: String
   field :account_type, type: Symbol # :student :teacher :moderator :admin
+  field :uid, type: String
+  field :image, type: String
+  field :urls, type: Hash
   field :profile_description
+  field :provider, type: String
 
   has_many :news
   belongs_to :school
@@ -37,5 +37,19 @@ class User
 
   def account_type_enum
     %w(student teacher moderator admin)
+  end
+
+  rails_admin do
+    edit do
+      field :name
+      field :email
+      field :image
+      field :nickname
+      field :account_type
+      field :profile_description, :text
+    end
+    object_label_method do
+      :nickname
+    end
   end
 end

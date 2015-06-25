@@ -1,3 +1,3 @@
 <h3>Profil użytkownika: <%= @user.nickname -%></h3>
 
-<%= raw parse_markdown(@user.profile_description) -%>
+<%= raw parse_markdown(@user.profile_description) if @user.profile_description -%>
