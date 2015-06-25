@@ -1,3 +1,15 @@
 <h3>Profil użytkownika: <%= @user.nickname -%></h3>
 
 <%= raw parse_markdown(@user.profile_description) if @user.profile_description -%>
+
+<%- if @forum -%>
+<h4>Forum</h4>
+    <%- if @forum['title'] -%>
+        <h5>Tytuł na forum:</h5>
+        <p><%= @forum['title'] -%></p>
+    <%- end -%>
+    <h5>Link do konta na forum:</h5>
+    <p><a href="http://forum.apki.org/users/<%= @forum['username'] -%>/activity"><%= @forum['username'] -%></a></p>
+    <h5>Ostatnio widziany:</h5>
+    <p><%= @forum['last_seen_at'].to_datetime.strftime('%F %T') -%></p>
+<%- end -%>
