@@ -13,14 +13,12 @@ class SchoolController < ApplicationController
       @school = School.new
     end
 
-    @users = User.where(:id.ne => current_user.id)
-    # TODO : przefiltrować tablicę (uczniowie którzy nie mają żadnej szkoły lub mają obecną)
-    # @users.reject! { |user| user.school.id != @school.id if user.school != nil }
+    @users = @school.get_proper_user_list(current_user.id)
 
     if params.include?(:school)
       # zatwierdzony formularz POST
-      params[:school][:user_ids] << current_user.id.to_s
-      params[:school][:user_ids].reject! { |c| c.empty? }
+      params[:school][:user_ids] << current_user.id.to_s # dodaj obecnego użytkownika do listy użytkowników
+      params[:school][:user_ids].reject! { |c| c.empty? } # wyczyść puste pola
       @school.update_attributes!(params[:school].permit(:name, :description, :user_ids => []))
 
       flash[:notice] = 'Zapisano'
