@@ -14,6 +14,7 @@ class User
   field :provider, type: String
 
   has_many :news
+  has_many :educator_news
   belongs_to :school
 
   def self.create_with_omniauth(auth)

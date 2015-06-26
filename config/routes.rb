@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   get 'school/edit_profile'
   post 'school/edit_profile'
 
+  get 'school/educator_news'
+  post 'school/educator_news'
+  get 'school/all_news'
+  get 'school/news/:id', to: 'school#view_news', as: 'school_view_news'
+
   get 'user/profile/:id', to: 'user#profile', as: 'profile_view'
   get 'user/edit_profile'
   post 'user/edit_profile'

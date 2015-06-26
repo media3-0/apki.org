@@ -63,6 +63,8 @@ module ICourse {
 
         //Lessions:
         lessions            :ILesson[];         //Lessions in course
+
+        // TODO : Zależności wstecz do innych kursów (prawdopodobnie jako tablica ID kursów)
     }
 
     //Communication interfaces:
