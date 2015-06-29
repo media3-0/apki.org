@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/bdrazhzhov/typescript-src-ruby.git
+  revision: 48d7e3028c8ffd906da36980c3bb88b6ff8adba8
+  specs:
+    typescript-src (1.0.1.3)
+
+GIT
   remote: git://github.com/rails/sprockets-rails.git
   revision: ae602d27bb951902d8b84bbde636cf11c66eae5a
   specs:
@@ -263,7 +269,6 @@ GEM
       railties
       tilt
       typescript-node (>= 1.1.0)
-    typescript-src (1.0.1.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.1)
@@ -310,6 +315,7 @@ DEPENDENCIES
   thin
   turbolinks
   typescript-rails
+  typescript-src!
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
 

@@ -32,6 +32,7 @@ gem 'mongoid', '~> 4'
 
 # kompilator typescript
 gem 'typescript-rails'
+gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
 
 #tłumaczenia dla rails
 gem 'rails-i18n'
