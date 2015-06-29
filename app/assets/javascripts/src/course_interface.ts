@@ -1,7 +1,7 @@
 //(c) Jakub Krol 2015
 
-module ICourse {
-    interface IAchievement{
+module ApkiOrg.CourseMgr {
+    export interface IAchievement{
         ID                  :number;            //Unique ID of achievement
 
         title               :string;            //Title of achievement
@@ -9,7 +9,7 @@ module ICourse {
         points              :number;            //Number of points to add (DONT USE IT AT SERVER SIDE, use ID of achievement instead)
     }
 
-    interface IQuiz{
+    export interface IQuiz{
         ID                  :number;            //Unique ID of quiz
 
         question            :string;            //Content of question (HTML)
@@ -18,14 +18,14 @@ module ICourse {
         achievement         :IAchievement;      //Achievement for finished quiz (null if none)
     }
 
-    interface ICodeLockCoord{
+    export interface ICodeLockCoord{
         rowStart            :number;            //Beginning of code lock - starting row
         colStart            :number;            //Beginning of code lock - starting column
         rowEnd              :number;            //End of code lock - ending row
         colEnd              :number;            //End of code lock - ending column
     }
 
-    interface IExercise{
+    export interface IExercise{
         ID                  :number;            //Unique ID of exercise
 
         content_of_exercise :string;            //Content of exercise (command what to do) (HTML)
@@ -37,7 +37,7 @@ module ICourse {
         achievement         :IAchievement;      //Achievement for finished exercise (null if none)
     }
 
-    interface ILesson{
+    export interface ILesson{
         ID                  :number;            //Unique ID of lesson
 
         title               :string;            //Title of lesson
@@ -49,7 +49,7 @@ module ICourse {
         achievement         :IAchievement;      //Achievement for finished lesson (null if none)
     }
 
-    interface ICourse{
+    export interface ICourse{
         //Constant Metadata
         ID                  :number;            //Unique ID of course
         title               :string;            //Title of the Course
@@ -62,33 +62,33 @@ module ICourse {
         finished            :boolean;           //True if course is finished
 
         //Lessions:
-        lessions            :ILesson[];         //Lessions in course
+        lessons            :ILesson[];         //Lessions in course
     }
 
     //Communication interfaces:
-    interface ICommSendExercise{
+    export interface ICommSendExercise{
         ID                  :number;            //Unique ID
         code                :string;            //Whole code
         user_input          :string;            //Whole user input (empty if not allowed)
     }
 
-    interface ICommRecvExercise{
+    export interface ICommRecvExercise{
         ID                  :number;            //Unique ID
         output              :string;            //Output of code / errors / console, whatever...
         is_correct          :boolean;           //True if output is correct, as expected
     }
 
-    interface ICommSendQuiz{
+    export interface ICommSendQuiz{
         ID                  :number;            //Unique ID
         answer_idx          :string;            //Answer idx
     }
 
-    interface ICommRecvQuiz{
+    export interface ICommRecvQuiz{
         ID                  :number;            //Unique ID
         is_correct          :boolean;           //True if answer is correct
     }
 
-    interface ICommSendAchievement{
+    export interface ICommSendAchievement{
         ID                  :number;            //Unique ID
     }
 }

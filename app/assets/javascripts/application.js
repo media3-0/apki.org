@@ -22,6 +22,7 @@
 //= require vendor/bootstrap-select/i18n/defaults-pl_PL.min
 //= require vendor/jspm/system@0.16.11.js
 //
+//= require src/angular_helpers
 //= require src/main
 //= require src/editor
 //= require src/course
