@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
 
-  resources :course_data_apis
+  namespace :course do
+    resources :course_data
+    resources :lessons
+    resources :exercises
+    resources :quizzes
+    resources :achievements
+  end
   get 'school/profile/:id', to: 'school#profile', as: 'school_profile_view'
   get 'school/edit_profile'
   post 'school/edit_profile'

@@ -87,9 +87,8 @@
   <% flash.each do |name, msg| -%>
       <%-
           # mapowanie niektórych nazw
-            if name == 'notice'
-              name = 'success'
-            end
+          name = 'success' if name == 'notice'
+          name = 'danger' if name == 'error'
       -%>
       <%= content_tag :div, msg, class: 'alert alert-'+name %>
   <% end -%>

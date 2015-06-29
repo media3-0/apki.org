@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CourseDataApiTest < ActiveSupport::TestCase
+class Course::QuizTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

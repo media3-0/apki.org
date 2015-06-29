@@ -1,6 +1,5 @@
 class SchoolController < ApplicationController
-  before_filter :current_user, only: [ :edit_profile, :educator_post ]
-  before_filter :is_teacher, only: [ :edit_profile, :educator_post  ]
+  before_action :is_teacher, only: [ :edit_profile, :educator_post ]
 
   def profile
     @school = School.find(params[:id])
@@ -58,10 +57,5 @@ class SchoolController < ApplicationController
 
   def all_news
     @news = EducatorNews.order_by(created_at: 'desc').page params[:page]
-  end
-
-  private
-  def is_teacher
-    current_user.account_type == :teacher
   end
 end
