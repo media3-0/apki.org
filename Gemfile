@@ -31,8 +31,9 @@ gem 'rails_admin'
 gem 'mongoid', '~> 4'
 
 # kompilator typescript
-gem 'typescript-rails'
-gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
+# gem 'typescript-rails'
+# gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
+# Na chwilę obecną rezygnujemy z kompilacji TypeScript po stronie serwera (typescipt-rails pracuje z mocno przestarzałą wersją TS)
 
 #tłumaczenia dla rails
 gem 'rails-i18n'
