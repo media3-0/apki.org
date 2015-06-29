@@ -1,6 +1,7 @@
 class Course::Lesson
   include Mongoid::Document
   include Mongoid::Timestamps
+  include JSONDataModel
 
   field :data, type: Hash
 
