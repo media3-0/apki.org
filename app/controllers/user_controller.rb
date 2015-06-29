@@ -1,6 +1,6 @@
 class UserController < ApplicationController
 
-  before_filter :current_user, only: [ :edit_profile ]
+  before_action :is_logged_in, only: [ :edit_profile ]
 
   def profile
     @user = User.find(params[:id])

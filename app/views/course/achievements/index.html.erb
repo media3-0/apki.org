@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Course Achievements</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @course_achievements.each do |course_achievement| %>
+      <tr>
+        <td><%= course_achievement.data %></td>
+        <td><%= link_to 'Show', course_achievement %></td>
+        <td><%= link_to 'Edit', edit_course_achievement_path(course_achievement) %></td>
+        <td><%= link_to 'Destroy', course_achievement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Achievement', new_course_achievement_path %>

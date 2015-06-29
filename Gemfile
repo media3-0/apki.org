@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.1'
+gem 'rails', '~> 4.2.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -31,8 +31,9 @@ gem 'rails_admin'
 gem 'mongoid', '~> 4'
 
 # kompilator typescript
-gem 'typescript-rails'
-gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
+# gem 'typescript-rails'
+# gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
+# Na chwilę obecną rezygnujemy z kompilacji TypeScript po stronie serwera (typescipt-rails pracuje z mocno przestarzałą wersją TS)
 
 #tłumaczenia dla rails
 gem 'rails-i18n'
