@@ -34,7 +34,10 @@
           <li <%- if current_page?(news_path) -%>class="active"<%- end -%>>
             <a href="<%= news_path -%>">Aktualności<%- if current_page?(news_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
           </li>
-          <li><a href="#">Forum</a></li>
+          <li <%- if current_page?(school_all_news_path) -%>class="active"<%- end -%>>
+            <a href="<%= school_all_news_path -%>">Nowości szkół<%- if current_page?(school_all_news_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
+          </li>
+          <li><a href="http://forum.apki.org/">Forum</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tu menu z podmenu <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -62,6 +65,7 @@
                   <%- if current_user.account_type == :teacher -%>
                       <li role="separator" class="divider"></li>
                       <li><%= link_to 'Profil szkoły', school_edit_profile_path -%></li>
+                      <li><%= link_to 'Nowy news', school_educator_news_path -%></li>
                   <%- end -%>
                   <li role="separator" class="divider"></li>
                   <li><%= link_to 'Wyloguj', signout_path -%></li>
@@ -81,6 +85,12 @@
 
 <article id="content" class="col-md-10 col-md-offset-1">
   <% flash.each do |name, msg| -%>
+      <%-
+          # mapowanie niektórych nazw
+            if name == 'notice'
+              name = 'success'
+            end
+      -%>
       <%= content_tag :div, msg, class: 'alert alert-'+name %>
   <% end -%>
 

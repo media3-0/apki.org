@@ -4,6 +4,6 @@
                     method: :post do |f| %>
     <%= f.input :name, label: 'Nazwa szkoły:' %>
     <%= f.input :description, label: 'Opis profilu:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
-    <%= f.association :users, collection: @users, label_method: :nickname, value_method: :id, label: 'Uczniowie' -%>
+    <%= f.association :users, collection: @users, label_method: :nickname, value_method: :id, label: 'Uczniowie', input_html: { class: "selectpicker", "data-width": "100%"} -%>
     <%= f.button :submit, value: 'Aktualizuj' %>
 <% end %>

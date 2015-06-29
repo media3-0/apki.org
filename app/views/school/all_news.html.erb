@@ -1,0 +1,28 @@
+<h1>Aktualności Szkół</h1>
+<%- for single in @news -%>
+    <div class="col-lg-8">
+
+      <!-- Blog Post -->
+
+      <!-- Title -->
+      <h1><%= link_to single.title, school_view_news_path(single) -%></h1>
+
+      <!-- Author -->
+      <p class="lead">
+        autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a>
+      </p>
+
+      <hr>
+
+      <!-- Date/Time -->
+      <p><span class="glyphicon glyphicon-time"></span> Opublikowane <%= single.created_at.strftime('%F %T') -%></p>
+
+
+      <hr>
+
+      <!-- Post Content -->
+      <%= raw parse_markdown(single.content) -%>
+      <hr>
+    </div>
+<%- end -%>
+<%= paginate @news -%>

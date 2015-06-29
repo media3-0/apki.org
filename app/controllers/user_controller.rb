@@ -4,6 +4,7 @@ class UserController < ApplicationController
 
   def profile
     @user = User.find(params[:id])
+    @forum = Discourse.instance.get_user @user.nickname
   end
 
   def edit_profile
@@ -11,8 +12,12 @@ class UserController < ApplicationController
 
     if params.include?(:user)
       #zatwierdzony formularz POST
-      @user.update_attributes!(params[:user].permit(:profile_description))
-      flash[:notice] = 'Zapisano'
+      if @user.update_attributes(params[:user].permit(:profile_description))
+        flash[:notice] = 'Zapisano'
+      else
+        flash[:error] = 'Błąd podczas zapisu'
+      end
+
     end
   end
 end

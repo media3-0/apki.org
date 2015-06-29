@@ -32,6 +32,7 @@ gem 'mongoid', '~> 4'
 
 # kompilator typescript
 gem 'typescript-rails'
+gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
 
 #tłumaczenia dla rails
 gem 'rails-i18n'
@@ -65,6 +66,9 @@ gem 'octokit', '~> 3'
 
 # cachowanie zapytań http robiony przez faraday (używane przez octokit) https://github.com/plataformatec/faraday-http-cache
 gem 'faraday-http-cache'
+
+# komunikacja z api forum
+gem 'discourse_api'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

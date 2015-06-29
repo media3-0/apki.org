@@ -1,2 +1,16 @@
-<h1>School#profile</h1>
-<p>Find me in app/views/school/profile.html.erb</p>
+<h3>Profil szkoły: <%= @school.name -%></h3>
+
+<%= raw parse_markdown(@school.description) if @school.description-%>
+
+<h4>Nauczyciel:</h4>
+<%- teacher = @school.users.where(account_type: :teacher).first -%>
+<%= link_to teacher.nickname, profile_view_path(teacher) -%>
+
+<h4>Lista uczniów:</h4>
+<ul>
+  <%- @school.users.each do |user| -%>
+      <%- if user.account_type == :student -%>
+        <li><%= link_to user.nickname, profile_view_path(user) -%></li>
+      <%- end -%>
+  <%- end -%>
+</ul>

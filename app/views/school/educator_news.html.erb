@@ -1,0 +1,11 @@
+<h3>News</h3>
+<%= simple_form_for @educator_news,
+                    url: url_for(action: 'educator_news', controller: 'school'),
+                    method: :post do |f| %>
+    <%- if @news_id -%>
+    <%= f.input :id, as: :hidden, :input_html => { :value => @news_id } -%>
+    <%- end -%>
+    <%= f.input :title, label: 'Tytuł:' %>
+    <%= f.input :content, label: 'Treść:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
+    <%= f.button :submit, value: 'Zatwierdź' %>
+<% end %>
