@@ -19,8 +19,7 @@ Rails.application.routes.draw do
   root 'main#index'
   get 'news', to: 'main#news'
   get 'main/forms_test'
-  get 'editor/index'
-
+  get 'course/index'
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
 

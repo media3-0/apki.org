@@ -24,49 +24,28 @@ var ApkiOrg;
 //(c) Jakub Krol 2015
 /// <reference path="course_interface.ts" />
 /// <reference path="../vendor/angularjs/angular.d.ts"/>
-/// <reference path="../vendor/angularjs/angular-route.d.ts"/>
 /// <reference path="angular_helpers"/>
 var ApkiOrg;
 (function (ApkiOrg) {
     var CourseMgr;
     (function (CourseMgr) {
-        var AngularConfig = (function () {
-            function AngularConfig($routeProvider) {
-                $routeProvider.when("/list", {
-                    templateUrl: "App/Templates/VideoList.html",
-                    controller: "TechVidsListCtrl"
-                })
-                    .when("/list/:id", {
-                    templateUrl: "App/Templates/VideoList.html",
-                    controller: "TechVidsListCtrl"
-                })
-                    .when("/add", {
-                    templateUrl: "App/Templates/AddVideo.html",
-                    controller: "AddTechVideoCtrl"
-                })
-                    .when("/edit/:id", {
-                    templateUrl: "App/Templates/EditVideo.html",
-                    controller: "EditTechVideoCtrl"
-                })
-                    .otherwise({
-                    redirectTo: '/list'
-                });
+        var myCtrl = (function () {
+            function myCtrl($scope) {
+                this.$scope = $scope;
+                $scope.firstName = "John";
+                $scope.lastName = "Doe";
+                $scope.fullName = function () {
+                    return $scope.firstName + " " + $scope.lastName;
+                };
             }
-            return AngularConfig;
+            myCtrl.$inject = [
+                '$scope'
+            ];
+            return myCtrl;
         })();
-        var AngularFactory = (function () {
-            function AngularFactory() {
-                //Logic of constructor
-            }
-            //        method1(): return -type { //Logic in the method
-            //        };
-            AngularFactory.MyClassFactory = function () {
-                return new AngularFactory();
-            };
-            return AngularFactory;
-        })();
-        var helper = new ApkiOrg.Angular.AngularHelper();
-        app = helper.initAngularApp('techVidsApp', ['ngRoute'], AngularConfig, 'myFactory', AngularFactory);
+        CourseMgr.myCtrl = myCtrl;
+        app = angular.module('myApp', []);
+        app.controller('myCtrl', myCtrl);
         var Achivement = (function () {
             function Achivement() {
             }
@@ -139,12 +118,6 @@ var ApkiOrg;
             return CommRecvQuiz;
         })();
         CourseMgr.CommRecvQuiz = CommRecvQuiz;
-        var CommSendAchievement = (function () {
-            function CommSendAchievement() {
-            }
-            return CommSendAchievement;
-        })();
-        CourseMgr.CommSendAchievement = CommSendAchievement;
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 ///<reference path="../vendor/jquery/jquery.d.ts" />

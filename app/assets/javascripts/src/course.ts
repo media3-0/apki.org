@@ -1,51 +1,36 @@
 //(c) Jakub Krol 2015
 /// <reference path="course_interface.ts" />
 /// <reference path="../vendor/angularjs/angular.d.ts"/>
-/// <reference path="../vendor/angularjs/angular-route.d.ts"/>
 /// <reference path="angular_helpers"/>
 
 declare var app:any;
 
 module ApkiOrg.CourseMgr {
-    class AngularConfig {
-        constructor($routeProvider: ng.route.IRouteProvider) {
-            $routeProvider.when("/list", {
-                templateUrl: "App/Templates/VideoList.html",
-                controller: "TechVidsListCtrl"
-            })
-                .when("/list/:id", {
-                    templateUrl: "App/Templates/VideoList.html",
-                    controller: "TechVidsListCtrl"
-                })
-                .when("/add", {
-                    templateUrl: "App/Templates/AddVideo.html",
-                    controller: "AddTechVideoCtrl"
-                })
-                .when("/edit/:id", {
-                    templateUrl: "App/Templates/EditVideo.html",
-                    controller: "EditTechVideoCtrl"
-                })
-                .otherwise({
-                    redirectTo: '/list'
-                });
+
+    export interface IAppCtrlScope extends ng.IScope {
+        firstName: string;
+        lastName: string;
+
+        fullName()
+    }
+
+    export class myCtrl {
+        public static $inject = [
+            '$scope'
+//            ,'appStorage'
+        ];
+        constructor(private $scope: IAppCtrlScope) {
+            $scope.firstName= "John";
+            $scope.lastName= "Doe";
+            $scope.fullName = () => {
+
+                return $scope.firstName+" "+$scope.lastName;
+            }
         }
     }
 
-    class AngularFactory {
-        constructor() {
-            //Logic of constructor
-        }
-
-//        method1(): return -type { //Logic in the method
-//        };
-
-        public static MyClassFactory() {
-            return new AngularFactory();
-        }
-    }
-
-    var helper = new ApkiOrg.Angular.AngularHelper();
-    app = helper.initAngularApp('techVidsApp', ['ngRoute'], AngularConfig, 'myFactory', AngularFactory);
+    app = angular.module('myApp', []);
+    app.controller('myCtrl', myCtrl);
 
     export class Achivement implements IAchievement{
         ID                  :number;            //Unique ID of achievement
@@ -156,9 +141,5 @@ module ApkiOrg.CourseMgr {
     export class CommRecvQuiz implements ICommRecvQuiz{
         ID                  :number;            //Unique ID
         is_correct          :boolean;           //True if answer is correct
-    }
-
-    export class CommSendAchievement implements ICommSendAchievement{
-        ID                  :number;            //Unique ID
     }
 }

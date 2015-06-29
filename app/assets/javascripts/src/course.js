@@ -1,52 +1,31 @@
 //(c) Jakub Krol 2015
 /// <reference path="course_interface.ts" />
 /// <reference path="../vendor/angularjs/angular.d.ts"/>
-/// <reference path="../vendor/angularjs/angular-route.d.ts"/>
+/// <reference path="angular_helpers"/>
 var ApkiOrg;
 (function (ApkiOrg) {
     var CourseMgr;
     (function (CourseMgr) {
-        var AngularConfig = (function () {
-            function AngularConfig($routeProvider) {
-                $routeProvider.when("/list", {
-                    templateUrl: "App/Templates/VideoList.html",
-                    controller: "TechVidsListCtrl"
-                })
-                    .when("/list/:id", {
-                    templateUrl: "App/Templates/VideoList.html",
-                    controller: "TechVidsListCtrl"
-                })
-                    .when("/add", {
-                    templateUrl: "App/Templates/AddVideo.html",
-                    controller: "AddTechVideoCtrl"
-                })
-                    .when("/edit/:id", {
-                    templateUrl: "App/Templates/EditVideo.html",
-                    controller: "EditTechVideoCtrl"
-                })
-                    .otherwise({
-                    redirectTo: '/list'
-                });
+        var myCtrl = (function () {
+            function myCtrl($scope) {
+                this.$scope = $scope;
+                this.fullName = - > ();
+                $scope.firstName = "John";
+                $scope.lastName = "Doe";
             }
-            return AngularConfig;
+            myCtrl.$inject = [
+                '$scope'
+            ];
+            return myCtrl;
         })();
-        var AngularFactory = (function () {
-            function AngularFactory() {
-                //Logic of constructor
-            }
-            AngularFactory.prototype.method1 = ;
-            return AngularFactory;
-        })();
-        return -type;
+        CourseMgr.myCtrl = myCtrl;
         {
-        }
-        ;
-        MyClassFactory();
-        {
-            return new MyClass();
+            return this.$scope.firstName + " " + this.$scope.lastName;
         }
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
+app = angular.module('myApp', []);
+app.controller('myCtrl', myCtrl);
 var Achivement = (function () {
     function Achivement() {
     }
@@ -119,10 +98,4 @@ var CommRecvQuiz = (function () {
     return CommRecvQuiz;
 })();
 exports.CommRecvQuiz = CommRecvQuiz;
-var CommSendAchievement = (function () {
-    function CommSendAchievement() {
-    }
-    return CommSendAchievement;
-})();
-exports.CommSendAchievement = CommSendAchievement;
 //# sourceMappingURL=course.js.map

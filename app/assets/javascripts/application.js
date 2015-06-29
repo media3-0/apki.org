@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require angular
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
@@ -19,6 +20,6 @@
 //= require vendor/ace/ace
 //= require vendor/bootstrap-select/bootstrap-select
 //= require vendor/bootstrap-select/i18n/defaults-pl_PL.min
-//= require vendor/jspm/system@0.16.11.js
+//= require vendor/jspm/system@0.16.11
 //
 //= require src/app

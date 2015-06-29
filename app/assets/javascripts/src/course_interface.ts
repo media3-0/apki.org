@@ -87,8 +87,4 @@ module ApkiOrg.CourseMgr {
         ID                  :number;            //Unique ID
         is_correct          :boolean;           //True if answer is correct
     }
-
-    export interface ICommSendAchievement{
-        ID                  :number;            //Unique ID
-    }
 }
