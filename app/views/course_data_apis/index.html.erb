@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Course Data Apis</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Difficulty</th>
+      <th>Description</th>
+      <th>Image</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @course_data_apis.each do |course_data_api| %>
+      <tr>
+        <td><%= course_data_api.name %></td>
+        <td><%= course_data_api.difficulty %></td>
+        <td><%= course_data_api.description %></td>
+        <td><%= course_data_api.image %></td>
+        <td><%= link_to 'Show', course_data_api %></td>
+        <td><%= link_to 'Edit', edit_course_data_api_path(course_data_api) %></td>
+        <td><%= link_to 'Destroy', course_data_api, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Course data api', new_course_data_api_path %>

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :course_data_apis
   get 'school/profile/:id', to: 'school#profile', as: 'school_profile_view'
   get 'school/edit_profile'
   post 'school/edit_profile'
