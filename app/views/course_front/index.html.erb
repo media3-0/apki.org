@@ -1,15 +1,17 @@
 <%= render "layouts/headers" %>
 <body data-no-turbolink="true">
 <%= render "layouts/main_menu" %>
-<article id="courseContent" class="col-md-12">
-    <div ng-app="myApp" ng-controller="myCtrl">
-
-        First Name: <input type="text" ng-model="firstName"><br>
-        Last Name: <input type="text" ng-model="lastName"><br>
-        <br>
-        Full Name: {{fullName()}}
+<div id="courseContent" ng-app="courseApp" ng-controller="myCtrl" ng-init="initCourse()">
+    <div id="courseLessonMenu" class="first col">
 
     </div>
-</article>
+    <div id="courseCnt" class="sec col">
+
+    </div>
+    <div class="clearfix"></div>
+    <div id="courseLessons">
+
+    </div>
+</div>
 </body>
 </html>
