@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <title>Apki.org</title>
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= csrf_meta_tags %>
+  <title>Apki.org</title>
+  <%= javascript_include_tag 'vendors', 'data-turbolinks-track' => true, debug: false %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
 
-    <script type="text/javascript">
-        jQuery(function(){
-        });
-    </script>
+  <script type="text/javascript">
+      jQuery(function () {
+      });
+  </script>
 </head>
