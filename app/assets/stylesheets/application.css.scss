@@ -13,14 +13,6 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import "pagedown_bootstrap";
-@import "font-awesome";
-@import "bootstrap-select.css";
-
-@import "peek";
-@import "peek/views/performance_bar";
-@import "peek/views/rblineprof";
-@import "peek/views/rblineprof/pygments";
 
 .code-editor {
   position: absolute;
