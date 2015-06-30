@@ -145,3 +145,38 @@ form{
   right: 0;
   z-index: 1500;
 }
+
+#courseContent{
+  width: 100%;
+  margin-top: -10px;
+
+  .col{
+    float:left;
+    margin:0;
+
+    &.first{
+      width:180px;
+      background-color: $gray-lighter;
+      margin-right:-1px;
+      border-right:{
+        width: 1px;
+        style: solid;
+        color: #e7e7e7;
+      }
+    }
+    &.sec{
+    }
+  }
+
+  #courseLessons{
+    width:100%;
+    height:110px;
+    background-color: $gray-lighter;
+    margin-top:-1px;
+    border-top:{
+      width: 1px;
+      style: solid;
+      color: #e7e7e7;
+    }
+  }
+}

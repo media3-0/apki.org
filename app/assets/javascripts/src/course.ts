@@ -11,7 +11,8 @@ module ApkiOrg.CourseMgr {
         firstName: string;
         lastName: string;
 
-        fullName()
+        initCourse()
+        resizeElements()
     }
 
     export class myCtrl {
@@ -22,14 +23,19 @@ module ApkiOrg.CourseMgr {
         constructor(private $scope: IAppCtrlScope) {
             $scope.firstName= "John";
             $scope.lastName= "Doe";
-            $scope.fullName = () => {
-
-                return $scope.firstName+" "+$scope.lastName;
+            $scope.initCourse = () => {
+                $(window).resize($scope.resizeElements);
+                $scope.resizeElements();
+            }
+            $scope.resizeElements = () => {
+                $('#courseContent').height($(window).height()-$('nav.navbar').height()-$('#courseLessons').height());
+                $('#courseContent').find('.col').height($('#courseContent').height());
+                $('#courseContent').find('.col.sec').width($('#courseContent').width()-$('#courseContent').find('.col.first').width());
             }
         }
     }
 
-    app = angular.module('myApp', []);
+    app = angular.module('courseApp', []);
     app.controller('myCtrl', myCtrl);
 
     export class Achivement implements IAchievement{

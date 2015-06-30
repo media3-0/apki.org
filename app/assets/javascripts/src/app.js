@@ -34,8 +34,14 @@ var ApkiOrg;
                 this.$scope = $scope;
                 $scope.firstName = "John";
                 $scope.lastName = "Doe";
-                $scope.fullName = function () {
-                    return $scope.firstName + " " + $scope.lastName;
+                $scope.initCourse = function () {
+                    $(window).resize($scope.resizeElements);
+                    $scope.resizeElements();
+                };
+                $scope.resizeElements = function () {
+                    $('#courseContent').height($(window).height() - $('nav.navbar').height() - $('#courseLessons').height());
+                    $('#courseContent').find('.col').height($('#courseContent').height());
+                    $('#courseContent').find('.col.sec').width($('#courseContent').width() - $('#courseContent').find('.col.first').width());
                 };
             }
             myCtrl.$inject = [
@@ -44,7 +50,7 @@ var ApkiOrg;
             return myCtrl;
         })();
         CourseMgr.myCtrl = myCtrl;
-        app = angular.module('myApp', []);
+        app = angular.module('courseApp', []);
         app.controller('myCtrl', myCtrl);
         var Achivement = (function () {
             function Achivement() {
