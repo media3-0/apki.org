@@ -23,3 +23,6 @@
 //= require vendor/jspm/system@0.16.11
 //
 //= require src/app
+//= require peek
+//= require peek/views/performance_bar
+//= require peek/views/rblineprof

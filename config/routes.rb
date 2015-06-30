@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   get 'school/profile/:id', to: 'school#profile', as: 'school_profile_view'
   get 'school/edit_profile'
   post 'school/edit_profile'
-
   get 'school/educator_news'
   post 'school/educator_news'
   get 'school/all_news'
@@ -22,6 +21,7 @@ Rails.application.routes.draw do
 
   mount Ckeditor::Engine => '/ckeditor'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount Peek::Railtie => '/peek'
   get 'main/test'
   root 'main#index'
   get 'news', to: 'main#news'

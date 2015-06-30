@@ -92,9 +92,17 @@ group :development, :test do
 
   gem 'better_errors'
   gem 'quiet_assets'
-  gem 'rails-footnotes', '~> 4.0'
-  gem 'rack-mini-profiler'
   gem 'binding_of_caller'
+  gem 'meta_request'
+
+  # peek jako pasek debuga (zamiast rails-footnotes oraz rails-miniprofiler)
+  gem 'peek'
+  gem 'peek-gc' # Garbage Collector monitor
+  gem 'peek-moped' # Moped (sterownik do MongoDB) monitor
+  gem 'peek-performance_bar' # Performance monitor
+  gem 'peek-rblineprof' # Rblineprof
+  gem 'pygments.rb', :require => false # Kolorowanie składni w Rblineprof
+
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
