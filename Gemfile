@@ -103,6 +103,8 @@ group :development, :test do
   gem 'peek-rblineprof' # Rblineprof
   gem 'pygments.rb', :require => false # Kolorowanie składni w Rblineprof
 
+  gem 'rails-dev-tweaks', '~> 1.1'
+
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
