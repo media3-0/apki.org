@@ -1,0 +1,15 @@
+<%= render "layouts/headers" %>
+<body data-no-turbolink="true">
+<%= render "layouts/main_menu" %>
+<article id="courseContent" class="col-md-12">
+    <div ng-app="myApp" ng-controller="myCtrl">
+
+        First Name: <input type="text" ng-model="firstName"><br>
+        Last Name: <input type="text" ng-model="lastName"><br>
+        <br>
+        Full Name: {{fullName()}}
+
+    </div>
+</article>
+</body>
+</html>
