@@ -1,88 +1,6 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <title>Apki.org</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-
-  <script type="text/javascript">
-      jQuery(function(){
-      });
-  </script>
-</head>
+<%= render "layouts/headers" %>
 <body data-no-turbolink="true">
-<header class="margin-bottom-xs">
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Nawigacja</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">apki.org</a>
-      </div>
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li <%- if current_page?(root_path) -%>class="active"<%- end -%>>
-            <a href="<%= root_path -%>">Strona główna<%- if current_page?(root_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
-          </li>
-          <li <%- if current_page?(news_path) -%>class="active"<%- end -%>>
-            <a href="<%= news_path -%>">Aktualności<%- if current_page?(news_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
-          </li>
-          <li <%- if current_page?(school_all_news_path) -%>class="active"<%- end -%>>
-            <a href="<%= school_all_news_path -%>">Nowości szkół<%- if current_page?(school_all_news_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
-          </li>
-          <li><a href="http://forum.apki.org/">Forum</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tu menu z podmenu <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">One more separated link</a></li>
-            </ul>
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <%- if current_user -%>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle user-profile" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                  <span id="loginImage" data-src="<%= current_user.image -%>" style="margin-right: 5px"></span>
-                  <%= current_user.nickname -%>
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><%= link_to 'Mój profil', user_edit_profile_path -%></li>
-                  <li><a href="#">Moje projekty</a></li>
-                  <%- if current_user.account_type == :teacher -%>
-                      <li role="separator" class="divider"></li>
-                      <li><%= link_to 'Profil szkoły', school_edit_profile_path -%></li>
-                      <li><%= link_to 'Nowy news', school_educator_news_path -%></li>
-                  <%- end -%>
-                  <li role="separator" class="divider"></li>
-                  <li><%= link_to 'Wyloguj', signout_path -%></li>
-
-                </ul>
-              </li>
-            <%- else -%>
-                <li><a href="/auth/github">Zaloguj się</a></li>
-            <%- end -%>
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-
-
-  </nav>
-</header>
-
+<%= render "layouts/main_menu" %>
 <article id="content" class="col-md-10 col-md-offset-1">
   <% flash.each do |name, msg| -%>
       <%-
@@ -95,7 +13,6 @@
 
   <%= yield %>
 </article>
-
 <div class="clearfix"></div>
 <footer>
   &copy; Apki.org by Fundacja Media 3.0
