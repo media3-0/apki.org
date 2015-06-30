@@ -24,7 +24,6 @@ Rails.application.configure do
   # number of complex assets.
   # jeżeli chcesz debugować swój js to ustaw true (strasznie wydłuża render stron)
   config.assets.debug = true
-
   config.assets.compress = false
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
