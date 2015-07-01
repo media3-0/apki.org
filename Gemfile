@@ -88,8 +88,16 @@ gem 'peek'
 gem 'peek-gc' # Garbage Collector monitor
 gem 'peek-moped' # Moped (sterownik do MongoDB) monitor
 gem 'peek-performance_bar' # Performance monitor
+<<<<<<< .merge_file_a02680
 gem 'peek-rblineprof' # Rblineprof
 gem 'pygments.rb', :require => false # Kolorowanie składni w Rblineprof
+=======
+
+unless Gem.win_platform?
+  gem 'peek-rblineprof' # Rblineprof
+  gem 'pygments.rb', :require => false # Kolorowanie składni w Rblineprof
+end
+>>>>>>> .merge_file_a02788
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
