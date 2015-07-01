@@ -1,11 +1,16 @@
 class Course::LessonsController < ApplicationController
   #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
-  before_action :set_course_lesson, only: [:show, :edit, :update, :destroy]
+  before_action :set_course_lesson, only: [:show, :update, :destroy]
 
   # GET /course/lessons.json
   def index
-    @course_lessons = Course::Lesson.all
+    unless params.has_key?(:course_id)
+      respond_to do |format|
+        format.json { render json: {}, status: :not_found}
+      end
+    end
+    @course_lessons = Course::CourseDatum.find(params[:course_id]).course_lessons
   end
 
   # GET /course/lessons/1.json
@@ -14,17 +19,17 @@ class Course::LessonsController < ApplicationController
 
   # POST /course/lessons.json
   def create
-    if params[:course_id].blank? or (!params[:course_id].blank? and !Course::CourseDatum.where(id: params[:course_id]).exists?)
+    if !params.has_key?(:course_id) or (params.has_key?(:course_id) and !Course::CourseDatum.where(id: params[:course_id]).exists?)
       respond_to do |format|
         format.json { render json: {}, status: :not_found}
       end
       return
     end
-    @course = Course::CourseDatum.find(params[:course_id])
+    course = Course::CourseDatum.find(params[:course_id])
     @course_lesson = Course::Lesson.new
 
     @course_lesson.data = {}
-    @course.course_lessons << @course_lesson
+    course.course_lessons << @course_lesson
 
     respond_to do |format|
       if @course_lesson.save

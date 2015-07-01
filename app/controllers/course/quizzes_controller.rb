@@ -1,62 +1,61 @@
 class Course::QuizzesController < ApplicationController
-  before_action :set_course_quiz, only: [:show, :edit, :update, :destroy]
+  #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
-  # GET /course/quizzes
+  before_action :set_course_quiz, only: [:show, :update, :destroy]
+
   # GET /course/quizzes.json
   def index
-    @course_quizzes = Course::Quiz.all
+    unless params.has_key?(:lesson_id)
+      respond_to do |format|
+        format.json { render json: {}, status: :not_found}
+      end
+    end
+    @course_quizzes = Course::Lesson.find(params[:lesson_id]).course_quizs
   end
 
-  # GET /course/quizzes/1
   # GET /course/quizzes/1.json
   def show
   end
 
-  # GET /course/quizzes/new
-  def new
-    @course_quiz = Course::Quiz.new
-  end
-
-  # GET /course/quizzes/1/edit
-  def edit
-  end
-
-  # POST /course/quizzes
   # POST /course/quizzes.json
   def create
-    @course_quiz = Course::Quiz.new(course_quiz_params)
+    if !params.has_key?(:lesson_id) or (params.has_key?(:lesson_id) and !Course::Lesson.where(id: params[:lesson_id]).exists?)
+      respond_to do |format|
+        format.json { render json: {}, status: :not_found}
+      end
+      return
+    end
+
+    lesson = Course::Lesson.find(params[:lesson_id])
+    @course_quiz = Course::Quiz.new
+    @course_quiz.data = {}
+    lesson.course_quizs << @course_quiz
 
     respond_to do |format|
       if @course_quiz.save
-        format.html { redirect_to @course_quiz, notice: 'Quiz was successfully created.' }
         format.json { render :show, status: :created, location: @course_quiz }
       else
-        format.html { render :new }
         format.json { render json: @course_quiz.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /course/quizzes/1
   # PATCH/PUT /course/quizzes/1.json
   def update
+    @course_quiz[:data] = @course_quiz.data(true).merge(JSON.parse(request.body.read))
     respond_to do |format|
-      if @course_quiz.update(course_quiz_params)
-        format.html { redirect_to @course_quiz, notice: 'Quiz was successfully updated.' }
+      if @course_quiz.save
         format.json { render :show, status: :ok, location: @course_quiz }
       else
-        format.html { render :edit }
         format.json { render json: @course_quiz.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /course/quizzes/1
   # DELETE /course/quizzes/1.json
   def destroy
     @course_quiz.destroy
     respond_to do |format|
-      format.html { redirect_to course_quizzes_url, notice: 'Quiz was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

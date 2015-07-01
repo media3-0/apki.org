@@ -1,7 +1,7 @@
 class Course::CourseDataController < ApplicationController
   #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
-  before_action :set_course_course_datum, only: [:show, :edit, :update, :destroy]
+  before_action :set_course_course_datum, only: [:show, :update, :destroy]
 
   # GET /course/course_data
   # GET /course/course_data.json
