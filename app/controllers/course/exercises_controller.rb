@@ -9,6 +9,7 @@ class Course::ExercisesController < ApplicationController
       respond_to do |format|
         format.json { render json: {}, status: :not_found}
       end
+      return
     end
     @course_exercises = Course::Lesson.find(params[:lesson_id]).course_exercises
   end

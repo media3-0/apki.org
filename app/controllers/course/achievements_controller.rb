@@ -1,62 +1,69 @@
 class Course::AchievementsController < ApplicationController
-  before_action :set_course_achievement, only: [:show, :edit, :update, :destroy]
+  #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
-  # GET /course/achievements
+  before_action :set_course_achievement, only: [:show, :update, :destroy]
+
   # GET /course/achievements.json
   def index
     @course_achievements = Course::Achievement.all
   end
 
-  # GET /course/achievements/1
   # GET /course/achievements/1.json
   def show
   end
 
-  # GET /course/achievements/new
-  def new
-    @course_achievement = Course::Achievement.new
-  end
-
-  # GET /course/achievements/1/edit
-  def edit
-  end
-
-  # POST /course/achievements
   # POST /course/achievements.json
   def create
-    @course_achievement = Course::Achievement.new(course_achievement_params)
+    id_present = false
+
+    @course_achievement = Course::Achievement.new
+    @course_achievement.data = {}
+
+    if params.has_key?(:lesson_id) and Course::Lesson.where(id: params[:lesson_id]).exists?
+      id_present = true
+      @course_achievement.lesson_id = params[:lesson_id]
+    end
+    if !id_present and params.has_key?(:exercise_id) and Course::Exercise.where(id: params[:exercise_id]).exists?
+      id_present = true
+      @course_achievement.exercise_id = params[:exercise_id]
+    end
+    if !id_present and params.has_key?(:quiz_id) and Course::Quiz.where(id: params[:quiz_id]).exists?
+      id_present = true
+      @course_achievement.quiz_id = params[:quiz_id]
+    end
+
+    unless id_present
+      respond_to do |format|
+        format.json { render json: {}, status: :not_found }
+      end
+      return
+    end
 
     respond_to do |format|
       if @course_achievement.save
-        format.html { redirect_to @course_achievement, notice: 'Achievement was successfully created.' }
         format.json { render :show, status: :created, location: @course_achievement }
       else
-        format.html { render :new }
         format.json { render json: @course_achievement.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /course/achievements/1
   # PATCH/PUT /course/achievements/1.json
   def update
+    @course_achievement[:data] = @course_achievement.data(true).merge(JSON.parse(request.body.read))
     respond_to do |format|
-      if @course_achievement.update(course_achievement_params)
-        format.html { redirect_to @course_achievement, notice: 'Achievement was successfully updated.' }
+      if @course_achievement.save
         format.json { render :show, status: :ok, location: @course_achievement }
       else
-        format.html { render :edit }
         format.json { render json: @course_achievement.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /course/achievements/1
   # DELETE /course/achievements/1.json
   def destroy
     @course_achievement.destroy
     respond_to do |format|
-      format.html { redirect_to course_achievements_url, notice: 'Achievement was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
