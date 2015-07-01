@@ -1,62 +1,56 @@
 class Course::LessonsController < ApplicationController
+  #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+
   before_action :set_course_lesson, only: [:show, :edit, :update, :destroy]
 
-  # GET /course/lessons
   # GET /course/lessons.json
   def index
     @course_lessons = Course::Lesson.all
   end
 
-  # GET /course/lessons/1
   # GET /course/lessons/1.json
   def show
   end
 
-  # GET /course/lessons/new
-  def new
-    @course_lesson = Course::Lesson.new
-  end
-
-  # GET /course/lessons/1/edit
-  def edit
-  end
-
-  # POST /course/lessons
   # POST /course/lessons.json
   def create
-    @course_lesson = Course::Lesson.new(course_lesson_params)
+    if params[:course_id].blank? or (!params[:course_id].blank? and !Course::CourseDatum.where(id: params[:course_id]).exists?)
+      respond_to do |format|
+        format.json { render json: {}, status: :not_found}
+      end
+      return
+    end
+    @course = Course::CourseDatum.find(params[:course_id])
+    @course_lesson = Course::Lesson.new
+
+    @course_lesson.data = {}
+    @course.course_lessons << @course_lesson
 
     respond_to do |format|
       if @course_lesson.save
-        format.html { redirect_to @course_lesson, notice: 'Lesson was successfully created.' }
         format.json { render :show, status: :created, location: @course_lesson }
       else
-        format.html { render :new }
         format.json { render json: @course_lesson.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /course/lessons/1
   # PATCH/PUT /course/lessons/1.json
   def update
+    @course_lesson[:data] = @course_lesson.data(true).merge(JSON.parse(request.body.read))
     respond_to do |format|
-      if @course_lesson.update(course_lesson_params)
-        format.html { redirect_to @course_lesson, notice: 'Lesson was successfully updated.' }
+      if @course_lesson.save
         format.json { render :show, status: :ok, location: @course_lesson }
       else
-        format.html { render :edit }
         format.json { render json: @course_lesson.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /course/lessons/1
   # DELETE /course/lessons/1.json
   def destroy
     @course_lesson.destroy
     respond_to do |format|
-      format.html { redirect_to course_lessons_url, notice: 'Lesson was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
