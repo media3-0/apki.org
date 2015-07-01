@@ -1,18 +1,18 @@
 class Course::CourseDataController < ApplicationController
-  #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+  before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
   before_action :set_course_course_datum, only: [:show, :update, :destroy]
 
   # GET /course/course_data
   # GET /course/course_data.json
   def index
-    #@course_course_data = Course::CourseDatum.get_list(current_user) # TODO : Włączyć po testach
-    @course_course_data = Course::CourseDatum.all
+    @course_course_data = Course::CourseDatum.get_list(current_user) # TODO : Włączyć po testach
+    #@course_course_data = Course::CourseDatum.all
   end
 
   # GET /course/course_data/1.json
   def show
-
+    # TODO : Zabezpieczyć dostęp do nieukończonych kursów
   end
 
   # POST /course/course_data.json

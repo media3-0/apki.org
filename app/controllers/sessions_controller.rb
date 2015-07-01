@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     else
       user = User.create_with_omniauth(auth)
     end
-    session[:user_id] = user.id
+    session[:user_id] = user.id.to_s
     redirect_to root_url, :notice => 'Zalogowano!'
   end
 

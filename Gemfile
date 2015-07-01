@@ -108,6 +108,8 @@ group :development, :test do
 
   gem 'rails-dev-tweaks', '~> 1.1'
 
+  gem 'rspec-rails', '~> 3.0'
+  gem 'factory_girl_rails'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
