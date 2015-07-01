@@ -91,7 +91,6 @@ GEM
     connection_pool (2.2.0)
     daemons (1.2.3)
     debug_inspector (0.0.2)
-    debugger-ruby_core_source (1.3.8)
     discourse_api (0.4.4)
       faraday (~> 0.9.0)
       faraday_middleware (~> 0.9)
@@ -158,6 +157,8 @@ GEM
     nested_form (0.3.2)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    nokogiri (1.6.6.2-x86-mingw32)
+      mini_portile (~> 0.6.0)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -191,13 +192,6 @@ GEM
       peek
     peek-performance_bar (1.1.6)
       peek (>= 0.1.0)
-    peek-rblineprof (0.1.2)
-      peek
-      rblineprof
-    posix-spawn (0.3.11)
-    pygments.rb (0.6.3)
-      posix-spawn (~> 0.3.6)
-      yajl-ruby (~> 1.2.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
@@ -253,8 +247,6 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
-    rblineprof (0.3.6)
-      debugger-ruby_core_source (~> 1.3)
     rdoc (4.2.0)
     remotipart (1.2.1)
     safe_yaml (1.0.4)
@@ -288,6 +280,8 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2015.5)
+      tzinfo (>= 1.0.0)
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -296,10 +290,10 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
-    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby
+  x86-mingw32
 
 DEPENDENCIES
   angularjs-rails
@@ -325,8 +319,6 @@ DEPENDENCIES
   peek-gc
   peek-moped
   peek-performance_bar
-  peek-rblineprof
-  pygments.rb
   quiet_assets
   rails (~> 4.2.0)
   rails-dev-tweaks (~> 1.1)
@@ -339,8 +331,9 @@ DEPENDENCIES
   sprockets-rails!
   thin
   turbolinks
+  tzinfo-data
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.10.3
+   1.10.5

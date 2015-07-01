@@ -204,6 +204,8 @@ var ApkiOrg;
                 return this.editor;
             };
             AppMgr.prototype.helperImageCircle = function (element, imgSrc, widthAndHeight) {
+                if (jQuery(element).length == 0)
+                    return;
                 jQuery(element).addClass('circular').css({
                     'background-image': 'url(https://images.weserv.nl/?h=' + widthAndHeight + '&w=' + widthAndHeight + '&url=' + encodeURIComponent(imgSrc.substr(imgSrc.indexOf('://') + 3)) + ')',
                     'border-radius': Math.round(widthAndHeight / 2) + 'px',
