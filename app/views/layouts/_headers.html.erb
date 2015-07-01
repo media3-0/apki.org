@@ -2,6 +2,10 @@
 <html lang="pl">
 <head>
   <title>Apki.org</title>
+  <%- unless Gem.win_platform? -%>
+      <%= stylesheet_link_tag 'rblineprof', media: 'all', 'data-turbolinks-track' => true, debug: false %>
+      <%= javascript_include_tag 'rblineprof', 'data-turbolinks-track' => true, debug: false %>
+  <%- end -%>
   <%= stylesheet_link_tag 'vendors', media: 'all', 'data-turbolinks-track' => true, debug: false %>
   <%= javascript_include_tag 'vendors', 'data-turbolinks-track' => true, debug: false %>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
