@@ -16,7 +16,7 @@ module Course
     def show
       unless current_user.present? and current_user.is_admin?
         if !@course_course_datum.data.has_key?('finished') || @course_course_datum.data['finished'] == false
-          render json: {}, status: :unauthorized
+          raise Exceptions::AccessDenied.new('Ten kurs nie został jeszcze opublikowany')
         end
       end
     end

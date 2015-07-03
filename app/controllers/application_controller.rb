@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   skip_before_action :verify_authenticity_token, if: :json_request?
+  rescue_from Exceptions::AccessDenied do |exception|
+    redirection exception.message
+  end
   helper_method :current_user
 
   private
@@ -40,7 +43,7 @@ class ApplicationController < ActionController::Base
       return
     end
 
-    redirect_to redirect_path, flash: { error: message}
+    redirect_to redirect_path, flash: { error: message }
   end
 
   def json_request?

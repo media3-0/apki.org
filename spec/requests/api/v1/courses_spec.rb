@@ -147,6 +147,9 @@ describe Course::CourseDataController, type: :controller do
     get :show, { format: :json, id: @course.id.to_s }
     expect(response.status).to eq 401
 
+    bypass_rescue
+    expect { get :show, { format: :json, id: @course.id.to_s }}.to raise_error(Exceptions::AccessDenied)
+
     session[:user_id] = @admin.id.to_s
     get :show, { format: :json, id: @course.id.to_s }
     expect(response).to be_success
