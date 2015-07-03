@@ -1,6 +1,6 @@
 module Course
   class CourseDataController < ApplicationController
-    before_action :is_logged_in, except: [:index] # TODO : Włączyć po testach
+    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
     before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
     before_action :set_course_course_datum, only: [:show, :update, :destroy]
@@ -14,7 +14,11 @@ module Course
 
     # GET /course/course_data/1.json
     def show
-      # TODO : if course finished + test
+      unless current_user.present? and current_user.is_admin?
+        if !@course_course_datum.data.has_key?('finished') || @course_course_datum.data['finished'] == false
+          render json: {}, status: :unauthorized
+        end
+      end
     end
 
     # POST /course/course_data.json

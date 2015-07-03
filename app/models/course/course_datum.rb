@@ -12,7 +12,7 @@ module Course
       data = Course::CourseDatum.all
       data = data.reject do |cd|
         !cd.data.has_key?('finished') || cd.data['finished'] == false
-      end unless user.present? and user.account_type == :admin
+      end unless user.present? and user.is_admin?
       return data
     end
   end

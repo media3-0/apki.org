@@ -128,18 +128,30 @@ describe Course::CourseDataController, type: :controller do
     expect(Course::CourseDatum.where(id: @course.id.to_s).exists?).to eq true
   end
 
-  it 'Logged user can show single course' do
-    session[:user_id] = @user.id.to_s
-
+  it 'Everybody can show single finished course' do
     @course = Course::CourseDatum.new
-    @course.data = @data
+    @course.data = { 'finished' => true }
     @course.save!
 
     get :show, { format: :json, id: @course.id.to_s }
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response['id']['$oid']).to eq @course.id.to_s
-    expect(json_response['data']).to eq @data
+  end
+
+  it 'Only admin can show single unfinished course' do
+    @course = Course::CourseDatum.new
+    @course.data = { 'finished' => false }
+    @course.save!
+
+    get :show, { format: :json, id: @course.id.to_s }
+    expect(response.status).to eq 401
+
+    session[:user_id] = @admin.id.to_s
+    get :show, { format: :json, id: @course.id.to_s }
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq @course.id.to_s
   end
 
   it 'Admin can list all courses' do
@@ -178,8 +190,6 @@ describe Course::CourseDataController, type: :controller do
     expect(json_response.count).to eq 1
   end
 
-  # TODO : dla widoku
-
   it 'Teacher can list only finished courses' do
     session[:user_id] = @teacher.id.to_s
 
@@ -202,9 +212,7 @@ describe Course::CourseDataController, type: :controller do
     expect(json_response.count).to eq 1
   end
 
-  it 'Not logged user cannot access to most courses' do
-    get :show, { format: :json, id: 'asdf' }
-    expect(response.status).to eq 401
+  it 'Not logged user cannot access to POST courses' do
     post :create, { format: :json }
     expect(response.status).to eq 401
     patch :update, { format: :json, id: 'asdf' }
@@ -212,6 +220,4 @@ describe Course::CourseDataController, type: :controller do
     delete :destroy, { format: :json, id: 'asdf' }
     expect(response.status).to eq 401
   end
-
-  # TODO : Obsługa kursu 'specjalnego', czyli dostępnego przed założeniem konta
 end
