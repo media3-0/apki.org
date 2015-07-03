@@ -1,57 +1,58 @@
-class Course::CourseDataController < ApplicationController
-  before_action :is_logged_in, except: [:index] # TODO : Włączyć po testach
-  before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+module Course
+  class CourseDataController < ApplicationController
+    before_action :is_logged_in, except: [:index] # TODO : Włączyć po testach
+    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
-  before_action :set_course_course_datum, only: [:show, :update, :destroy]
+    before_action :set_course_course_datum, only: [:show, :update, :destroy]
 
-  # GET /course/course_data
-  # GET /course/course_data.json
-  def index
-    @course_course_data = Course::CourseDatum.get_list(current_user) # TODO : Włączyć po testach
-    #@course_course_data = Course::CourseDatum.all
-  end
+    # GET /course/course_data
+    # GET /course/course_data.json
+    def index
+      @course_course_data = Course::CourseDatum.get_list(current_user) # TODO : Włączyć po testach
+      #@course_course_data = Course::CourseDatum.all
+    end
 
-  # GET /course/course_data/1.json
-  def show
-    # TODO : if course finished + test
-  end
+    # GET /course/course_data/1.json
+    def show
+      # TODO : if course finished + test
+    end
 
-  # POST /course/course_data.json
-  def create
-    @course_course_datum = Course::CourseDatum.new
+    # POST /course/course_data.json
+    def create
+      @course_course_datum = Course::CourseDatum.new
 
-    @course_course_datum.data = {}
+      @course_course_datum.data = {}
 
-    respond_to do |format|
-      if @course_course_datum.save
-        format.json { render :show, status: :created, location: @course_course_datum }
-      else
-        format.json { render json: @course_course_datum.errors, status: :unprocessable_entity }
+      respond_to do |format|
+        if @course_course_datum.save
+          format.json { render :show, status: :created, location: @course_course_datum }
+        else
+          format.json { render json: @course_course_datum.errors, status: :unprocessable_entity }
+        end
       end
     end
-  end
 
-  # PATCH/PUT /course/course_data/1.json
-  def update
-    @course_course_datum[:data] = @course_course_datum.data.merge(JSON.parse(request.body.read))
-    respond_to do |format|
-      if @course_course_datum.save
-        format.json { render :show, status: :ok, location: @course_course_datum }
-      else
-        format.json { render json: @course_course_datum.errors, status: :unprocessable_entity }
+    # PATCH/PUT /course/course_data/1.json
+    def update
+      @course_course_datum[:data] = @course_course_datum.data.merge(JSON.parse(request.body.read))
+      respond_to do |format|
+        if @course_course_datum.save
+          format.json { render :show, status: :ok, location: @course_course_datum }
+        else
+          format.json { render json: @course_course_datum.errors, status: :unprocessable_entity }
+        end
       end
     end
-  end
 
-  # DELETE /course/course_data/1.json
-  def destroy
-    @course_course_datum.destroy
-    respond_to do |format|
-      format.json { head :no_content }
+    # DELETE /course/course_data/1.json
+    def destroy
+      @course_course_datum.destroy
+      respond_to do |format|
+        format.json { head :no_content }
+      end
     end
-  end
 
-  private
+    private
     def set_course_course_datum
       @course_course_datum = Course::CourseDatum.find(params[:id])
     end
@@ -59,4 +60,5 @@ class Course::CourseDataController < ApplicationController
     def course_course_datum_params
       params.require(:course_course_datum).permit(:data)
     end
+  end
 end
