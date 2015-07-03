@@ -18,14 +18,12 @@ class ApplicationController < ActionController::Base
   end
 
   def is_teacher
-    is_logged_in
     unless current_user.account_type == :teacher
       redirection 'Musisz być edukatorem aby mieć tu dostęp'
     end
   end
 
   def is_admin
-    is_logged_in
     unless current_user.account_type == :admin
       redirection 'Musisz być adminem aby mieć tu dostęp'
     end
@@ -35,6 +33,11 @@ class ApplicationController < ActionController::Base
     redirect_path = root_path
     if request.referrer
       redirect_path = request.referrer
+    end
+
+    if json_request?
+      render json: { 'error' => message }, status: :unauthorized
+      return
     end
 
     redirect_to redirect_path, flash: { error: message}

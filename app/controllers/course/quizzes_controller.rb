@@ -43,7 +43,7 @@ class Course::QuizzesController < ApplicationController
 
   # PATCH/PUT /course/quizzes/1.json
   def update
-    @course_quiz[:data] = @course_quiz.data(true).merge(JSON.parse(request.body.read))
+    @course_quiz[:data] = @course_quiz.data.merge(JSON.parse(request.body.read))
     respond_to do |format|
       if @course_quiz.save
         format.json { render :show, status: :ok, location: @course_quiz }

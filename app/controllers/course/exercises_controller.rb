@@ -43,7 +43,7 @@ class Course::ExercisesController < ApplicationController
 
   # PATCH/PUT /course/exercises/1.json
   def update
-    @course_exercise[:data] = @course_exercise.data(true).merge(JSON.parse(request.body.read))
+    @course_exercise[:data] = @course_exercise.data.merge(JSON.parse(request.body.read))
     respond_to do |format|
       if @course_exercise.save
         format.json { render :show, status: :ok, location: @course_exercise }

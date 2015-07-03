@@ -50,7 +50,7 @@ class Course::AchievementsController < ApplicationController
 
   # PATCH/PUT /course/achievements/1.json
   def update
-    @course_achievement[:data] = @course_achievement.data(true).merge(JSON.parse(request.body.read))
+    @course_achievement[:data] = @course_achievement.data.merge(JSON.parse(request.body.read))
     respond_to do |format|
       if @course_achievement.save
         format.json { render :show, status: :ok, location: @course_achievement }

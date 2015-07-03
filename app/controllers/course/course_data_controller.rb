@@ -1,4 +1,5 @@
 class Course::CourseDataController < ApplicationController
+  before_action :is_logged_in, except: [:index] # TODO : Włączyć po testach
   before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
   before_action :set_course_course_datum, only: [:show, :update, :destroy]
@@ -12,7 +13,7 @@ class Course::CourseDataController < ApplicationController
 
   # GET /course/course_data/1.json
   def show
-    # TODO : Zabezpieczyć dostęp do nieukończonych kursów
+    # TODO : if course finished + test
   end
 
   # POST /course/course_data.json
@@ -32,7 +33,7 @@ class Course::CourseDataController < ApplicationController
 
   # PATCH/PUT /course/course_data/1.json
   def update
-    @course_course_datum[:data] = @course_course_datum.data(true).merge(JSON.parse(request.body.read))
+    @course_course_datum[:data] = @course_course_datum.data.merge(JSON.parse(request.body.read))
     respond_to do |format|
       if @course_course_datum.save
         format.json { render :show, status: :ok, location: @course_course_datum }
