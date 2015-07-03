@@ -30,22 +30,37 @@ var ApkiOrg;
     var CourseMgr;
     (function (CourseMgr) {
         var myCtrl = (function () {
-            function myCtrl($scope) {
+            function myCtrl($scope, $timeout) {
                 this.$scope = $scope;
-                $scope.firstName = "John";
-                $scope.lastName = "Doe";
+                this.$timeout = $timeout;
+                $scope.leftMenuVisible = true;
                 $scope.initCourse = function () {
                     $(window).resize($scope.resizeElements);
                     $scope.resizeElements();
+                    $('#courseContent').find('.firstHidePanelBar').click(function () {
+                        $scope.leftMenuVisible = !$scope.leftMenuVisible;
+                        $scope.$apply();
+                    });
                 };
-                $scope.resizeElements = function () {
-                    $('#courseContent').height($(window).height() - $('nav.navbar').height() - $('#courseLessons').height());
-                    $('#courseContent').find('.col').height($('#courseContent').height());
-                    $('#courseContent').find('.col.sec').width($('#courseContent').width() - $('#courseContent').find('.col.first').width());
+                $scope.resizeElements = function (delay) {
+                    if (delay === void 0) { delay = 0; }
+                    var _resFnc = function () {
+                        console.log('resizeElements...');
+                        $('#courseContent').height($(window).height() - $('nav.navbar').height() - $('#courseLessons').height());
+                        $('#courseContent').find('.col').height($('#courseContent').height());
+                        $('#courseContent').find('.col.col-line-height-100-pro').css('line-height', $('#courseContent').height() + 'px');
+                        var freeWidth = $('#courseContent').width() - ($('#courseContent').find('.col.first').is(':visible') ? $('#courseContent').find('.col.first').width() : 0) - $('#courseContent').find('.firstHidePanelBar').width();
+                        $('#courseContent').find('.col.sec').width(freeWidth);
+                    };
+                    if (delay > 0)
+                        $timeout(_resFnc, 100);
+                    else
+                        _resFnc();
                 };
             }
             myCtrl.$inject = [
-                '$scope'
+                '$scope',
+                '$timeout'
             ];
             return myCtrl;
         })();

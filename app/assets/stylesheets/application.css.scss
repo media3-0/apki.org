@@ -163,8 +163,35 @@ form{
         style: solid;
         color: #e7e7e7;
       }
+      overflow-y: auto;
+
+      ul {
+        list-style: none;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+
+        li{
+          margin-bottom: 5px;
+          overflow-x: hidden;
+        }
+
+        &>ul{
+          padding-left:20px;
+          padding-top: 0px;
+          padding-bottom: 0px;
+        }
+      }
     }
     &.sec{
+    }
+
+    &.firstHidePanelBar{
+      width:10px;
+      background-color: $gray-light;
+      text-align: center;
+      color: white;
+      cursor: pointer;
     }
   }
 

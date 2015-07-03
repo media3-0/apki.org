@@ -2,9 +2,21 @@
 <body data-no-turbolink="true">
 <%= render "layouts/main_menu" %>
 <div id="courseContent" ng-app="courseApp" ng-controller="myCtrl" ng-init="initCourse()">
-    <div id="courseLessonMenu" class="first col">
-
+    <div id="courseLessonMenu" class="first col" ng-hide="resizeElements(100);!leftMenuVisible">
+        <ul>
+            <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#">Menu wpis jeden...</a></li>
+            <ul>
+                <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#">Menu wpis jeden...</a></li>
+                <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#">Menu wpis jeden...</a></li>
+                <li><i class="glyphicon glyphicon-facetime-video"></i> <a href="#">Menu wpis dwa...</a></li>
+                <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#">Menu wpis jeden...</a></li>
+            </ul>
+            <li><i class="glyphicon glyphicon-facetime-video"></i> <a href="#">Menu wpis dwa...</a></li>
+            <li><i class="glyphicon glyphicon-check"></i> <a href="#">Menu wpis czy...</a></li>
+            <li><i class="glyphicon glyphicon-console"></i> <a href="#">Menu wpis cztyry...</a></li>
+        </ul>
     </div>
+    <div class="col col-line-height-100-pro firstHidePanelBar">||</div>
     <div id="courseCnt" class="sec col">
 
     </div>

@@ -11,26 +11,42 @@ module ApkiOrg.CourseMgr {
         firstName: string;
         lastName: string;
 
+        leftMenuVisible:boolean;
+
         initCourse()
         resizeElements()
     }
 
     export class myCtrl {
         public static $inject = [
-            '$scope'
-//            ,'appStorage'
+            '$scope',
+            '$timeout'
         ];
-        constructor(private $scope: IAppCtrlScope) {
-            $scope.firstName= "John";
-            $scope.lastName= "Doe";
+        constructor(private $scope: IAppCtrlScope, private $timeout: ng.ITimeoutService) {
+            $scope.leftMenuVisible=true;
+
             $scope.initCourse = () => {
                 $(window).resize($scope.resizeElements);
                 $scope.resizeElements();
+
+                $('#courseContent').find('.firstHidePanelBar').click(function(){
+                    $scope.leftMenuVisible=!$scope.leftMenuVisible;
+                    $scope.$apply();
+                });
             }
-            $scope.resizeElements = () => {
-                $('#courseContent').height($(window).height()-$('nav.navbar').height()-$('#courseLessons').height());
-                $('#courseContent').find('.col').height($('#courseContent').height());
-                $('#courseContent').find('.col.sec').width($('#courseContent').width()-$('#courseContent').find('.col.first').width());
+            $scope.resizeElements = (delay:number=0) => {
+                var _resFnc = () => {
+                    console.log('resizeElements...');
+                    $('#courseContent').height($(window).height()-$('nav.navbar').height()-$('#courseLessons').height());
+                    $('#courseContent').find('.col').height($('#courseContent').height());
+                    $('#courseContent').find('.col.col-line-height-100-pro').css('line-height', $('#courseContent').height()+'px');
+                    var freeWidth = $('#courseContent').width()-($('#courseContent').find('.col.first').is(':visible')?$('#courseContent').find('.col.first').width():0)-$('#courseContent').find('.firstHidePanelBar').width();
+                    $('#courseContent').find('.col.sec').width(freeWidth);
+                }
+                if (delay>0)
+                    $timeout(_resFnc, 100);
+                else
+                    _resFnc();
             }
         }
     }
