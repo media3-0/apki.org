@@ -1,6 +1,7 @@
 module Course
   class AchievementsController < ApplicationController
-    #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
+    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
     before_action :set_course_achievement, only: [:show, :update, :destroy]
 
@@ -34,10 +35,7 @@ module Course
       end
 
       unless id_present
-        respond_to do |format|
-          format.json { render json: {}, status: :not_found }
-        end
-        return
+        raise Exceptions::NotFound
       end
 
       respond_to do |format|

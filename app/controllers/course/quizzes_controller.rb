@@ -1,17 +1,14 @@
 module Course
   class QuizzesController < ApplicationController
-    #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
+    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+
+    before_action :check_lesson_id, only: [:index, :create]
 
     before_action :set_course_quiz, only: [:show, :update, :destroy]
 
     # GET /course/quizzes.json
     def index
-      unless params.has_key?(:lesson_id)
-        respond_to do |format|
-          format.json { render json: {}, status: :not_found }
-        end
-        return
-      end
       @course_quizzes = Course::Lesson.find(params[:lesson_id]).course_quizs
     end
 
@@ -21,13 +18,6 @@ module Course
 
     # POST /course/quizzes.json
     def create
-      if !params.has_key?(:lesson_id) or (params.has_key?(:lesson_id) and !Course::Lesson.where(id: params[:lesson_id]).exists?)
-        respond_to do |format|
-          format.json { render json: {}, status: :not_found }
-        end
-        return
-      end
-
       lesson = Course::Lesson.find(params[:lesson_id])
       @course_quiz = Course::Quiz.new
       @course_quiz.data = {}
@@ -71,6 +61,12 @@ module Course
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_quiz_params
       params.require(:course_quiz).permit(:data)
+    end
+
+    def check_lesson_id
+      if !params.has_key?(:lesson_id) or (params.has_key?(:lesson_id) and !Course::Lesson.where(id: params[:lesson_id]).exists?)
+        raise Exceptions::NotFound
+      end
     end
   end
 end

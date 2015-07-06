@@ -1,17 +1,14 @@
 module Course
   class LessonsController < ApplicationController
-    #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
+    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+
+    before_action :check_course_id, only: [:index, :create]
 
     before_action :set_course_lesson, only: [:show, :update, :destroy]
 
     # GET /course/lessons.json
     def index
-      unless params.has_key?(:course_id)
-        respond_to do |format|
-          format.json { render json: {}, status: :not_found }
-        end
-        return
-      end
       @course_lessons = Course::CourseDatum.find(params[:course_id]).course_lessons
     end
 
@@ -21,12 +18,7 @@ module Course
 
     # POST /course/lessons.json
     def create
-      if !params.has_key?(:course_id) or (params.has_key?(:course_id) and !Course::CourseDatum.where(id: params[:course_id]).exists?)
-        respond_to do |format|
-          format.json { render json: {}, status: :not_found }
-        end
-        return
-      end
+
       course = Course::CourseDatum.find(params[:course_id])
       @course_lesson = Course::Lesson.new
 
@@ -71,6 +63,12 @@ module Course
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_lesson_params
       params.require(:course_lesson).permit(:data)
+    end
+
+    def check_course_id
+      if !params.has_key?(:course_id) or (params.has_key?(:course_id) and !Course::CourseDatum.where(id: params[:course_id]).exists?)
+        raise Exceptions::NotFound
+      end
     end
   end
 end

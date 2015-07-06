@@ -2,10 +2,16 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+
   skip_before_action :verify_authenticity_token, if: :json_request?
+
   rescue_from Exceptions::AccessDenied do |exception|
     redirection exception.message
   end
+  rescue_from Exceptions::NotFound do |exception|
+    redirection exception.message, :not_found
+  end
+
   helper_method :current_user
 
   private
@@ -32,14 +38,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def redirection(message)
+  def redirection(message, status = :unauthorized)
     redirect_path = root_path
     if request.referrer
       redirect_path = request.referrer
     end
 
     if json_request?
-      render json: { 'error' => message }, status: :unauthorized
+      render json: { 'error' => message }, status: status
       return
     end
 
