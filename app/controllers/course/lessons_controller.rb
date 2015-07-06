@@ -1,67 +1,60 @@
-class Course::LessonsController < ApplicationController
-  #before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
+module Course
+  class LessonsController < ApplicationController
+    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
+    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
 
-  before_action :set_course_lesson, only: [:show, :update, :destroy]
+    before_action :check_course_id, only: [:index, :create]
 
-  # GET /course/lessons.json
-  def index
-    unless params.has_key?(:course_id)
+    before_action :set_course_lesson, only: [:show, :update, :destroy]
+
+    # GET /course/lessons.json
+    def index
+      @course_lessons = Course::CourseDatum.find(params[:course_id]).course_lessons
+    end
+
+    # GET /course/lessons/1.json
+    def show
+    end
+
+    # POST /course/lessons.json
+    def create
+
+      course = Course::CourseDatum.find(params[:course_id])
+      @course_lesson = Course::Lesson.new
+
+      @course_lesson.data = {}
+      course.course_lessons << @course_lesson
+
       respond_to do |format|
-        format.json { render json: {}, status: :not_found}
+        if @course_lesson.save
+          format.json { render :show, status: :created, location: @course_lesson }
+        else
+          format.json { render json: @course_lesson.errors, status: :unprocessable_entity }
+        end
       end
-      return
     end
-    @course_lessons = Course::CourseDatum.find(params[:course_id]).course_lessons
-  end
 
-  # GET /course/lessons/1.json
-  def show
-  end
-
-  # POST /course/lessons.json
-  def create
-    if !params.has_key?(:course_id) or (params.has_key?(:course_id) and !Course::CourseDatum.where(id: params[:course_id]).exists?)
+    # PATCH/PUT /course/lessons/1.json
+    def update
+      @course_lesson[:data] = @course_lesson.data.merge(JSON.parse(request.body.read))
       respond_to do |format|
-        format.json { render json: {}, status: :not_found}
-      end
-      return
-    end
-    course = Course::CourseDatum.find(params[:course_id])
-    @course_lesson = Course::Lesson.new
-
-    @course_lesson.data = {}
-    course.course_lessons << @course_lesson
-
-    respond_to do |format|
-      if @course_lesson.save
-        format.json { render :show, status: :created, location: @course_lesson }
-      else
-        format.json { render json: @course_lesson.errors, status: :unprocessable_entity }
+        if @course_lesson.save
+          format.json { render :show, status: :ok, location: @course_lesson }
+        else
+          format.json { render json: @course_lesson.errors, status: :unprocessable_entity }
+        end
       end
     end
-  end
 
-  # PATCH/PUT /course/lessons/1.json
-  def update
-    @course_lesson[:data] = @course_lesson.data(true).merge(JSON.parse(request.body.read))
-    respond_to do |format|
-      if @course_lesson.save
-        format.json { render :show, status: :ok, location: @course_lesson }
-      else
-        format.json { render json: @course_lesson.errors, status: :unprocessable_entity }
+    # DELETE /course/lessons/1.json
+    def destroy
+      @course_lesson.destroy
+      respond_to do |format|
+        format.json { head :no_content }
       end
     end
-  end
 
-  # DELETE /course/lessons/1.json
-  def destroy
-    @course_lesson.destroy
-    respond_to do |format|
-      format.json { head :no_content }
-    end
-  end
-
-  private
+    private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_lesson
       @course_lesson = Course::Lesson.find(params[:id])
@@ -71,4 +64,11 @@ class Course::LessonsController < ApplicationController
     def course_lesson_params
       params.require(:course_lesson).permit(:data)
     end
+
+    def check_course_id
+      if !params.has_key?(:course_id) or (params.has_key?(:course_id) and !Course::CourseDatum.where(id: params[:course_id]).exists?)
+        raise Exceptions::NotFound
+      end
+    end
+  end
 end

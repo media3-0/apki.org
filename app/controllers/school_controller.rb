@@ -1,5 +1,6 @@
 class SchoolController < ApplicationController
-  before_action :is_teacher, only: [ :edit_profile, :educator_post ]
+  before_action :is_logged_in, only: [ :edit_profile, :educator_news ]
+  before_action :is_teacher, only: [ :edit_profile, :educator_news ]
 
   def profile
     @school = School.find(params[:id])
@@ -31,6 +32,9 @@ class SchoolController < ApplicationController
       if params[:educator_news][:id]
         # Edycja newsu
         @educator_news = EducatorNews.find(params[:educator_news][:id])
+        unless @educator_news.user.eql?(current_user)
+          raise Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
+        end
         @educator_news.update_attributes!(params[:educator_news].permit(:title, :content))
         flash[:notice] = 'Zaktualizowano news'
         redirect_to school_view_news_path(@educator_news)
