@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Course::LessonsController, type: :controller do
   render_views
 
-  before(:each) do
+  before(:all) do
     @admin = User.create!(nickname: 'test_admin', uid: 'asdf', account_type: :admin)
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
@@ -13,9 +13,12 @@ describe Course::LessonsController, type: :controller do
   end
 
   after(:each) do
-    User.destroy_all
     Course::CourseDatum.destroy_all
     Course::Lesson.destroy_all
+  end
+
+  after(:all) do
+    User.destroy_all
   end
 
   it 'Admin can create new lesson' do

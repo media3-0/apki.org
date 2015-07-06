@@ -16,6 +16,7 @@ class User
   has_many :news
   has_many :educator_news
   belongs_to :school
+  has_one :klasa, class_name: 'School'
 
   def self.create_with_omniauth(auth)
     create! do |user|

@@ -1,5 +1,4 @@
 class UserController < ApplicationController
-
   before_action :is_logged_in, only: [ :edit_profile ]
 
   def profile
@@ -17,7 +16,6 @@ class UserController < ApplicationController
       else
         flash[:error] = 'Błąd podczas zapisu'
       end
-
     end
   end
 end
