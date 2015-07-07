@@ -1,6 +1,6 @@
 class SchoolController < ApplicationController
-  before_action :is_logged_in, only: [ :edit_profile, :educator_news ]
-  before_action :is_teacher, only: [ :edit_profile, :educator_news ]
+  before_action :is_logged_in, only: [:edit_profile, :educator_news]
+  before_action :is_teacher, only: [:edit_profile, :educator_news]
 
   def profile
     @school = School.find(params[:id])
@@ -36,19 +36,27 @@ class SchoolController < ApplicationController
         unless @educator_news.user.eql?(current_user)
           raise Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
         end
-        @educator_news.update_attributes!(params[:educator_news].permit(:title, :content))
-        flash[:notice] = 'Zaktualizowano news'
-        redirect_to school_view_news_path(@educator_news)
+        if @educator_news.update_attributes(params[:educator_news].permit(:title, :content))
+          flash[:notice] = 'Zaktualizowano news'
+          redirect_to school_view_news_path(@educator_news)
+        end
+        flash[:error] = 'Błąd podczas zapisu'
       else
         # Nowy news
         params[:educator_news][:user_id] = current_user.id.to_s
-        @educator_news = EducatorNews.create!(params[:educator_news].permit(:title, :content, :user_id))
-        flash[:notice] = 'Stworzono nowy news'
-        redirect_to school_view_news_path(@educator_news)
+        @educator_news = EducatorNews.new(params[:educator_news].permit(:title, :content, :user_id))
+        if @educator_news.save
+          flash[:notice] = 'Stworzono nowy news'
+          redirect_to school_view_news_path(@educator_news)
+        end
+        flash[:error] = 'Błąd podczas zapisu'
       end
     else
       if params.include?(:id)
         @educator_news = EducatorNews.find(params[:id])
+        unless @educator_news.user.eql?(current_user)
+          raise Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
+        end
         @news_id = params[:id]
       else
         @educator_news = EducatorNews.new

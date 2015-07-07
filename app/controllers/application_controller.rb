@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
 
   def is_logged_in
     unless current_user
-      redirection 'Musisz być zalogowanym aby mieć tu dostęp'
+      redirection 'Musisz być zalogowany aby mieć tu dostęp'
     end
   end
 

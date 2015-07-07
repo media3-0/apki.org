@@ -22,7 +22,7 @@
   <%= raw parse_markdown(@news.content) -%>
   <hr>
 
-  <%- if @news.user.id == current_user.id -%>
+  <%- if current_user and @news.user.id == current_user.id -%>
   <%= link_to 'Edytuj newsa', school_educator_news_path + '?id=' + @news.id.to_s -%>
   <%- end -%>
 </div>
