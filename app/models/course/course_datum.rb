@@ -7,6 +7,8 @@ module Course
 
     has_many :course_lessons, :class_name => 'Course::Lesson'
 
+    has_many :course_user_courses, :class_name => 'Course::UserCourse'
+
     # Pobiera listę wszystkich kursów. Dla adminów także tych nieopublikowanych
     def self.get_list(user)
       data = Course::CourseDatum.all

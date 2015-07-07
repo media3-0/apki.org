@@ -21,9 +21,13 @@ class SessionsController < ApplicationController
       if params.has_key? :user_id
         session[:user_id] = params[:user_id]
       else
-        session[:user_id] = User.create!(nickname: 'test', uid: 'test', account_type: :student)
+        user = User.find_by(uid: 'test')
+        session[:user_id] = user.id.to_s
       end
-      redirect_to root_url, :notice => 'Zalogowano!'
+      respond_to do |format|
+        format.html { redirect_to root_url, :notice => 'Zalogowano!' }
+        format.json { render json: { 'notice': 'Zalogowano!' }}
+      end
     end
   end
 end
