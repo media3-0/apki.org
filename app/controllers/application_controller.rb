@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
   rescue_from Exceptions::NotFound do |exception|
     redirection exception.message, :not_found
   end
+  rescue_from Mongoid::Errors::DocumentNotFound do
+    redirection 'Nie znaleziono takiego zasobu', :not_found
+  end
 
   helper_method :current_user
 
@@ -22,7 +25,7 @@ class ApplicationController < ActionController::Base
 
   def is_logged_in
     unless current_user
-      redirection 'Musisz być zalogowanym aby mieć tu dostęp'
+      redirection 'Musisz być zalogowany aby mieć tu dostęp'
     end
   end
 

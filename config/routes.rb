@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     resources :exercises
     resources :quizzes
     resources :achievements
+    controller :user_courses do
+      match '/user_courses/:action', :via => 'post'
+    end
   end
   get 'school/profile/:id', to: 'school#profile', as: 'school_profile_view'
   get 'school/edit_profile'
@@ -29,6 +32,11 @@ Rails.application.routes.draw do
   get 'course_front/index'
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
+
+  unless Rails.env.production?
+    get 'test_login/:user_id', to: 'sessions#test_login', as: :test_login
+    get 'test_login', to: 'sessions#test_login'
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
