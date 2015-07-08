@@ -5,7 +5,7 @@ module Course
 
     field :achievements, type: Array, :default => []
     field :quizzes, type: Array, :default => []
-    field :exercises, type: Array, :default => []
+    field :exercises, type: Hash, :default => {}
     field :lessons, type: Array, :default => []
 
     belongs_to :user
