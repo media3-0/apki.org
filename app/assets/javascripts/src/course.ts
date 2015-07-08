@@ -2,6 +2,7 @@
 /// <reference path="course_interface.ts" />
 /// <reference path="../vendor/angularjs/angular.d.ts"/>
 /// <reference path="angular_helpers"/>
+/// <reference path="resources/course_rest_api.ts"/>
 
 declare var app:any;
 
@@ -10,6 +11,7 @@ module ApkiOrg.CourseMgr {
         menuVisible:{'left':boolean; 'bottom':boolean};
         currPart:string;
         course:Course;
+        api:CourseRestAPI;
 
         initCourse(courseJSON:string)
         resizeElements()
@@ -24,9 +26,10 @@ module ApkiOrg.CourseMgr {
         public static $inject = [
             '$scope',
             '$timeout',
-            '$compile'
+            '$compile',
+            '$resource'
         ];
-        constructor(private $scope: IAppCtrlScope, private $timeout: ng.ITimeoutService, private $compile:ng.ICompileService) {
+        constructor(private $scope: IAppCtrlScope, private $timeout: ng.ITimeoutService, private $compile:ng.ICompileService, private $resource:any) {
 
             /**
              * Hold are menus visible
@@ -39,13 +42,18 @@ module ApkiOrg.CourseMgr {
              * @param string courseJSON JSON holding Course configuration
              */
             $scope.initCourse = (courseJSON:string) => {
-                $scope.course = apkiOrg.helperObjectFromJSON<Course>(courseJSON);
+                var _f = () => {
+                    //$scope.course = apkiOrg.helperObjectFromJSON<Course>(courseJSON);
 
-                $(window).resize($scope.resizeElements);
-                $scope.resizeElements();
+                    $(window).resize($scope.resizeElements);
+                    $scope.resizeElements();
 
-                $scope.parseArticle();
-                $scope.currPart = 'article';
+                    $scope.parseArticle();
+                    $scope.currPart = 'article';
+
+                    $scope.api = new CourseRestAPI($resource);
+                }
+                $timeout(_f, 1, false);
             }
 
             /**
@@ -169,7 +177,7 @@ module ApkiOrg.CourseMgr {
         }
     }
 
-    app = angular.module('courseApp', []);
+    app = angular.module('courseApp', ['ngResource']);
     app.controller('myCtrl', myCtrl);
 
     export class Achivement implements IAchievement{

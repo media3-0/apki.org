@@ -3,6 +3,8 @@
 ///<reference path="course.ts" />
 
 module ApkiOrg.App {
+    export var app:ApkiOrg.App.AppMgr;
+
     export class AppMgr {
         private editor:Editor.EditorManager;
         constructor() {
@@ -34,13 +36,11 @@ module ApkiOrg.App {
 
 }
 
-declare var apkiOrg:ApkiOrg.App.AppMgr;
-
 jQuery(function(){
-    apkiOrg = new ApkiOrg.App.AppMgr();
+    ApkiOrg.App.app = new ApkiOrg.App.AppMgr();
 
     //Layout, elements etc:
-    apkiOrg.helperImageCircle('#loginImage', jQuery('#loginImage').data('src'), 35);
+    ApkiOrg.App.app.helperImageCircle('#loginImage', jQuery('#loginImage').data('src'), 35);
     var elems:any = jQuery('.selectpicker');
     elems.selectpicker();
     jQuery('.auto-status-removal').on('click', function(){
