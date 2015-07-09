@@ -68,31 +68,33 @@ module Course
     private
 
     # Przyznawanie achiementa
-    def grant_achievement(json_response, user_course, id, id_type)
+    def grant_achievement(json_response, user_course, id, id_type, lesson_achievement = false)
       query = Course::Achievement.where(id_type => id)
+      json_response_key = 'achievement_granted'
+      json_response_key = 'lesson_achievement_granted' if lesson_achievement
       if query.exists?
         # Przyznanie achievementa
         achievement = query.first
         if user_course.achievements.include? achievement.id.to_s
-          json_response['achievement_granted'] = false
+          json_response[json_response_key] = false
         else
           user_course.achievements << achievement.id.to_s
-          json_response['achievement_granted'] = true
+          json_response[json_response_key] = true
         end
       else
-        json_response['achievement_granted'] = false
+        json_response[json_response_key] = false
       end
     end
 
     # Sprawdzanie czy lekcja jest już zaliczona
-    def check_lesson(user_course, lesson)
-      # TODO : Wywołanie modułu sprawdzającego czy wszystkie podsegmenty lekcji (zadania oraz quizy) zostały wykonane
-      correct = true # FIXME : Sprawdzenie poprawności
+    def check_lesson(user_course, lesson, json_reponse)
+      correct = Course::CourseChecker.check_lesson lesson, user_course
       if correct
         unless user_course.lessons.include? lesson.id.to_s
           user_course.lessons << lesson.id.to_s
+          grant_achievement json_reponse, user_course, lesson.id.to_s, :lesson_id, true
         end
-      end # TODO : Obsługa nieprawidłowego rozwiązania
+      end
     end
   end
 end
