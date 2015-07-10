@@ -40,28 +40,27 @@ module Course
         json_response['is_correct'] = true
 
         grant_achievement json_response, user_course, id, :exercise_id
+        check_lesson user_course, lesson, json_response
         user_course.save!
-      end # TODO : Obsługa nieprawidłowego rozwiązania
+      end
       render json: json_response.to_json
     end
 
-    def check_quiz
+    def check_quizzes
       data = JSON.parse request.body.read
-      quiz = Course::Quiz.find(data['ID'])
-      course = quiz.course_lesson.course_course_datum
-      user_course = Course::UserCourse.find_by(course_course_datum: course)
-      # TODO : Wyowołanie modułu sprawdzającego poprawność quizu
-      id = quiz.id.to_s
+      lesson = Course::Lesson.find(data['ID'])
+      user_course = Course::UserCourse.find_by(course_course_datum: lesson.course_course_datum)
+      id = lesson.id.to_s
       json_response = { 'ID': id, 'is_correct': false }
-      correct = true # FIXME : Sprawdzenie poprawności
+      correct = Course::CourseChecker.check_quizes lesson, data, json_response
       if correct
         unless user_course.quizzes.include? id
           user_course.quizzes << id
         end
         json_response['is_correct'] = true
-        grant_achievement json_response, user_course, id, :quiz_id
+        check_lesson user_course, lesson, json_response
         user_course.save!
-      end # TODO : Obsługa nieprawidłowego rozwiązania
+      end
       render json: json_response.to_json
     end
 

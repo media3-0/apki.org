@@ -8,7 +8,7 @@ describe Course::UserCoursesController, type: :controller do
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = { 'test' => 'data'}
+    @data = {'test' => 'data'}
   end
 
   before(:each) do
@@ -18,13 +18,14 @@ describe Course::UserCoursesController, type: :controller do
     Course::Lesson.destroy_all
     Course::Quiz.destroy_all
     Course::Achievement.destroy_all
+    @quizzes = []
   end
 
   after(:all) do
     User.destroy_all
   end
 
-  it 'All quizzes and exercises done marks lesson as passed' do
+  it 'All quizzes and exercises done marks lesson as passed (+ achievement for lesson)' do
     session[:user_id] = @user.id.to_s
     course = create_course_with_sample_data
     lesson = course.course_lessons.first
@@ -33,9 +34,7 @@ describe Course::UserCoursesController, type: :controller do
     lesson.course_exercises.each do |exercise|
       user_course.exercises[exercise.id.to_s] = {}
     end
-    lesson.course_quizs.each do |quiz|
-      user_course.quizzes << quiz.id.to_s
-    end
+    user_course.quizzes << lesson.id.to_s
     user_course.save!
     expect(Course::CourseChecker.check_lesson lesson, user_course).to eq true
     achievement = Course::Achievement.where(lesson_id: lesson.id.to_s).first
@@ -57,6 +56,61 @@ describe Course::UserCoursesController, type: :controller do
     expect(json_response['status']).to eq 'already exists'
   end
 
+  describe 'User solving quizzes' do
+
+    it 'User succesfully solve quizzes (lesson with no exercises marked as solved)' do
+      course = create_course_with_sample_data
+
+      session[:user_id] = @user.id.to_s
+      user_course = Course::UserCourse.create!(user: @user, course_course_datum: course)
+      lesson = course.course_lessons.first
+      json_request = {'ID': lesson.id.to_s, 'quizzes': {
+          @quizzes[0].id.to_s => 3,
+          @quizzes[1].id.to_s => 0,
+          @quizzes[2].id.to_s => 1
+      }}
+      request.env['RAW_POST_DATA'] = json_request.to_json
+      post :check_quizzes, format: :json
+      json_response = JSON.parse response.body
+      expect(json_response['is_correct']).to eq true
+      json_response['quizzes'].each do |key, value|
+        quizzes_ids = @quizzes.map { |quiz| quiz.id.to_s }
+        expect(quizzes_ids.include? key).to eq true
+        expect(value).to eq true
+      end
+      user_course.reload
+      expect(user_course.quizzes.include? lesson.id.to_s).to eq true
+    end
+
+    it 'User solved only 2 quizzes' do
+      course = create_course_with_sample_data
+
+      session[:user_id] = @user.id.to_s
+      user_course = Course::UserCourse.create!(user: @user, course_course_datum: course)
+      lesson = course.course_lessons.first
+      json_request = {'ID': lesson.id.to_s, 'quizzes': {
+          @quizzes[0].id.to_s => 3,
+          @quizzes[1].id.to_s => 1,
+          @quizzes[2].id.to_s => 1
+      }}
+      request.env['RAW_POST_DATA'] = json_request.to_json
+      post :check_quizzes, format: :json
+      json_response = JSON.parse response.body
+      expect(json_response['is_correct']).to eq false
+      json_response['quizzes'].each do |key, value|
+        quizzes_ids = @quizzes.map { |quiz| quiz.id.to_s }
+        expect(quizzes_ids.include? key).to eq true
+        if key == @quizzes[1].id.to_s
+          expect(value).to eq false
+        else
+          expect(value).to eq true
+        end
+      end
+      user_course.reload
+      expect(user_course.quizzes.include? lesson.id.to_s).to eq false
+    end
+  end
+
   it 'Not logged user cannot participate to course' do
     course = create_course_with_sample_data
     post :new, format: :json, id: course.id.to_s
@@ -70,12 +124,18 @@ describe Course::UserCoursesController, type: :controller do
     3.times do
       lesson.course_exercises << Course::Exercise.create!(data: @data)
     end
-    2.times do
-      lesson.course_quizs << Course::Quiz.create!(data: @data)
+
+    @quizzes << Course::Quiz.create!(data: {'question': 'Test question 1', 'answer_idx': 3})
+    @quizzes << Course::Quiz.create!(data: {'question': 'Test question 2', 'answer_idx': 0})
+    @quizzes << Course::Quiz.create!(data: {'question': 'Test question 3', 'answer_idx': 1})
+    lesson.course_quizs.concat @quizzes
+    @quizzes.each do |quiz|
+      quiz.save!
     end
+
     Course::Achievement.create!(data: @data, lesson_id: lesson.id.to_s)
-    lesson.save!
     course.course_lessons << lesson
+    lesson.save!
     course.save!
     return course
   end

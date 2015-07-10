@@ -29,10 +29,6 @@ module Course
         id_present = true
         @course_achievement.exercise_id = params[:exercise_id]
       end
-      if !id_present and params.has_key?(:quiz_id) and Course::Quiz.where(id: params[:quiz_id]).exists?
-        id_present = true
-        @course_achievement.quiz_id = params[:quiz_id]
-      end
 
       unless id_present
         raise Exceptions::NotFound

@@ -6,6 +6,5 @@ module Course
     field :data, type: Hash
     field :lesson_id, type: String
     field :exercise_id, type: String
-    field :quiz_id, type: String
   end
 end
