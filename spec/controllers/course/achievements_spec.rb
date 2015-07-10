@@ -45,15 +45,6 @@ describe Course::AchievementsController, type: :controller do
     achievement = Course::Achievement.all.first
     expect(achievement).to be_valid
     Course::Achievement.destroy_all
-
-    quiz = Course::Quiz.create!(data: {})
-
-    post :create, { format: :json, quiz_id: quiz.id.to_s }
-    expect(response).to be_success
-    expect(Course::Achievement.count).to be > 0
-
-    achievement = Course::Achievement.all.first
-    expect(achievement).to be_valid
   end
 
   it 'User or teacher cannot create new achievement' do
@@ -84,10 +75,6 @@ describe Course::AchievementsController, type: :controller do
     expect(Course::Achievement.count).to eq 0
 
     post :create, { format: :json, exercise_id: 'bad_id' }
-    expect(response.status).to eq 404
-    expect(Course::Achievement.count).to eq 0
-
-    post :create, { format: :json, quiz_id: 'bad_id' }
     expect(response.status).to eq 404
     expect(Course::Achievement.count).to eq 0
   end
