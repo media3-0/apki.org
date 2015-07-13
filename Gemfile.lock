@@ -186,7 +186,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (~> 1.2)
-    octokit (3.8.0)
+    octokit (4.0.1)
       sawyer (~> 0.6.0, >= 0.5.3)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
@@ -373,7 +373,7 @@ DEPENDENCIES
   meta_request
   mini_magick
   mongoid (~> 4)
-  octokit (~> 3)
+  octokit (~> 4)
   omniauth-github
   pagedown-bootstrap-rails
   peek
