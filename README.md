@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org)
 # apki.org
 Informacje o rozwoju projektu można znaleźć na naszym [devblogu](http://devblog.apki.org)
 
