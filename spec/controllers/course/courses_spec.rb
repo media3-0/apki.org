@@ -103,7 +103,7 @@ describe Course::CourseDataController, type: :controller do
   end
 
   it 'Everybody can show single finished course' do
-    course = Course::CourseDatum.create!(data: { 'finished': true })
+    course = Course::CourseDatum.create!(data: {'finished' => true})
 
     get :show, { format: :json, id: course.id.to_s }
     expect(response).to be_success
@@ -112,7 +112,7 @@ describe Course::CourseDataController, type: :controller do
   end
 
   it 'Only admin can show single unfinished course' do
-    course = Course::CourseDatum.create!(data: { 'finished': false })
+    course = Course::CourseDatum.create!(data: {'finished' => false})
 
     get :show, { format: :json, id: course.id.to_s }
     expect(response.status).to eq 401
@@ -146,8 +146,8 @@ describe Course::CourseDataController, type: :controller do
       Course::CourseDatum.create!(data: @data)
     end
 
-    Course::CourseDatum.create!(data: { 'finished': false })
-    Course::CourseDatum.create!(data: { 'finished': true })
+    Course::CourseDatum.create!(data: {'finished' => false})
+    Course::CourseDatum.create!(:data => {'finished' => true})
 
     get :index, { format: :json }
     expect(response).to be_success

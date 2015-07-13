@@ -118,9 +118,9 @@ describe Course::UserCoursesController, type: :controller do
     end
 
     @quizzes = []
-    @quizzes << Course::Quiz.create!(data: {'question': 'Test question 1', 'answer_idx': 3})
-    @quizzes << Course::Quiz.create!(data: {'question': 'Test question 2', 'answer_idx': 0})
-    @quizzes << Course::Quiz.create!(data: {'question': 'Test question 3', 'answer_idx': 1})
+    @quizzes << Course::Quiz.create!(data: {'question' => 'Test question 1', 'answer_idx' => 3})
+    @quizzes << Course::Quiz.create!(data: {'question' => 'Test question 2', 'answer_idx' => 0})
+    @quizzes << Course::Quiz.create!(data: {'question' => 'Test question 3', 'answer_idx' => 1})
     lesson.course_quizs.concat @quizzes
     @quizzes.each do |quiz|
       quiz.save!
