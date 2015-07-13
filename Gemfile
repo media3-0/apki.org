@@ -63,7 +63,7 @@ gem 'simple_form'
 gem 'font-awesome-rails'
 
 # API GitHub - octokit (oficjalne)
-gem 'octokit', '~> 3'
+gem 'octokit', '~> 4'
 
 # cachowanie zapytań http robiony przez faraday (używane przez octokit) https://github.com/plataformatec/faraday-http-cache
 gem 'faraday-http-cache'
@@ -122,3 +122,4 @@ group :development, :test do
   gem 'spring'
 end
 
+gem "codeclimate-test-reporter", group: :test, require: nil
