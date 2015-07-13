@@ -18,7 +18,7 @@ describe Course::UserCoursesController, type: :controller do
     Course::Lesson.destroy_all
     Course::Quiz.destroy_all
     Course::Achievement.destroy_all
-    @quizzes = []
+    create_course_with_sample_data
   end
 
   after(:all) do
@@ -27,9 +27,8 @@ describe Course::UserCoursesController, type: :controller do
 
   it 'All quizzes and exercises done marks lesson as passed (+ achievement for lesson)' do
     session[:user_id] = @user.id.to_s
-    course = create_course_with_sample_data
-    lesson = course.course_lessons.first
-    user_course = Course::UserCourse.create!(user: @user, course_course_datum: course)
+    lesson = @course.course_lessons.first
+    user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
     expect(Course::CourseChecker.check_lesson lesson, user_course).to eq false
     lesson.course_exercises.each do |exercise|
       user_course.exercises[exercise.id.to_s] = {}
@@ -43,14 +42,13 @@ describe Course::UserCoursesController, type: :controller do
 
   it 'User can participate to course' do
     session[:user_id] = @user.id.to_s
-    course = create_course_with_sample_data
-    post :new, format: :json, id: course.id.to_s
+    post :new, format: :json, id: @course.id.to_s
     json_response = JSON.parse response.body
     expect(json_response['status']).to eq 'ok'
     expect(Course::UserCourse.where(id: json_response['id']).exists?).to eq true
-    expect(Course::UserCourse.where(user: @user, course_course_datum: course).exists?).to eq true
+    expect(Course::UserCourse.where(user: @user, course_course_datum: @course).exists?).to eq true
 
-    post :new, format: :json, id: course.id.to_s
+    post :new, format: :json, id: @course.id.to_s
     expect(response.status).to eq 422
     json_response = JSON.parse response.body
     expect(json_response['status']).to eq 'already exists'
@@ -59,11 +57,9 @@ describe Course::UserCoursesController, type: :controller do
   describe 'User solving quizzes' do
 
     it 'User succesfully solve quizzes (lesson with no exercises marked as solved)' do
-      course = create_course_with_sample_data
-
       session[:user_id] = @user.id.to_s
-      user_course = Course::UserCourse.create!(user: @user, course_course_datum: course)
-      lesson = course.course_lessons.first
+      user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
+      lesson = @course.course_lessons.first
       json_request = {'ID': lesson.id.to_s, 'quizzes': {
           @quizzes[0].id.to_s => 3,
           @quizzes[1].id.to_s => 0,
@@ -73,8 +69,8 @@ describe Course::UserCoursesController, type: :controller do
       post :check_quizzes, format: :json
       json_response = JSON.parse response.body
       expect(json_response['is_correct']).to eq true
+      quizzes_ids = @quizzes.map { |quiz| quiz.id.to_s }
       json_response['quizzes'].each do |key, value|
-        quizzes_ids = @quizzes.map { |quiz| quiz.id.to_s }
         expect(quizzes_ids.include? key).to eq true
         expect(value).to eq true
       end
@@ -83,11 +79,9 @@ describe Course::UserCoursesController, type: :controller do
     end
 
     it 'User solved only 2 quizzes' do
-      course = create_course_with_sample_data
-
       session[:user_id] = @user.id.to_s
-      user_course = Course::UserCourse.create!(user: @user, course_course_datum: course)
-      lesson = course.course_lessons.first
+      user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
+      lesson = @course.course_lessons.first
       json_request = {'ID': lesson.id.to_s, 'quizzes': {
           @quizzes[0].id.to_s => 3,
           @quizzes[1].id.to_s => 1,
@@ -97,8 +91,8 @@ describe Course::UserCoursesController, type: :controller do
       post :check_quizzes, format: :json
       json_response = JSON.parse response.body
       expect(json_response['is_correct']).to eq false
+      quizzes_ids = @quizzes.map { |quiz| quiz.id.to_s }
       json_response['quizzes'].each do |key, value|
-        quizzes_ids = @quizzes.map { |quiz| quiz.id.to_s }
         expect(quizzes_ids.include? key).to eq true
         if key == @quizzes[1].id.to_s
           expect(value).to eq false
@@ -112,19 +106,19 @@ describe Course::UserCoursesController, type: :controller do
   end
 
   it 'Not logged user cannot participate to course' do
-    course = create_course_with_sample_data
-    post :new, format: :json, id: course.id.to_s
+    post :new, format: :json, id: @course.id.to_s
     expect(response.status).to eq 401
   end
 
   private
   def create_course_with_sample_data
-    course = Course::CourseDatum.new(data: @data)
+    @course = Course::CourseDatum.new(data: @data)
     lesson = Course::Lesson.new(data: @data)
     3.times do
       lesson.course_exercises << Course::Exercise.create!(data: @data)
     end
 
+    @quizzes = []
     @quizzes << Course::Quiz.create!(data: {'question': 'Test question 1', 'answer_idx': 3})
     @quizzes << Course::Quiz.create!(data: {'question': 'Test question 2', 'answer_idx': 0})
     @quizzes << Course::Quiz.create!(data: {'question': 'Test question 3', 'answer_idx': 1})
@@ -134,9 +128,8 @@ describe Course::UserCoursesController, type: :controller do
     end
 
     Course::Achievement.create!(data: @data, lesson_id: lesson.id.to_s)
-    course.course_lessons << lesson
+    @course.course_lessons << lesson
     lesson.save!
-    course.save!
-    return course
+    @course.save!
   end
 end

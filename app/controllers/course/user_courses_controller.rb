@@ -49,7 +49,7 @@ module Course
     def check_quizzes
       data = JSON.parse request.body.read
       lesson = Course::Lesson.find(data['ID'])
-      user_course = Course::UserCourse.find_by(course_course_datum: lesson.course_course_datum)
+      user_course = Course::UserCourse.find_by(user: current_user, course_course_datum: lesson.course_course_datum)
       id = lesson.id.to_s
       json_response = { 'ID': id, 'is_correct': false }
       correct = Course::CourseChecker.check_quizes lesson, data, json_response
