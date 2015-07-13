@@ -1,4 +1,4 @@
-# apki.org [![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org)
+# apki.org [![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Dependency Status](https://gemnasium.com/media3-0/apki.org.svg)](https://gemnasium.com/media3-0/apki.org) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org) [![Test Coverage](https://codeclimate.com/github/media3-0/apki.org/badges/coverage.svg)](https://codeclimate.com/github/media3-0/apki.org/coverage)
 Informacje o rozwoju projektu można znaleźć na naszym [devblogu](http://devblog.apki.org)
 
 ## Konfiguracja potrzebna do uruchomienia aplikacji
@@ -32,4 +32,4 @@ Aby uruchomić wszystkie testy po zainstalowaniu zależności wystarczy wykonać
 
 Status testów dla MRI 2.1 oraz 2.2 jest na bieżąco monitorowany na Travis CI. 
 
-[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org)
+[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Test Coverage](https://codeclimate.com/github/media3-0/apki.org/badges/coverage.svg)](https://codeclimate.com/github/media3-0/apki.org/coverage) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org)
