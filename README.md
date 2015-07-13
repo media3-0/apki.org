@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org)
-# apki.org
+# apki.org [![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org)
 Informacje o rozwoju projektu można znaleźć na naszym [devblogu](http://devblog.apki.org)
 
 ## Konfiguracja potrzebna do uruchomienia aplikacji
@@ -26,3 +25,11 @@ Po tym procesie wystarczy uruchomić serwer poleceniem `rails s`.
 ## Konfiguracja Vagranta do pracy z portalem apki.org
 
 Pełna instrukcja dostępna na naszym [devblogu](http://devblog.apki.org/vagrant-ustawienie-srodowiska-developerskiego/).
+
+## Testowanie
+
+Aby uruchomić wszystkie testy po zainstalowaniu zależności wystarczy wykonać polecenie `rake`.
+
+Status testów dla MRI 2.1 oraz 2.2 jest na bieżąco monitorowany na Travis CI. 
+
+[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org)
