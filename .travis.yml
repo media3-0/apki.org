@@ -1,0 +1,11 @@
+language: ruby
+cache: bundler
+rvm:
+  - 2.1.6
+
+env:
+  - RAILS_ENV=test
+  - SECRET_KEY_BASE=wirybq243nr6qw7f
+
+services:
+  - mongodb
