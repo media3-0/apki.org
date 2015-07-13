@@ -5,14 +5,14 @@ module Course
     def new
       course = Course::CourseDatum.find(params[:id])
       if Course::UserCourse.where(user: current_user).and(course_course_datum: course).exists?
-        render json: {'status': 'already exists'}, status: :unprocessable_entity
+        render json: {'status' => 'already exists'}, status: :unprocessable_entity
         return
       end
       user_course = Course::UserCourse.new
       current_user.course_user_courses << user_course
       user_course.course_course_datum = course
       if user_course.save
-        render json: {'status': 'ok', 'id': user_course.id.to_s}
+        render json: {'status' => 'ok', 'id' => user_course.id.to_s}
       else
         render json: user_course.errors, status: :unprocessable_entity
       end
@@ -27,7 +27,7 @@ module Course
       # Jeżeli output jest poprawny, zadanie rozwiązane
       id = exercise.id.to_s
       output = 'testowy output'
-      json_response = { 'ID': id, 'output': output, 'is_correct': false }
+      json_response = { 'ID' => id, 'output' => output, 'is_correct': false }
       correct = true # FIXME : Sprawdzenie poprawności
       if correct
         unless user_course.exercises.has_key? id
@@ -51,7 +51,7 @@ module Course
       lesson = Course::Lesson.find(data['ID'])
       user_course = Course::UserCourse.find_by(user: current_user, course_course_datum: lesson.course_course_datum)
       id = lesson.id.to_s
-      json_response = { 'ID': id, 'is_correct': false }
+      json_response = { 'ID' => id, 'is_correct' => false }
       correct = Course::CourseChecker.check_quizes lesson, data, json_response
       if correct
         unless user_course.quizzes.include? id
