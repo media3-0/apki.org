@@ -27,7 +27,7 @@ module Course
       # Jeżeli output jest poprawny, zadanie rozwiązane
       id = exercise.id.to_s
       output = 'testowy output'
-      json_response = { 'ID' => id, 'output' => output, 'is_correct': false }
+      json_response = { 'ID' => id, 'output' => output, 'is_correct' =>  false }
       correct = true # FIXME : Sprawdzenie poprawności
       if correct
         unless user_course.exercises.has_key? id
