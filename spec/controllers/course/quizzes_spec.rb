@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'spec_helper'
 
 describe Course::QuizzesController, type: :controller do
   render_views
