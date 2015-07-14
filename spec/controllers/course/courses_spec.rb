@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'spec_helper'
 
 describe Course::CourseDataController, type: :controller do
   render_views
@@ -51,7 +50,7 @@ describe Course::CourseDataController, type: :controller do
   it 'Admin can update course' do
     session[:user_id] = @admin.id.to_s
 
-    course = Course::CourseDatum.create!(data: {})
+    course = Course::CourseDatum.create!
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -66,7 +65,7 @@ describe Course::CourseDataController, type: :controller do
   it 'User or teacher cannot update course' do
     session[:user_id] = @user.id.to_s
 
-    course = Course::CourseDatum.create!(data: {})
+    course = Course::CourseDatum.create!
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -104,7 +103,7 @@ describe Course::CourseDataController, type: :controller do
   end
 
   it 'Everybody can show single finished course' do
-    course = Course::CourseDatum.create!(data: { 'finished': true })
+    course = Course::CourseDatum.create!(data: {'finished' => true})
 
     get :show, { format: :json, id: course.id.to_s }
     expect(response).to be_success
@@ -113,7 +112,7 @@ describe Course::CourseDataController, type: :controller do
   end
 
   it 'Only admin can show single unfinished course' do
-    course = Course::CourseDatum.create!(data: { 'finished': false })
+    course = Course::CourseDatum.create!(data: {'finished' => false})
 
     get :show, { format: :json, id: course.id.to_s }
     expect(response.status).to eq 401
@@ -147,8 +146,8 @@ describe Course::CourseDataController, type: :controller do
       Course::CourseDatum.create!(data: @data)
     end
 
-    Course::CourseDatum.create!(data: { 'finished': false })
-    Course::CourseDatum.create!(data: { 'finished': true })
+    Course::CourseDatum.create!(data: {'finished' => false})
+    Course::CourseDatum.create!(data: {'finished' => true})
 
     get :index, { format: :json }
     expect(response).to be_success

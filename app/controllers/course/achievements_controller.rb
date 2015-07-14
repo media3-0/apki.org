@@ -1,8 +1,5 @@
 module Course
-  class AchievementsController < ApplicationController
-    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
-    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
-
+  class AchievementsController < CourseAdminController
     before_action :set_course_achievement, only: [:show, :update, :destroy]
 
     # GET /course/achievements.json
@@ -16,25 +13,7 @@ module Course
 
     # POST /course/achievements.json
     def create
-      id_present = false
-
-      @course_achievement = Course::Achievement.new
-      @course_achievement.data = {}
-
-      if params.has_key?(:lesson_id) and Course::Lesson.where(id: params[:lesson_id]).exists?
-        id_present = true
-        @course_achievement.lesson_id = params[:lesson_id]
-      end
-      if !id_present and params.has_key?(:exercise_id) and Course::Exercise.where(id: params[:exercise_id]).exists?
-        id_present = true
-        @course_achievement.exercise_id = params[:exercise_id]
-      end
-      if !id_present and params.has_key?(:quiz_id) and Course::Quiz.where(id: params[:quiz_id]).exists?
-        id_present = true
-        @course_achievement.quiz_id = params[:quiz_id]
-      end
-
-      unless id_present
+      unless check_achievement_type
         raise Exceptions::NotFound
       end
 
@@ -68,14 +47,23 @@ module Course
     end
 
     private
-    # Use callbacks to share common setup or constraints between actions.
     def set_course_achievement
       @course_achievement = Course::Achievement.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def course_achievement_params
-      params.require(:course_achievement).permit(:data)
+    def check_achievement_type
+      id_present = false
+      @course_achievement = Course::Achievement.new
+
+      if params.has_key?(:lesson_id) and Course::Lesson.where(id: params[:lesson_id]).exists?
+        id_present = true
+        @course_achievement.lesson_id = params[:lesson_id]
+      end
+      if !id_present and params.has_key?(:exercise_id) and Course::Exercise.where(id: params[:exercise_id]).exists?
+        id_present = true
+        @course_achievement.exercise_id = params[:exercise_id]
+      end
+      id_present
     end
   end
 end

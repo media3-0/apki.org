@@ -1,0 +1,10 @@
+language: ruby
+cache: bundler
+rvm:
+  - 2.2.2
+  - 2.1.6
+services:
+  - mongodb
+addons:
+  code_climate:
+    repo_token: f084c6419326c1cdc0d2779c1af241955fdd4c39a1d2e9b0d51d56099329e125

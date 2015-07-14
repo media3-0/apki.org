@@ -1,10 +1,6 @@
 module Course
-  class ExercisesController < ApplicationController
-    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
-    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
-
+  class ExercisesController < CourseAdminController
     before_action :check_lesson_id, only: [:index, :create]
-
     before_action :set_course_exercise, only: [:show, :update, :destroy]
 
     # GET /course/exercises.json
@@ -20,7 +16,6 @@ module Course
     def create
       lesson = Course::Lesson.find(params[:lesson_id])
       @course_exercise = Course::Exercise.new
-      @course_exercise.data = {}
       lesson.course_exercises << @course_exercise
 
       respond_to do |format|
@@ -53,14 +48,8 @@ module Course
     end
 
     private
-    # Use callbacks to share common setup or constraints between actions.
     def set_course_exercise
       @course_exercise = Course::Exercise.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def course_exercise_params
-      params.require(:course_exercise).permit(:data)
     end
 
     def check_lesson_id

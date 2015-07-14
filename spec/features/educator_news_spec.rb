@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature 'Zarządzanie newsami edukatorów' do
 
@@ -61,7 +61,7 @@ feature 'Zarządzanie newsami edukatorów' do
     logout
   end
 
-  scenario 'Walidacje formularza edycji posta' do
+  scenario 'Walidacje formularza nowego newsa' do
     login @teacher
     visit school_educator_news_path
     within 'form.simple_form' do
@@ -84,7 +84,7 @@ feature 'Zarządzanie newsami edukatorów' do
     logout
   end
 
-  scenario 'Walidacje formularza edycji posta' do
+  scenario 'Walidacje formularza edycji newsa' do
     news = EducatorNews.create!(title: 'test', content: 'opis', user: @teacher)
     login @teacher
     visit school_educator_news_path + '?id=' + news.id.to_s

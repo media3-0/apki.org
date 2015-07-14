@@ -26,7 +26,11 @@ class SessionsController < ApplicationController
       end
       respond_to do |format|
         format.html { redirect_to root_url, :notice => 'Zalogowano!' }
+<<<<<<< HEAD
         format.json { render json: { 'notice'=> 'Zalogowano!' }}
+=======
+        format.json { render json: { 'notice' => 'Zalogowano!' }}
+>>>>>>> 79dd69b18dd8474cf90aeb893c567e4332e76ce2
       end
     end
   end

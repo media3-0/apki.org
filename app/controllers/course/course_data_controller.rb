@@ -1,8 +1,5 @@
 module Course
-  class CourseDataController < ApplicationController
-    before_action :is_logged_in, except: [:index, :show] # TODO : Włączyć po testach
-    before_action :is_admin, except: [:index, :show]  # TODO : Włączyć po testach
-
+  class CourseDataController < CourseAdminController
     before_action :set_course_course_datum, only: [:show, :update, :destroy]
 
     # GET /course/course_data
@@ -24,8 +21,6 @@ module Course
     # POST /course/course_data.json
     def create
       @course_course_datum = Course::CourseDatum.new
-
-      @course_course_datum.data = {}
 
       respond_to do |format|
         if @course_course_datum.save
@@ -59,10 +54,6 @@ module Course
     private
     def set_course_course_datum
       @course_course_datum = Course::CourseDatum.find(params[:id])
-    end
-
-    def course_course_datum_params
-      params.require(:course_course_datum).permit(:data)
     end
   end
 end

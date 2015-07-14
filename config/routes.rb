@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :quizzes
     resources :achievements
     controller :user_courses do
+      match '/user_courses/:action/:id', :via => 'post'
       match '/user_courses/:action', :via => 'post'
     end
   end

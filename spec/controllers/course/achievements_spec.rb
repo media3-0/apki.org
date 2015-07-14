@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'spec_helper'
 
 describe Course::AchievementsController, type: :controller do
   render_views
@@ -26,7 +25,7 @@ describe Course::AchievementsController, type: :controller do
   it 'Admin can create new achievement' do
     session[:user_id] = @admin.id.to_s
 
-    lesson = Course::Lesson.create!(data: {})
+    lesson = Course::Lesson.create!
 
     post :create, { format: :json, lesson_id: lesson.id.to_s }
     expect(response).to be_success
@@ -36,7 +35,7 @@ describe Course::AchievementsController, type: :controller do
     expect(achievement).to be_valid
     Course::Achievement.destroy_all
 
-    exercise = Course::Exercise.create!(data: {})
+    exercise = Course::Exercise.create!
 
     post :create, { format: :json, exercise_id: exercise.id.to_s }
     expect(response).to be_success
@@ -45,21 +44,12 @@ describe Course::AchievementsController, type: :controller do
     achievement = Course::Achievement.all.first
     expect(achievement).to be_valid
     Course::Achievement.destroy_all
-
-    quiz = Course::Quiz.create!(data: {})
-
-    post :create, { format: :json, quiz_id: quiz.id.to_s }
-    expect(response).to be_success
-    expect(Course::Achievement.count).to be > 0
-
-    achievement = Course::Achievement.all.first
-    expect(achievement).to be_valid
   end
 
   it 'User or teacher cannot create new achievement' do
     session[:user_id] = @user.id.to_s
 
-    lesson = Course::Lesson.create!(data: {})
+    lesson = Course::Lesson.create!
 
     post :create, { format: :json, lesson_id: lesson.id.to_s }
     expect(response.status).to eq 401
@@ -86,16 +76,12 @@ describe Course::AchievementsController, type: :controller do
     post :create, { format: :json, exercise_id: 'bad_id' }
     expect(response.status).to eq 404
     expect(Course::Achievement.count).to eq 0
-
-    post :create, { format: :json, quiz_id: 'bad_id' }
-    expect(response.status).to eq 404
-    expect(Course::Achievement.count).to eq 0
   end
 
   it 'Admin can update achievement' do
     session[:user_id] = @admin.id.to_s
 
-    achievement = Course::Achievement.create!(data: {})
+    achievement = Course::Achievement.create!
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -110,7 +96,7 @@ describe Course::AchievementsController, type: :controller do
   it 'User or teacher cannot update achievement' do
     session[:user_id] = @user.id.to_s
 
-    achievement = Course::Achievement.create!(data: {})
+    achievement = Course::Achievement.create!
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -128,7 +114,7 @@ describe Course::AchievementsController, type: :controller do
   it 'Admin can destroy achievement' do
     session[:user_id] = @admin.id.to_s
 
-    achievement = Course::Achievement.create!(data: {})
+    achievement = Course::Achievement.create!
 
     delete :destroy, { format: :json, id: achievement.id.to_s }
     expect(response).to be_success
@@ -138,7 +124,7 @@ describe Course::AchievementsController, type: :controller do
   it 'User or Teacher cannot destroy achievement' do
     session[:user_id] = @user.id.to_s
 
-    achievement = Course::Achievement.create!(data: {})
+    achievement = Course::Achievement.create!
 
     delete :destroy, { format: :json, id: achievement.id.to_s }
     expect(response.status).to eq 401
