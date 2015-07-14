@@ -27,21 +27,10 @@ module Course
       # Jeżeli output jest poprawny, zadanie rozwiązane
       id = exercise.id.to_s
       output = 'testowy output'
-      json_response = { 'ID' => id, 'output' => output, 'is_correct' =>  false }
+      json_response = {'ID' => id, 'output' => output, 'is_correct' => false}
       correct = true # FIXME : Sprawdzenie poprawności
       if correct
-        unless user_course.exercises.has_key? id
-          user_course.exercises[id] = {}
-        end
-        user_course.exercises[id]['code'] = data['code']
-        user_course.exercises[id]['user_input'] = data['user_input']
-        user_course.exercises[id]['output'] = output
-
-        json_response['is_correct'] = true
-
-        grant_achievement json_response, user_course, id, :exercise_id
-        check_lesson user_course, lesson, json_response
-        user_course.save!
+        correct_exercise id, data, output, exercise.course_lesson, user_course, json_response
       end
       render json: json_response.to_json
     end
@@ -51,15 +40,9 @@ module Course
       lesson = Course::Lesson.find(data['ID'])
       user_course = Course::UserCourse.find_by(user: current_user, course_course_datum: lesson.course_course_datum)
       id = lesson.id.to_s
-      json_response = { 'ID' => id, 'is_correct' => false }
-      correct = Course::CourseChecker.check_quizes lesson, data, json_response
-      if correct
-        unless user_course.quizzes.include? id
-          user_course.quizzes << id
-        end
-        json_response['is_correct'] = true
-        check_lesson user_course, lesson, json_response
-        user_course.save!
+      json_response = {'ID' => id, 'is_correct' => false}
+      if Course::CourseChecker.check_quizes lesson, data, json_response
+        correct_quizzes id, lesson, user_course, json_response
       end
       render json: json_response.to_json
     end
@@ -94,6 +77,30 @@ module Course
           grant_achievement json_reponse, user_course, lesson.id.to_s, :lesson_id, true
         end
       end
+    end
+
+    def correct_exercise(id, data, output, lesson, user_course, json_response)
+      unless user_course.exercises.has_key? id
+        user_course.exercises[id] = {}
+      end
+      user_course.exercises[id]['code'] = data['code']
+      user_course.exercises[id]['user_input'] = data['user_input']
+      user_course.exercises[id]['output'] = output
+
+      json_response['is_correct'] = true
+
+      grant_achievement json_response, user_course, id, :exercise_id
+      check_lesson user_course, lesson, json_response
+      user_course.save!
+    end
+
+    def correct_quizzes(id, lesson, user_course, json_response)
+      unless user_course.quizzes.include? id
+        user_course.quizzes << id
+      end
+      json_response['is_correct'] = true
+      check_lesson user_course, lesson, json_response
+      user_course.save!
     end
   end
 end
