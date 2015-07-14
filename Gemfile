@@ -89,11 +89,6 @@ gem 'peek-gc' # Garbage Collector monitor
 gem 'peek-moped' # Moped (sterownik do MongoDB) monitor
 gem 'peek-performance_bar' # Performance monitor
 
-unless Gem.win_platform?
-  gem 'peek-rblineprof' # Rblineprof
-  gem 'pygments.rb', :require => false # Kolorowanie składni w Rblineprof
-end
-
 # Windows fixer
 gem 'tzinfo-data'
 
@@ -122,4 +117,5 @@ group :development, :test do
   gem 'spring'
 end
 
-gem "codeclimate-test-reporter", group: :test, require: nil
+gem 'codeclimate-test-reporter', group: :test, require: nil
+gem 'newrelic_rpm', group: [ :production, :development ]
