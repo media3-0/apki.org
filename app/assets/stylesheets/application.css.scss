@@ -166,18 +166,16 @@ form{
       overflow-y: auto;
 
       ul {
-        list-style: none;
         padding-top: 10px;
         padding-bottom: 10px;
         padding-left: 10px;
+        list-style-type: none;
 
         li{
           margin-bottom: 5px;
           overflow-x: hidden;
-          list-style-type: disc;
-          list-style-position: inside;
-          text-indent: -1em;
-          padding-left: 1em;
+          padding-left: 1.4em;
+          text-indent: -0.7em;
         }
 
         &>ul{

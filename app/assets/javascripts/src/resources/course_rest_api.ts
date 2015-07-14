@@ -18,59 +18,31 @@ module ApkiOrg.CourseMgr {
 //                    'params':{
 //                        'sub_url':'course_data/'
 //                    }
-//                    ,'transformResponse':[] //Uncomment to enable RAW text, no JSON decoding
+                    ,'transformResponse':this.transformFromBackEndToFrontEnd
                 }
                 ,'show':{
                     'method':'GET'
+                    ,'transformResponse':this.transformFromBackEndToFrontEnd
                 }
                 ,'create':{
                     'method':'POST',
                     'url':'/course/course_data.json'
+                    ,'transformResponse':this.transformFromBackEndToFrontEnd
                 }
                 ,'update':{
                     'method':'PUT'
+                    ,'transformResponse':this.transformFromBackEndToFrontEnd
                 }
                 ,'delete':{
                     'method':'DELETE'
+                    ,'transformResponse':this.transformFromBackEndToFrontEnd
                 }
             });
+        }
 
-                var c = new ApkiOrg.CourseMgr.Course();
-    c.ID = 1;
-    c.title = 'Halo halo!';
-    c.lessonsPassed = [1, 2, 3];
-    c.lessonCurrent = 1;
-
-//    c.lessons = [];
-    var newLess = new ApkiOrg.CourseMgr.Lesson();
-    newLess.achievement = null;
-    newLess.article = '<h1>HWDP JP 100%!</h1>';
-    newLess.ID = 0;
-//    newLess.quizzes=[];
-//    newLess.exercises = new Array();
-
-    var newExecrise = new ApkiOrg.CourseMgr.Exercise();
-    newExecrise.ID=777;
-    newExecrise.content_of_exercise='Zrób coś!';
-    newExecrise.lang = 'javascript';
-    newExecrise.code='heheheh';
-//    newExecrise.code_locks = new Array();
-
-    var newAch = new ApkiOrg.CourseMgr.Achivement();
-    newAch.ID=1;
-    newAch.title='Heheszki';
-    newAch.points=100;
-
-    newExecrise.achievement = newAch;
-    newLess.exercises.push(newExecrise);
-    c.lessons.push(newLess);
-
-    var tekst = ApkiOrg.App.app.helperObjectToJSON<ApkiOrg.CourseMgr.Course>(c);
-
-            console.log(this.res.create({}, '', (ans:string) => {
-                console.log('Jest i ans!');
-                console.log(ans);
-            }));
+        private transformFromBackEndToFrontEnd(data, headersGetter){
+            data = angular.fromJson(data);
+            return $.extend(data.data, {'ID':data.id.$oid||''}); //overwrite ID to real ID
         }
     }
 }

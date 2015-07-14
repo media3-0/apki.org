@@ -3,6 +3,7 @@
 /// <reference path="../vendor/angularjs/angular.d.ts"/>
 /// <reference path="angular_helpers"/>
 /// <reference path="resources/course_rest_api.ts"/>
+/// <reference path="../vendor/custom.d.ts"/>
 
 declare var app:any;
 
@@ -12,6 +13,8 @@ module ApkiOrg.CourseMgr {
         currPart:string;
         course:Course;
         api:CourseRestAPI;
+        inited:boolean;
+        courseId:string;
 
         initCourse(courseJSON:string)
         resizeElements()
@@ -20,6 +23,8 @@ module ApkiOrg.CourseMgr {
         fullSizeElement(element:{}, $event:{})
         isPartVisible(part:string)
         goToPart(part:string)
+        buildCourse(data:any)
+        getLesson():Lesson
     }
 
     export class myCtrl {
@@ -39,21 +44,43 @@ module ApkiOrg.CourseMgr {
 
             /**
              * This will init Course. Required at the beginning. Called in ng-init.
-             * @param string courseJSON JSON holding Course configuration
              */
-            $scope.initCourse = (courseJSON:string) => {
+            $scope.initCourse = () => {
                 var _f = () => {
-                    //$scope.course = apkiOrg.helperObjectFromJSON<Course>(courseJSON);
+                    $scope.inited = false;
 
-                    $(window).resize($scope.resizeElements);
-                    $scope.resizeElements();
-
-                    $scope.parseArticle();
                     $scope.currPart = 'article';
 
+                    $(window).resize($scope.resizeElements);
+
                     $scope.api = new CourseRestAPI($resource);
+
+                    $scope.course = $scope.api.res.show({'id':$scope.courseId}, '', $scope.buildCourse);
                 }
                 $timeout(_f, 1, false);
+            }
+
+            /**
+             * This will create course object, init rest of app and set application as initialized.
+             * Private.
+             * @param any data Data from JSON
+             */
+            $scope.buildCourse = (data:any) => {
+                $scope.parseArticle();
+
+                $scope.inited = true;
+                $scope.resizeElements();
+            }
+
+            /**
+             * Gets current lesson.
+             * @return Lesson Current lesson or null if all finished
+             */
+            $scope.getLesson = ():Lesson => {
+                if ($scope.course.lessonCurrent>=$scope.course.lessons.length)
+                    return null;
+                else
+                    return $scope.course.lessons[$scope.course.lessonCurrent];
             }
 
             /**
@@ -69,7 +96,6 @@ module ApkiOrg.CourseMgr {
              */
             $scope.resizeElements = (delay:number=0) => {
                 var _resFnc = () => {
-                    console.log('resizeElements...');
                     var freeHeight = $(window).height()-$('nav.navbar').height()-($('#courseLessons').is(':visible')?$('#courseLessons').height():3/*why required ??*/)-$('#courseContent').find('.secHidePanelBar').height();
                     $('#courseContent').height(freeHeight);
                     $('#courseContent').find('.col').height($('#courseContent').height());
@@ -93,48 +119,52 @@ module ApkiOrg.CourseMgr {
              * Private.
              */
             $scope.parseArticle = () => {
-                var get_gen_id = (element:any):string => {
-                    if ($.inArray($(element).attr('id'), [undefined, null, ''])>-1){
-                        var rand_id:string;
-                        do {
-                            var rand_id = 'anchor_'+Math.round(Math.random()*1000)+Math.round(Math.random()*1000);
-                        } while ($('*[id="'+rand_id+'"]').length>0);
-                        $(element).attr('id', rand_id);
-                    }
-                    return $(element).attr('id');
-                };
-                var art_el : JQuery = $('#courseCnt').find('.course-article');
-                if (art_el.length==0) return;
-                var sub_cats : {'title':string; 'anchor':string; 'ico':string}[] = [];
+                $timeout(() => {
 
-                art_el.find(':header, iframe').each(function(){
-                    if ($(this).is(':header')){
-                        sub_cats.push({
-                            'title': $.trim($(this).text()),
-                            'anchor':'#'+get_gen_id(this),
-                            'ico':'glyphicon-align-justify'
-                        });
-                    }
-                    if ($(this).is('iframe')){
-                        if ($.inArray($(this).attr('alt'), [undefined, null, ''])>-1){
-                            $(this).attr('alt', 'Film');
+                    var get_gen_id = (element:any):string => {
+                        if ($.inArray($(element).attr('id'), [undefined, null, ''])>-1){
+                            var rand_id:string;
+                            do {
+                                var rand_id = 'anchor_'+Math.round(Math.random()*1000)+Math.round(Math.random()*1000);
+                            } while ($('*[id="'+rand_id+'"]').length>0);
+                            $(element).attr('id', rand_id);
                         }
-                        var iframe_id:string = get_gen_id(this);
-                        $(this).wrap('<div></div>');
-                        $(this).before('<a href="javascript:;" ng-click="fullSizeElement(this, $event)">Przejdź do trybu pełnoekranowego</a><br>');
-                        $compile($(this).parent('div'))($scope);
-                        sub_cats.push({
-                            'title': $.trim($(this).attr('alt')),
-                            'anchor':'#'+iframe_id,
-                            'ico':'glyphicon-facetime-video'
-                        });
-                    }
-                });
+                        return $(element).attr('id');
+                    };
+                    var art_el : JQuery = $('#courseCnt').find('.course-article');
+                    if (art_el.length==0) return;
+                    var sub_cats : {'title':string; 'anchor':string; 'ico':string}[] = [];
 
-                $('#courseLessonMenu').find('ul.article-parsed').html(''); //Empty article-parsed submenu
-                $.each(sub_cats, function(){
-                    $('#courseLessonMenu').find('ul.article-parsed').append('<li><i class="glyphicon '+this.ico+'"></i> <a href="'+this.anchor+'">'+this.title+'</a></li>');
-                });
+                    art_el.find(':header, iframe').each(function(){
+                        if ($(this).is(':header')){
+                            sub_cats.push({
+                                'title': $.trim($(this).text()),
+                                'anchor':'#'+get_gen_id(this),
+                                'ico':'glyphicon-align-justify'
+                            });
+                        }
+                        if ($(this).is('iframe')){
+                            if ($.inArray($(this).attr('alt'), [undefined, null, ''])>-1){
+                                $(this).attr('alt', 'Film');
+                            }
+                            var iframe_id:string = get_gen_id(this);
+                            $(this).wrap('<div></div>');
+                            $(this).before('<a href="javascript:;" ng-click="fullSizeElement(this, $event)">Przejdź do trybu pełnoekranowego</a><br>');
+                            $compile($(this).parent('div'))($scope);
+                            sub_cats.push({
+                                'title': $.trim($(this).attr('alt')),
+                                'anchor':'#'+iframe_id,
+                                'ico':'glyphicon-facetime-video'
+                            });
+                        }
+                    });
+
+                    $('#courseLessonMenu').find('ul.article-parsed').html(''); //Empty article-parsed submenu
+                    $.each(sub_cats, function(){
+                        $('#courseLessonMenu').find('ul.article-parsed').append('<li><i class="glyphicon '+this.ico+'"></i> <a href="'+this.anchor+'" ng-click="goToPart(\'article\')">'+this.title+'</a></li>');
+                    });
+                    $compile($('#courseLessonMenu').find('ul.article-parsed'))($scope);
+                }, 1, false);
             }
 
             /**
@@ -167,10 +197,19 @@ module ApkiOrg.CourseMgr {
 
                 $($event.currentTarget)[0].scrollIntoView( true );
             }
-            $scope.isPartVisible = (part:string) =>{
+            $scope.isPartVisible = (part:string):boolean =>{
                 return $scope.currPart == part;
             }
             $scope.goToPart = (part:string) =>{
+                var possibleParts:boolean[] = [];
+                possibleParts['article'] = true; //always enabled
+                possibleParts['end'] = true; //always enabled
+                possibleParts['quiz'] = (!!$scope.getLesson().quizzes.length);
+                possibleParts['exercise'] = (!!$scope.getLesson().quizzes.length);
+                var path:string[] = ['article', 'quiz', 'exercise', 'end'];
+                if (!possibleParts[part])
+                    part = path[path.indexOf(part)+1];
+
                 $scope.currPart = part;
             }
 
@@ -179,6 +218,44 @@ module ApkiOrg.CourseMgr {
 
     app = angular.module('courseApp', ['ngResource']);
     app.controller('myCtrl', myCtrl);
+    app.filter('to_trusted', ['$sce', ($sce) => {
+        return (text) => {
+            return $sce.trustAsHtml(text);
+        };
+    }]);
+
+    class SelectPickerDirective
+    {
+        public link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) => void;
+//        public template = '<div>{{name}}</div>';
+        public scope = {};
+
+        constructor($timeout)
+        {
+            // It's important to add `link` to the prototype or you will end up with state issues.
+            // See http://blog.aaronholmes.net/writing-angularjs-directives-as-typescript-classes/#comment-2111298002 for more information.
+            SelectPickerDirective.prototype.link = (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) =>
+            {
+                $timeout((element) => {
+                    $(element).selectpicker();
+                }, 0, true, element);
+            };
+        }
+
+        public static Factory()
+        {
+            var directive = ($timeout) =>
+            {
+                return new SelectPickerDirective($timeout);
+            };
+
+            directive['$inject'] = ['$timeout'];
+
+            return directive;
+        }
+    }
+
+    app.directive('selectpicker', SelectPickerDirective.Factory());
 
     export class Achivement implements IAchievement{
         ID                  :number;            //Unique ID of achievement
