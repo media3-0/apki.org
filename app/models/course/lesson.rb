@@ -3,7 +3,7 @@ module Course
     include Mongoid::Document
     include Mongoid::Timestamps
 
-    field :data, type: Hash
+    field :data, type: Hash, :default => {}
 
     belongs_to :course_course_datum, :class_name => 'Course::CourseDatum'
 

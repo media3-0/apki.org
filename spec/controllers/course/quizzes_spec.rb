@@ -23,7 +23,7 @@ describe Course::QuizzesController, type: :controller do
   it 'Admin can create new quiz' do
     session[:user_id] = @admin.id.to_s
 
-    lesson = Course::Lesson.create!(data: {})
+    lesson = Course::Lesson.create!
 
     post :create, { format: :json, lesson_id: lesson.id.to_s }
     expect(response).to be_success
@@ -37,7 +37,7 @@ describe Course::QuizzesController, type: :controller do
   it 'User or teacher cannot create new quiz' do
     session[:user_id] = @user.id.to_s
 
-    lesson = Course::Lesson.create!(data: {})
+    lesson = Course::Lesson.create!
 
     post :create, { format: :json, lesson_id: lesson.id.to_s }
     expect(response.status).to eq 401
@@ -69,7 +69,7 @@ describe Course::QuizzesController, type: :controller do
   it 'Admin can update quiz' do
     session[:user_id] = @admin.id.to_s
 
-    quiz = Course::Quiz.create!(data: {})
+    quiz = Course::Quiz.create!
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -84,7 +84,7 @@ describe Course::QuizzesController, type: :controller do
   it 'User or teacher cannot update quiz' do
     session[:user_id] = @user.id.to_s
 
-    quiz = Course::Quiz.create!(data: {})
+    quiz = Course::Quiz.create!
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -102,7 +102,7 @@ describe Course::QuizzesController, type: :controller do
   it 'Admin can destroy quiz' do
     session[:user_id] = @admin.id.to_s
 
-    quiz = Course::Quiz.create!(data: {})
+    quiz = Course::Quiz.create!
 
     delete :destroy, { format: :json, id: quiz.id.to_s }
     expect(response).to be_success
@@ -112,7 +112,7 @@ describe Course::QuizzesController, type: :controller do
   it 'User or Teacher cannot destroy quiz' do
     session[:user_id] = @user.id.to_s
 
-    quiz = Course::Quiz.create!(data: {})
+    quiz = Course::Quiz.create!
 
     delete :destroy, { format: :json, id: quiz.id.to_s }
     expect(response.status).to eq 401

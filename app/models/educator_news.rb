@@ -12,21 +12,4 @@ class EducatorNews
   field :content, type: String
 
   belongs_to :user
-
-  rails_admin do
-    edit do
-      field :title
-      field :content, :text
-      field :user do
-        visible false
-      end
-
-      field :user_id, :hidden do
-        visible true
-        default_value do
-          bindings[:view].current_user.id
-        end
-      end
-    end
-  end
 end
