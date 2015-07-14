@@ -15,6 +15,7 @@ module ApkiOrg.CourseMgr {
         api:CourseRestAPI;
         inited:boolean;
         courseId:string;
+        quizChecking:boolean;
 
         initCourse(courseJSON:string)
         resizeElements()
@@ -25,6 +26,7 @@ module ApkiOrg.CourseMgr {
         goToPart(part:string)
         buildCourse(data:any)
         getLesson():Lesson
+        checkQuiz(element:{}, $event:any)
     }
 
     export class myCtrl {
@@ -36,6 +38,28 @@ module ApkiOrg.CourseMgr {
         ];
         constructor(private $scope: IAppCtrlScope, private $timeout: ng.ITimeoutService, private $compile:ng.ICompileService, private $resource:any) {
 
+            $scope.checkQuiz = (element:any, $event:any) => {
+                $scope.quizChecking = true;
+
+                var _quiz:CommSendQuiz = new CommSendQuiz();
+                _quiz.ID = $scope.getLesson().ID;
+
+                _quiz.quizzes['55a512ef416d6927dc00000a'] = 8;
+                _quiz.quizzes['55a512f0416d6927dc00000b'] = 0;
+
+                console.log(_quiz);
+
+                var _quiz_str:string = ApkiOrg.App.app.helperObjectToJSON(_quiz);
+
+                console.log(_quiz_str);
+
+                var $QuizCtrl:QuizRestAPI = new QuizRestAPI($resource);
+                $QuizCtrl.res.check({}, _quiz_str, (ans:any) => {
+                    console.log(ans);
+                });
+
+                $scope.quizChecking = false;
+            }
             /**
              * Hold are menus visible
              * @type {{left: boolean, bottom: boolean}}
@@ -359,8 +383,12 @@ module ApkiOrg.CourseMgr {
     }
 
     export class CommSendQuiz implements ICommSendQuiz{
-        ID                  :number;            //Unique ID
-        answer_idx          :string;            //Answer idx
+        ID                  :number;            //Unique Lesson ID
+        quizzes             :{};                //Quiz ID : Answer idx
+
+        constructor() {
+            this.quizzes  =   {};
+        }
     }
 
     export class CommRecvQuiz implements ICommRecvQuiz{

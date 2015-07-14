@@ -45,4 +45,17 @@ module ApkiOrg.CourseMgr {
             return $.extend(data.data, {'ID':data.id.$oid||''}); //overwrite ID to real ID
         }
     }
+
+    export class QuizRestAPI{
+        public res : any;
+
+        constructor(private $resource : any) {
+            this.res = $resource('/course/user_courses/check_quizzes.json', {}, {
+                //Definition of RESTful API:
+                'check':{
+                    'method':'POST'
+                }
+            });
+        }
+    }
 }

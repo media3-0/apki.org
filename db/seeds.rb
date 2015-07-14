@@ -11,3 +11,20 @@ puts 'Tworzenie użytkowników'
   User.create!(uid: n.to_s, nickname: "nickname#{n}", account_type: :student)
 end
 puts 'Użytkownicy stworzeni'
+
+@course = Course::CourseDatum.new(data: @data)
+lesson = Course::Lesson.new(data: @data)
+
+@quizzes = []
+@quizzes << Course::Quiz.create!(data: {'question' => 'Test question 1', 'answer_idx' => 3})
+@quizzes << Course::Quiz.create!(data: {'question' => 'Test question 2', 'answer_idx' => 0})
+@quizzes << Course::Quiz.create!(data: {'question' => 'Test question 3', 'answer_idx' => 1})
+lesson.course_quizs.concat @quizzes
+@quizzes.each do |quiz|
+	quiz.save!
+end
+
+Course::Achievement.create!(data: @data, lesson_id: lesson.id.to_s)
+@course.course_lessons << lesson
+lesson.save!
+@course.save!

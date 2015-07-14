@@ -225,6 +225,19 @@ var ApkiOrg;
             return CourseRestAPI;
         })();
         CourseMgr.CourseRestAPI = CourseRestAPI;
+        var QuizRestAPI = (function () {
+            function QuizRestAPI($resource) {
+                this.$resource = $resource;
+                this.res = $resource('/course/user_courses/check_quizzes.json', {}, {
+                    //Definition of RESTful API:
+                    'check': {
+                        'method': 'POST'
+                    }
+                });
+            }
+            return QuizRestAPI;
+        })();
+        CourseMgr.QuizRestAPI = QuizRestAPI;
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 //(c) Jakub Krol 2015
@@ -243,6 +256,21 @@ var ApkiOrg;
                 this.$timeout = $timeout;
                 this.$compile = $compile;
                 this.$resource = $resource;
+                $scope.checkQuiz = function (element, $event) {
+                    $scope.quizChecking = true;
+                    var _quiz = new CommSendQuiz();
+                    _quiz.ID = $scope.getLesson().ID;
+                    _quiz.quizzes['55a512ef416d6927dc00000a'] = 8;
+                    _quiz.quizzes['55a512f0416d6927dc00000b'] = 0;
+                    console.log(_quiz);
+                    var _quiz_str = ApkiOrg.App.app.helperObjectToJSON(_quiz);
+                    console.log(_quiz_str);
+                    var $QuizCtrl = new CourseMgr.QuizRestAPI($resource);
+                    $QuizCtrl.res.check({}, _quiz_str, function (ans) {
+                        console.log(ans);
+                    });
+                    $scope.quizChecking = false;
+                };
                 /**
                  * Hold are menus visible
                  * @type {{left: boolean, bottom: boolean}}
@@ -499,6 +527,7 @@ var ApkiOrg;
         CourseMgr.CommRecvExercise = CommRecvExercise;
         var CommSendQuiz = (function () {
             function CommSendQuiz() {
+                this.quizzes = {};
             }
             return CommSendQuiz;
         })();

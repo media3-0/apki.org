@@ -37,7 +37,7 @@
                             <label for="quiz_question_{{quiz.ID}}"><small>{{ quiz.question }}</small></label>
                         </div>
                         <div class="field-value">
-                            <select id="quiz_question_{{quiz.ID}}" selectpicker class="selectpicker" data-width="100%">
+                            <select id="quiz_question_{{quiz.ID}}" selectpicker class="selectpicker" data-width="100%" data-quiz-id="{{quiz.ID}}">
                                 <option ng-repeat="(ans_idx, ans) in quiz.answers" value="{{ans_idx}}">{{ans}}</option>
                             </select>
                         </div>
@@ -45,7 +45,7 @@
 
                     <div class="clearfix"></div>
                     <div class="buttons">
-                        <input type="submit" class="btn btn-lg btn-primary btn-save" value="Sprawdź odpowiedzi">
+                        <button ng-disabled="quizChecking" ng-class="quizChecking?'active':''" type="button" ng-click="checkQuiz(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
                     </div>
                 </form>
             </div>
