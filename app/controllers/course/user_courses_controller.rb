@@ -70,8 +70,7 @@ module Course
 
     # Sprawdzanie czy lekcja jest już zaliczona
     def check_lesson(user_course, lesson, json_reponse)
-      correct = Course::CourseChecker.check_lesson lesson, user_course
-      if correct
+      if Course::CourseChecker.check_lesson lesson, user_course
         unless user_course.lessons.include? lesson.id.to_s
           user_course.lessons << lesson.id.to_s
           grant_achievement json_reponse, user_course, lesson.id.to_s, :lesson_id, true

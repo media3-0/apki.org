@@ -28,15 +28,33 @@ describe Course::UserCoursesController, type: :controller do
     session[:user_id] = @user.id.to_s
     lesson = @course.course_lessons.first
     user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
-    expect(Course::CourseChecker.check_lesson lesson, user_course).to eq false
     lesson.course_exercises.each do |exercise|
       user_course.exercises[exercise.id.to_s] = {}
     end
-    user_course.quizzes << lesson.id.to_s
     user_course.save!
+
+    # Nie zakończona lekcja
+    expect(Course::CourseChecker.check_lesson lesson, user_course).to eq false
+
+    json_request = {'ID' => lesson.id.to_s, 'quizzes' => {
+        @quizzes[0].id.to_s => 3,
+        @quizzes[1].id.to_s => 0,
+        @quizzes[2].id.to_s => 1
+    }}
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_quizzes, format: :json
+
+    user_course.reload
+
+    # Rozwiązane quizy
     expect(Course::CourseChecker.check_lesson lesson, user_course).to eq true
     achievement = Course::Achievement.where(lesson_id: lesson.id.to_s).first
-    expect(user_course.achievements.include? achievement.id.to_s)
+    expect(user_course.achievements.include? achievement.id.to_s).to eq true
+
+    # Sprawdzenie po raz drugi. Achievement nie powinieć być ponownie przyznany!
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_quizzes, format: :json
+    expect(user_course.achievements.count).to eq 1
   end
 
   it 'User can participate to course' do
@@ -102,11 +120,47 @@ describe Course::UserCoursesController, type: :controller do
       user_course.reload
       expect(user_course.quizzes.include? lesson.id.to_s).to eq false
     end
+
+    it 'Bad lesson ID passed by data' do
+      session[:user_id] = @user.id.to_s
+      json_request = {'ID' => 'bad_id', 'quizzes' => {
+          @quizzes[0].id.to_s => 3,
+          @quizzes[1].id.to_s => 1,
+          @quizzes[2].id.to_s => 1
+      }}
+      request.env['RAW_POST_DATA'] = json_request.to_json
+      post :check_quizzes, format: :json
+      expect(response.status).to eq 404
+      json_response = JSON.parse response.body
+      expect(json_response['error']).to eq 'Nie znaleziono takiego zasobu'
+    end
+
+    it 'User is not participating to course' do
+      session[:user_id] = @user.id.to_s
+      lesson = @course.course_lessons.first
+      json_request = {'ID' => lesson.id.to_s, 'quizzes' => {
+          @quizzes[0].id.to_s => 3,
+          @quizzes[1].id.to_s => 1,
+          @quizzes[2].id.to_s => 1
+      }}
+      request.env['RAW_POST_DATA'] = json_request.to_json
+      post :check_quizzes, format: :json
+      expect(response.status).to eq 404
+      json_response = JSON.parse response.body
+      expect(json_response['error']).to eq 'Nie znaleziono takiego zasobu'
+    end
   end
 
-  it 'Not logged user cannot participate to course' do
-    post :new, format: :json, id: @course.id.to_s
-    expect(response.status).to eq 401
+  describe 'Not logged user' do
+    it 'cannot participate to course' do
+      post :new, format: :json, id: @course.id.to_s
+      expect(response.status).to eq 401
+    end
+
+    it 'cannot solve quizzes' do
+      post :check_quizzes, format: :json
+      expect(response.status). to eq 401
+    end
   end
 
   private
