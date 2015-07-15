@@ -1,18 +1,15 @@
 //(c) Jakub Krol 2015
 
 module ApkiOrg.CourseMgr {
-    /**
-     * Resource [REST API]: Course.
-     */
-    export class CourseRestAPI{
+    export class LessonRestAPI{
         public res : any;
 
         constructor(private $resource : any) {
-            this.res = $resource('/course/course_data/:id.json', {}, {
+            this.res = $resource('/course/lessons/:id.json', {}, {
                 //Definition of RESTful API:
                 'list':{
                     'method':'GET',
-                    'url':'/course/course_data.json',
+                    'url':'/course/lessons.json',
                     isArray: true
 //                    'params':{
 //                        'sub_url':'course_data/'
@@ -24,7 +21,7 @@ module ApkiOrg.CourseMgr {
                 }
                 ,'create':{
                     'method':'POST',
-                    'url':'/course/course_data.json'
+                    'url':'/course/lessons.json'
                 }
                 ,'update':{
                     'method':'PUT'

@@ -21,7 +21,7 @@
         </div>
         <div class="col col-line-height-100-pro firstHidePanelBar" ng-click="hidePanelBarClick('left')">||</div>
         <div id="courseCnt" class="sec col">
-            <div class="course-article course-element" ng-hide="!isPartVisible('article')" ng-bind-html="getLesson().article | to_trusted">
+            <div class="course-article course-element" ng-hide="!isPartVisible('article')" ng-bind-html="getLesson().data.article | to_trusted">
             </div>
 
             <div class="buttons" ng-hide="!isPartVisible('article')">
