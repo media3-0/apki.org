@@ -11,8 +11,8 @@ class ApplicationController < ActionController::Base
   rescue_from Exceptions::NotFound do |exception|
     redirection exception.message, :not_found
   end
-  rescue_from Mongoid::Errors::DocumentNotFound do
-    redirection 'Nie znaleziono takiego zasobu', :not_found
+  rescue_from Mongoid::Errors::DocumentNotFound do |exception|
+    redirection 'Nie znaleziono takiego zasobu', :not_found, exception.message
   end
 
   helper_method :current_user
@@ -41,14 +41,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def redirection(message, status = :unauthorized)
+  def redirection(message, status = :unauthorized, spec = nil)
     redirect_path = root_path
     if request.referrer
       redirect_path = request.referrer
     end
 
     if json_request?
-      render json: { 'error' => message }, status: status
+      result = { 'error' => message }
+      unless Rails.env.production? or spec.nil?
+        result['error_message'] = spec
+      end
+      render json: result, status: status
       return
     end
 

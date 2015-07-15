@@ -11,6 +11,11 @@ describe Course::LessonsController, type: :controller do
     @data = { 'test' => 'data'}
   end
 
+  before(:each) do
+    @course = Course::CourseDatum.create!
+    @lesson = Course::Lesson.create!(course_course_datum: @course)
+  end
+
   after(:each) do
     Course::CourseDatum.destroy_all
     Course::Lesson.destroy_all
@@ -23,9 +28,7 @@ describe Course::LessonsController, type: :controller do
   it 'Admin can create new lesson' do
     session[:user_id] = @admin.id.to_s
 
-    course = Course::CourseDatum.create!
-
-    post :create, { format: :json, course_id: course.id.to_s }
+    post :create, { format: :json, course_id: @course.id.to_s }
     expect(response).to be_success
 
     expect(Course::Lesson.count).to be > 0
@@ -37,19 +40,17 @@ describe Course::LessonsController, type: :controller do
   it 'User or teacher cannot create new lesson' do
     session[:user_id] = @user.id.to_s
 
-    course = Course::CourseDatum.create!
-
-    post :create, { format: :json, course_id: course.id.to_s }
+    post :create, { format: :json, course_id: @course.id.to_s }
     expect(response.status).to eq 401
 
-    expect(Course::Lesson.count).to eq 0
+    expect(Course::Lesson.count).to eq 1
 
     session[:user_id] = @teacher.id.to_s
 
-    post :create, { format: :json, course_id: course.id.to_s }
+    post :create, { format: :json, course_id: @course.id.to_s }
     expect(response.status).to eq 401
 
-    expect(Course::Lesson.count).to eq 0
+    expect(Course::Lesson.count).to eq 1
   end
 
   it 'New lesson cannot be created without course_id (or bad one)' do
@@ -58,74 +59,66 @@ describe Course::LessonsController, type: :controller do
     post :create, { format: :json }
     expect(response.status).to eq 404
 
-    expect(Course::Lesson.count).to eq 0
+    expect(Course::Lesson.count).to eq 1
 
     post :create, { format: :json, course_id: 'bad_id' }
     expect(response.status).to eq 404
 
-    expect(Course::Lesson.count).to eq 0
+    expect(Course::Lesson.count).to eq 1
   end
 
   it 'Admin can update lesson' do
     session[:user_id] = @admin.id.to_s
 
-    lesson = Course::Lesson.create!
-
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: lesson.id.to_s }
+    patch :update, { format: :json, id: @lesson.id.to_s }
     expect(response).to be_success
 
-    lesson.reload
+    @lesson.reload
 
-    expect(lesson.data).to eq @data
+    expect(@lesson.data).to eq @data
   end
 
   it 'User or teacher cannot update lesson' do
     session[:user_id] = @user.id.to_s
 
-    lesson = Course::Lesson.create!
-
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: lesson.id.to_s }
+    patch :update, { format: :json, id: @lesson.id.to_s }
     expect(response.status).to eq 401
 
     session[:user_id] = @teacher.id.to_s
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: lesson.id.to_s }
+    patch :update, { format: :json, id: @lesson.id.to_s }
     expect(response.status).to eq 401
   end
 
   it 'Admin can destroy lesson' do
     session[:user_id] = @admin.id.to_s
 
-    lesson = Course::Lesson.create!
-
-    delete :destroy, { format: :json, id: lesson.id.to_s }
+    delete :destroy, { format: :json, id: @lesson.id.to_s }
     expect(response).to be_success
-    expect(Course::Lesson.where(id: lesson.id.to_s).exists?).to eq false
+    expect(Course::Lesson.where(id: @lesson.id.to_s).exists?).to eq false
   end
 
   it 'User or Teacher cannot destroy lesson' do
     session[:user_id] = @user.id.to_s
 
-    lesson = Course::Lesson.create!
-
-    delete :destroy, { format: :json, id: lesson.id.to_s }
+    delete :destroy, { format: :json, id: @lesson.id.to_s }
     expect(response.status).to eq 401
-    expect(Course::Lesson.where(id: lesson.id.to_s).exists?).to eq true
+    expect(Course::Lesson.where(id: @lesson.id.to_s).exists?).to eq true
 
     session[:user_id] = @teacher.id.to_s
-    delete :destroy, { format: :json, id: lesson.id.to_s }
+    delete :destroy, { format: :json, id: @lesson.id.to_s }
     expect(response.status).to eq 401
-    expect(Course::Lesson.where(id: lesson.id.to_s).exists?).to eq true
+    expect(Course::Lesson.where(id: @lesson.id.to_s).exists?).to eq true
   end
 
   it 'Everybody can show single lesson' do
-    lesson = Course::Lesson.create!(data: @data)
+    lesson = Course::Lesson.create!(data: @data, course_course_datum: @course)
 
     get :show, { format: :json, id: lesson.id.to_s }
     expect(response).to be_success

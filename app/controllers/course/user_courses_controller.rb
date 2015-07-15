@@ -58,13 +58,13 @@ module Course
         # Przyznanie achievementa
         achievement = query.first
         if user_course.achievements.include? achievement.id.to_s
-          json_response[json_response_key] = false
+          json_response[json_response_key] = nil
         else
           user_course.achievements << achievement.id.to_s
-          json_response[json_response_key] = true
+          json_response[json_response_key] = achievement.to_json
         end
       else
-        json_response[json_response_key] = false
+        json_response[json_response_key] = nil
       end
     end
 
