@@ -17,5 +17,9 @@ module Course
       end unless user.present? and user.is_admin?
       return data
     end
+
+    def parent_id
+      ''
+    end
   end
 end

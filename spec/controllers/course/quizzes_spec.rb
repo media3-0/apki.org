@@ -11,6 +11,11 @@ describe Course::QuizzesController, type: :controller do
     @data = { 'test' => 'data'}
   end
 
+  before(:each) do
+    @course = Course::CourseDatum.create!
+    @lesson = Course::Lesson.create!(course_course_datum: @course, data: @data)
+  end
+
   after(:each) do
     Course::Lesson.destroy_all
     Course::Quiz.destroy_all
@@ -23,9 +28,7 @@ describe Course::QuizzesController, type: :controller do
   it 'Admin can create new quiz' do
     session[:user_id] = @admin.id.to_s
 
-    lesson = Course::Lesson.create!
-
-    post :create, { format: :json, lesson_id: lesson.id.to_s }
+    post :create, { format: :json, lesson_id: @lesson.id.to_s }
     expect(response).to be_success
 
     expect(Course::Quiz.count).to be > 0
@@ -37,16 +40,14 @@ describe Course::QuizzesController, type: :controller do
   it 'User or teacher cannot create new quiz' do
     session[:user_id] = @user.id.to_s
 
-    lesson = Course::Lesson.create!
-
-    post :create, { format: :json, lesson_id: lesson.id.to_s }
+    post :create, { format: :json, lesson_id: @lesson.id.to_s }
     expect(response.status).to eq 401
 
     expect(Course::Quiz.count).to eq 0
 
     session[:user_id] = @teacher.id.to_s
 
-    post :create, { format: :json, lesson_id: lesson.id.to_s }
+    post :create, { format: :json, lesson_id: @lesson.id.to_s }
     expect(response.status).to eq 401
 
     expect(Course::Quiz.count).to eq 0
@@ -69,7 +70,7 @@ describe Course::QuizzesController, type: :controller do
   it 'Admin can update quiz' do
     session[:user_id] = @admin.id.to_s
 
-    quiz = Course::Quiz.create!
+    quiz = Course::Quiz.create!(course_lesson: @lesson)
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -84,7 +85,7 @@ describe Course::QuizzesController, type: :controller do
   it 'User or teacher cannot update quiz' do
     session[:user_id] = @user.id.to_s
 
-    quiz = Course::Quiz.create!
+    quiz = Course::Quiz.create!(course_lesson: @lesson)
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
@@ -102,7 +103,7 @@ describe Course::QuizzesController, type: :controller do
   it 'Admin can destroy quiz' do
     session[:user_id] = @admin.id.to_s
 
-    quiz = Course::Quiz.create!
+    quiz = Course::Quiz.create!(course_lesson: @lesson)
 
     delete :destroy, { format: :json, id: quiz.id.to_s }
     expect(response).to be_success
@@ -112,7 +113,7 @@ describe Course::QuizzesController, type: :controller do
   it 'User or Teacher cannot destroy quiz' do
     session[:user_id] = @user.id.to_s
 
-    quiz = Course::Quiz.create!
+    quiz = Course::Quiz.create!(course_lesson: @lesson)
 
     delete :destroy, { format: :json, id: quiz.id.to_s }
     expect(response.status).to eq 401
@@ -125,7 +126,7 @@ describe Course::QuizzesController, type: :controller do
   end
 
   it 'Everybody can show single quiz' do
-    quiz = Course::Quiz.create!(data: @data)
+    quiz = Course::Quiz.create!(data: @data, course_lesson: @lesson)
 
     get :show, { format: :json, id: quiz.id.to_s }
     expect(response).to be_success
@@ -135,24 +136,23 @@ describe Course::QuizzesController, type: :controller do
   end
 
   it 'Everybody can list all quizzes' do
-    lesson = Course::Lesson.create!(data: @data)
     3.times do
-      Course::Quiz.create!(data: @data, course_lesson: lesson)
+      Course::Quiz.create!(data: @data, course_lesson: @lesson)
     end
 
-    get :index, { format: :json, lesson_id: lesson.id.to_s }
+    get :index, { format: :json, lesson_id: @lesson.id.to_s }
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
 
     session[:user_id] = @user.id.to_s
-    get :index, { format: :json, lesson_id: lesson.id.to_s }
+    get :index, { format: :json, lesson_id: @lesson.id.to_s }
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
 
     session[:user_id] = @teacher.id.to_s
-    get :index, { format: :json, lesson_id: lesson.id.to_s }
+    get :index, { format: :json, lesson_id: @lesson.id.to_s }
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3

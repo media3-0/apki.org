@@ -9,5 +9,9 @@ module Course
 
     has_many :course_exercises, :class_name => 'Course::Exercise'
     has_many :course_quizs, :class_name => 'Course::Quiz'
+
+    def parent_id
+      course_course_datum.id.to_s
+    end
   end
 end
