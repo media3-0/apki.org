@@ -1,7 +1,7 @@
 <%= render 'layouts/headers' %>
 <body data-no-turbolink="true">
 <%= render "layouts/main_menu" %>
-<div id="courseContent" ng-app="courseApp" ng-controller="myCtrl" ng-init="courseId='559ce5ca416d690ea0000002'; initCourse()">
+<div id="courseContent" ng-app="courseApp" ng-controller="myCtrl" ng-init="courseId='55a77510416d69249c000005'; initCourse()">
     <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
         <div class="progress progress-striped active">
             <div class="progress-bar" role="progressbar" style="width: 100%;">
@@ -15,8 +15,8 @@
                 <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#" ng-click="goToPart('article')">Artykuł</a></li>
                 <ul class="article-parsed">
                 </ul>
-                <li ng-hide="!course.lessons[course.lessonCurrent].quizzes.length"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
-                <li ng-hide="!course.lessons[course.lessonCurrent].exercises.length"><i class="glyphicon glyphicon-console"></i> <a href="#" ng-click="goToPart('exercise')">Zadanie</a></li>
+                <li ng-hide="!quizzes.length"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
+                <li ng-hide="!exercises.length"><i class="glyphicon glyphicon-console"></i> <a href="#" ng-click="goToPart('exercise')">Zadanie</a></li>
             </ul>
         </div>
         <div class="col col-line-height-100-pro firstHidePanelBar" ng-click="hidePanelBarClick('left')">||</div>
@@ -29,21 +29,22 @@
             </div>
 
             <div class="course-quiz course-element" ng-hide="!isPartVisible('quiz')">
-                <form>
+                <form id="quizForm">
                     <div class="caption">Quiz</div>
 
-                    <div class="form-group" ng-repeat="(key, quiz) in getLesson().quizzes">
+                    <div class="form-group" ng-repeat="(key, quiz) in quizzes">
                         <div class="field-name">
-                            <label for="quiz_question_{{quiz.ID}}"><small>{{ quiz.question }}</small></label>
+                            <small>{{ quiz.data.question }}</small>
                         </div>
                         <div class="field-value">
-                            <select id="quiz_question_{{quiz.ID}}" selectpicker class="selectpicker" data-width="100%" data-quiz-id="{{quiz.ID}}">
-                                <option ng-repeat="(ans_idx, ans) in quiz.answers" value="{{ans_idx}}">{{ans}}</option>
-                            </select>
+                            <div ng-repeat="(ans_idx, ans) in quiz.data.answers">
+                                <input data-quiz-id="{{quiz.id}}" type="radio" id="quiz_question_{{quiz.id}}_{{ans_idx}}" name="quiz_question_{{quiz.id}}" value="{{ans_idx}}" class="mrg5r"><label for="quiz_question_{{quiz.id}}_{{ans_idx}}">{{ans}}</label>
+                            </div>
                         </div>
+
+                        <div class="clearfix"></div>
                     </div>
 
-                    <div class="clearfix"></div>
                     <div class="buttons">
                         <button ng-disabled="quizChecking" ng-class="quizChecking?'active':''" type="button" ng-click="checkQuiz(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
                     </div>

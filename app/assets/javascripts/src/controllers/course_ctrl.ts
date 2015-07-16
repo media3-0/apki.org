@@ -10,7 +10,9 @@
 /// <reference path="../../vendor/angularjs/angular.d.ts"/>
 /// <reference path="../resources/course_rest_api.ts"/>
 /// <reference path="../resources/lesson_rest_api.ts"/>
-/// <reference path="../resources/quiz_rest_api.ts"/>
+/// <reference path="../resources/quizzes_rest_api.ts"/>
+/// <reference path="../resources/exercises_rest_api.ts"/>
+/// <reference path="../resources/check_quiz_rest_api.ts"/>
 /// <reference path="../../vendor/custom.d.ts"/>
 
 declare var app:any;
@@ -24,10 +26,12 @@ module ApkiOrg.CourseMgr {
         currPart:string;
         course:MCourse;
         lessons:MLesson[];
-        quizzes:MLesson[];
-        exercises:MLesson[];
+        quizzes:MQuiz[];
+        exercises:MExercise[];
         apiCourse:CourseRestAPI;
         apiLesson:LessonRestAPI;
+        apiQuizzes:QuizzesRestAPI;
+        apiExercises:ExercisesRestAPI;
         inited:boolean;
         toBeInited:{};
         courseId:string;
@@ -40,10 +44,11 @@ module ApkiOrg.CourseMgr {
         fullSizeElement(element:{}, $event:{})
         isPartVisible(part:string)
         goToPart(part:string)
-        checkCourseLoaded(data:any, elId:string)
+        checkIsLoaded(data:any, elId:string, clbOnFinish:() => any)
         buildCourse()
         getLesson():MLesson
         checkQuiz(element:{}, $event:any)
+        loadLesson()
     }
 
     export class appCourseCtrl {
@@ -61,16 +66,13 @@ module ApkiOrg.CourseMgr {
                 var _quiz:MCommSendQuiz = new MCommSendQuiz();
                 _quiz.id = $scope.getLesson().id;
 
-                _quiz.quizzes['55a512ef416d6927dc00000a'] = 8;
-                _quiz.quizzes['55a512f0416d6927dc00000b'] = 0;
-
-                console.log(_quiz);
+                $('#quizForm input:checked').each((i, el) => {
+                    _quiz.quizzes[$(el).data('quiz-id')] =parseInt($(el).val());
+                });
 
                 var _quiz_str:string = ApkiOrg.App.app.helperObjectToJSON(_quiz);
 
-                console.log(_quiz_str);
-
-                var $QuizCtrl:QuizRestAPI = new QuizRestAPI($resource);
+                var $QuizCtrl:CheckQuizRestAPI = new CheckQuizRestAPI($resource);
                 $QuizCtrl.res.check({}, _quiz_str, (ans:any) => {
                     console.log(ans);
                 });
@@ -101,9 +103,11 @@ module ApkiOrg.CourseMgr {
 
                     $scope.apiCourse = new CourseRestAPI($resource);
                     $scope.apiLesson = new LessonRestAPI($resource);
+                    $scope.apiQuizzes = new QuizzesRestAPI($resource);
+                    $scope.apiExercises = new ExercisesRestAPI($resource);
 
-                    $scope.course = $scope.apiCourse.res.show({'id':$scope.courseId}, '', (data) => { $scope.checkCourseLoaded(data, 'course') });
-                    $scope.lessons = $scope.apiLesson.res.list({'course_id':$scope.courseId}, '', (data) => { $scope.checkCourseLoaded(data, 'lessons') });
+                    $scope.course = $scope.apiCourse.res.show({'id':$scope.courseId}, '', (data) => { $scope.checkIsLoaded(data, 'course', $scope.loadLesson) });
+                    $scope.lessons = $scope.apiLesson.res.list({'course_id':$scope.courseId}, '', (data) => { $scope.checkIsLoaded(data, 'lessons', $scope.loadLesson) });
                 }
                 $timeout(_f, 1, false);
             }
@@ -113,6 +117,8 @@ module ApkiOrg.CourseMgr {
              * Private.
              */
             $scope.buildCourse = () => {
+                if ($scope.inited) return;
+
                 $scope.parseArticle();
 
                 $scope.inited = true;
@@ -124,8 +130,9 @@ module ApkiOrg.CourseMgr {
              * Private.
              * @param any data Data from JSON
              * @param string elId Element to be inited id
+             * @param function clbOnFinish Callback to run when all is inited.
              */
-            $scope.checkCourseLoaded = (data:any, elId:string) => {
+            $scope.checkIsLoaded = (data:any, elId:string, clbOnFinish:() => any) => {
                 $scope.toBeInited[elId]=true;
 
                 var _inited:boolean=true;
@@ -134,19 +141,41 @@ module ApkiOrg.CourseMgr {
                         _inited=false;
                 });
 
-                if (_inited)
-                    $scope.buildCourse();
+                if (_inited){
+                    clbOnFinish();
+                }
             }
+
+            $scope.loadLesson = () => {
+                $scope.inited = false;
+
+                $scope.toBeInited = {
+                    'quizzes':false,
+                    'exercises':false
+                };
+
+                $scope.quizzes = $scope.apiQuizzes.res.list({'lesson_id':$scope.getLesson().id}, '', (data) => { $scope.checkIsLoaded(data, 'quizzes', $scope.buildCourse) });
+                $scope.exercises = $scope.apiExercises.res.list({'lesson_id':$scope.getLesson().id}, '', (data) => { $scope.checkIsLoaded(data, 'exercises', $scope.buildCourse) });
+            }
+
 
             /**
              * Gets current lesson.
              * @return Lesson Current lesson or null if all finished
              */
             $scope.getLesson = ():MLesson => {
-                if ($scope.course.data.lessonCurrent>=$scope.lessons.length)
-                    return null;
-                else
-                    return $scope.lessons[$scope.course.data.lessonCurrent];
+                if ($scope.course.data.lessonCurrent == "")
+                    $scope.course.data.lessonCurrent = $scope.lessons[0].id;
+
+                var _less = null;
+                $.each($scope.lessons, (i, el):any => {
+                    if (el.id == $scope.course.data.lessonCurrent){
+                        _less = el;
+                        return false; //Break
+                    }
+                });
+
+                return _less;
             }
 
             /**

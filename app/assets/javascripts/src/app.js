@@ -196,17 +196,59 @@ var ApkiOrg;
     var CourseMgr;
     (function (CourseMgr) {
         /**
+         * Base class for Rest API. Contains some helpers.
+         */
+        var BaseRestAPI = (function () {
+            function BaseRestAPI() {
+            }
+            /**
+             * This will prepare data from backend to frontend use (for example will expose id). Use it like this: 'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, true); } or simply 'transformResponse':this.transformFromBackEndToFrontEnd .
+             * @param any data Original data parameter.
+             * @param any headersGetter Original data parameter.
+             * @param boolean isArr Optional (defaults to false). Pass true if response in an array.
+             * @return {*} Prepared data.
+             */
+            BaseRestAPI.prototype.transformFromBackEndToFrontEnd = function (data, headersGetter, isArr) {
+                if (isArr === void 0) { isArr = false; }
+                data = angular.fromJson(data);
+                if (isArr) {
+                    //Reassigned ID:
+                    $.each(data, function (i, el) {
+                        data[i].id = data[i].id.$oid;
+                    });
+                }
+                else {
+                    data.id = data.id.$oid; //Reassigned ID
+                }
+                return data;
+            };
+            return BaseRestAPI;
+        })();
+        CourseMgr.BaseRestAPI = BaseRestAPI;
+    })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="base_rest_api.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var CourseMgr;
+    (function (CourseMgr) {
+        /**
          * Resource [REST API]: Course.
          */
-        var CourseRestAPI = (function () {
+        var CourseRestAPI = (function (_super) {
+            __extends(CourseRestAPI, _super);
             function CourseRestAPI($resource) {
+                var _this = this;
+                _super.call(this);
                 this.$resource = $resource;
                 this.res = $resource('/course/course_data/:id.json', {}, {
                     //Definition of RESTful API:
                     'list': {
                         'method': 'GET',
                         'url': '/course/course_data.json',
-                        isArray: true
+                        isArray: true,
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, true); }
                     },
                     'show': {
                         'method': 'GET'
@@ -224,24 +266,29 @@ var ApkiOrg;
                 });
             }
             return CourseRestAPI;
-        })();
+        })(CourseMgr.BaseRestAPI);
         CourseMgr.CourseRestAPI = CourseRestAPI;
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 //(c) Jakub Krol 2015
+/// <reference path="base_rest_api.ts"/>
 var ApkiOrg;
 (function (ApkiOrg) {
     var CourseMgr;
     (function (CourseMgr) {
-        var LessonRestAPI = (function () {
+        var LessonRestAPI = (function (_super) {
+            __extends(LessonRestAPI, _super);
             function LessonRestAPI($resource) {
+                var _this = this;
+                _super.call(this);
                 this.$resource = $resource;
                 this.res = $resource('/course/lessons/:id.json', {}, {
                     //Definition of RESTful API:
                     'list': {
                         'method': 'GET',
                         'url': '/course/lessons.json',
-                        isArray: true
+                        isArray: true,
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, true); }
                     },
                     'show': {
                         'method': 'GET'
@@ -259,8 +306,88 @@ var ApkiOrg;
                 });
             }
             return LessonRestAPI;
-        })();
+        })(CourseMgr.BaseRestAPI);
         CourseMgr.LessonRestAPI = LessonRestAPI;
+    })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="base_rest_api.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var CourseMgr;
+    (function (CourseMgr) {
+        var QuizzesRestAPI = (function (_super) {
+            __extends(QuizzesRestAPI, _super);
+            function QuizzesRestAPI($resource) {
+                var _this = this;
+                _super.call(this);
+                this.$resource = $resource;
+                this.res = $resource('/course/quizzes/:id.json', {}, {
+                    //Definition of RESTful API:
+                    'list': {
+                        'method': 'GET',
+                        'url': '/course/quizzes.json',
+                        isArray: true,
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, true); }
+                    },
+                    'show': {
+                        'method': 'GET'
+                    },
+                    'create': {
+                        'method': 'POST',
+                        'url': '/course/quizzes.json'
+                    },
+                    'update': {
+                        'method': 'PUT'
+                    },
+                    'delete': {
+                        'method': 'DELETE'
+                    }
+                });
+            }
+            return QuizzesRestAPI;
+        })(CourseMgr.BaseRestAPI);
+        CourseMgr.QuizzesRestAPI = QuizzesRestAPI;
+    })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="base_rest_api.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var CourseMgr;
+    (function (CourseMgr) {
+        var ExercisesRestAPI = (function (_super) {
+            __extends(ExercisesRestAPI, _super);
+            function ExercisesRestAPI($resource) {
+                var _this = this;
+                _super.call(this);
+                this.$resource = $resource;
+                this.res = $resource('/course/exercises/:id.json', {}, {
+                    //Definition of RESTful API:
+                    'list': {
+                        'method': 'GET',
+                        'url': '/course/exercises.json',
+                        isArray: true,
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, true); }
+                    },
+                    'show': {
+                        'method': 'GET'
+                    },
+                    'create': {
+                        'method': 'POST',
+                        'url': '/course/exercises.json'
+                    },
+                    'update': {
+                        'method': 'PUT'
+                    },
+                    'delete': {
+                        'method': 'DELETE'
+                    }
+                });
+            }
+            return ExercisesRestAPI;
+        })(CourseMgr.BaseRestAPI);
+        CourseMgr.ExercisesRestAPI = ExercisesRestAPI;
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 //(c) Jakub Krol 2015
@@ -271,8 +398,8 @@ var ApkiOrg;
         /**
          * Resource [REST API]: Quiz.
          */
-        var QuizRestAPI = (function () {
-            function QuizRestAPI($resource) {
+        var CheckQuizRestAPI = (function () {
+            function CheckQuizRestAPI($resource) {
                 this.$resource = $resource;
                 this.res = $resource('/course/user_courses/check_quizzes.json', {}, {
                     //Definition of RESTful API:
@@ -281,9 +408,9 @@ var ApkiOrg;
                     }
                 });
             }
-            return QuizRestAPI;
+            return CheckQuizRestAPI;
         })();
-        CourseMgr.QuizRestAPI = QuizRestAPI;
+        CourseMgr.CheckQuizRestAPI = CheckQuizRestAPI;
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 //(c) Jakub Krol 2015
@@ -298,7 +425,9 @@ var ApkiOrg;
 /// <reference path="../../vendor/angularjs/angular.d.ts"/>
 /// <reference path="../resources/course_rest_api.ts"/>
 /// <reference path="../resources/lesson_rest_api.ts"/>
-/// <reference path="../resources/quiz_rest_api.ts"/>
+/// <reference path="../resources/quizzes_rest_api.ts"/>
+/// <reference path="../resources/exercises_rest_api.ts"/>
+/// <reference path="../resources/check_quiz_rest_api.ts"/>
 /// <reference path="../../vendor/custom.d.ts"/>
 var ApkiOrg;
 (function (ApkiOrg) {
@@ -314,12 +443,11 @@ var ApkiOrg;
                     $scope.quizChecking = true;
                     var _quiz = new CourseMgr.MCommSendQuiz();
                     _quiz.id = $scope.getLesson().id;
-                    _quiz.quizzes['55a512ef416d6927dc00000a'] = 8;
-                    _quiz.quizzes['55a512f0416d6927dc00000b'] = 0;
-                    console.log(_quiz);
+                    $('#quizForm input:checked').each(function (i, el) {
+                        _quiz.quizzes[$(el).data('quiz-id')] = parseInt($(el).val());
+                    });
                     var _quiz_str = ApkiOrg.App.app.helperObjectToJSON(_quiz);
-                    console.log(_quiz_str);
-                    var $QuizCtrl = new CourseMgr.QuizRestAPI($resource);
+                    var $QuizCtrl = new CourseMgr.CheckQuizRestAPI($resource);
                     $QuizCtrl.res.check({}, _quiz_str, function (ans) {
                         console.log(ans);
                     });
@@ -344,8 +472,10 @@ var ApkiOrg;
                         $(window).resize($scope.resizeElements);
                         $scope.apiCourse = new CourseMgr.CourseRestAPI($resource);
                         $scope.apiLesson = new CourseMgr.LessonRestAPI($resource);
-                        $scope.course = $scope.apiCourse.res.show({ 'id': $scope.courseId }, '', function (data) { $scope.checkCourseLoaded(data, 'course'); });
-                        $scope.lessons = $scope.apiLesson.res.list({ 'course_id': $scope.courseId }, '', function (data) { $scope.checkCourseLoaded(data, 'lessons'); });
+                        $scope.apiQuizzes = new CourseMgr.QuizzesRestAPI($resource);
+                        $scope.apiExercises = new CourseMgr.ExercisesRestAPI($resource);
+                        $scope.course = $scope.apiCourse.res.show({ 'id': $scope.courseId }, '', function (data) { $scope.checkIsLoaded(data, 'course', $scope.loadLesson); });
+                        $scope.lessons = $scope.apiLesson.res.list({ 'course_id': $scope.courseId }, '', function (data) { $scope.checkIsLoaded(data, 'lessons', $scope.loadLesson); });
                     };
                     $timeout(_f, 1, false);
                 };
@@ -354,6 +484,8 @@ var ApkiOrg;
                  * Private.
                  */
                 $scope.buildCourse = function () {
+                    if ($scope.inited)
+                        return;
                     $scope.parseArticle();
                     $scope.inited = true;
                     $scope.resizeElements();
@@ -363,26 +495,43 @@ var ApkiOrg;
                  * Private.
                  * @param any data Data from JSON
                  * @param string elId Element to be inited id
+                 * @param function clbOnFinish Callback to run when all is inited.
                  */
-                $scope.checkCourseLoaded = function (data, elId) {
+                $scope.checkIsLoaded = function (data, elId, clbOnFinish) {
                     $scope.toBeInited[elId] = true;
                     var _inited = true;
                     $($scope.toBeInited).each(function (i, el) {
                         if (!el)
                             _inited = false;
                     });
-                    if (_inited)
-                        $scope.buildCourse();
+                    if (_inited) {
+                        clbOnFinish();
+                    }
+                };
+                $scope.loadLesson = function () {
+                    $scope.inited = false;
+                    $scope.toBeInited = {
+                        'quizzes': false,
+                        'exercises': false
+                    };
+                    $scope.quizzes = $scope.apiQuizzes.res.list({ 'lesson_id': $scope.getLesson().id }, '', function (data) { $scope.checkIsLoaded(data, 'quizzes', $scope.buildCourse); });
+                    $scope.exercises = $scope.apiExercises.res.list({ 'lesson_id': $scope.getLesson().id }, '', function (data) { $scope.checkIsLoaded(data, 'exercises', $scope.buildCourse); });
                 };
                 /**
                  * Gets current lesson.
                  * @return Lesson Current lesson or null if all finished
                  */
                 $scope.getLesson = function () {
-                    if ($scope.course.data.lessonCurrent >= $scope.lessons.length)
-                        return null;
-                    else
-                        return $scope.lessons[$scope.course.data.lessonCurrent];
+                    if ($scope.course.data.lessonCurrent == "")
+                        $scope.course.data.lessonCurrent = $scope.lessons[0].id;
+                    var _less = null;
+                    $.each($scope.lessons, function (i, el) {
+                        if (el.id == $scope.course.data.lessonCurrent) {
+                            _less = el;
+                            return false; //Break
+                        }
+                    });
+                    return _less;
                 };
                 /**
                  * Hides or shows one of the menus.

@@ -2,28 +2,28 @@
 /// <reference path="base_rest_api.ts"/>
 
 module ApkiOrg.CourseMgr {
-    export class LessonRestAPI extends BaseRestAPI{
+    export class QuizzesRestAPI extends BaseRestAPI{
         public res : any;
 
         constructor(private $resource : any) {
             super();
-            this.res = $resource('/course/lessons/:id.json', {}, {
+            this.res = $resource('/course/quizzes/:id.json', {}, {
                 //Definition of RESTful API:
                 'list':{
                     'method':'GET',
-                    'url':'/course/lessons.json'
-                    ,isArray: true
+                    'url':'/course/quizzes.json',
+                    isArray: true
 //                    'params':{
 //                        'sub_url':'course_data/'
 //                    }
-                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, true); }
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, true) }
                 }
                 ,'show':{
                     'method':'GET'
                 }
                 ,'create':{
                     'method':'POST',
-                    'url':'/course/lessons.json'
+                    'url':'/course/quizzes.json'
                 }
                 ,'update':{
                     'method':'PUT'

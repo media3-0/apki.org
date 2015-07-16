@@ -4,7 +4,7 @@ module ApkiOrg.CourseMgr {
     /**
      * Resource [REST API]: Quiz.
      */
-    export class QuizRestAPI{
+    export class CheckQuizRestAPI{
         public res : any;
 
         constructor(private $resource : any) {

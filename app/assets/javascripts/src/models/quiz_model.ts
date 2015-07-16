@@ -20,7 +20,7 @@ module ApkiOrg.CourseMgr {
     export class MQuizData{
         question            :string;            //Content of question (HTML)
         answers             :string[];          //Array of possible anserws.
-        answer_id           :number;            //Idx of correct answer
+        answer_idx          :number;            //Idx of correct answer
 
         constructor() {
             this.answers = new Array();
