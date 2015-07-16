@@ -20,14 +20,14 @@ module Course
 
     def check_exercise
       data = JSON.parse request.body.read
-      exercise = Course::Exercise.find(data['ID'])
+      exercise = Course::Exercise.find(data['id'])
       course = exercise.course_lesson.course_course_datum
       user_course = Course::UserCourse.find_by(course_course_datum: course)
       # TODO : Wywołanie zewnętrznego modułu zadaniowego i sprawdzenie poprawności wykonania data['code'] data['user_input']
       # Jeżeli output jest poprawny, zadanie rozwiązane
       id = exercise.id.to_s
       output = 'testowy output'
-      json_response = {'ID' => id, 'output' => output, 'is_correct' => false}
+      json_response = {'id' => id, 'output' => output, 'is_correct' => false}
       correct = true # FIXME : Sprawdzenie poprawności
       if correct
         correct_exercise id, data, output, exercise.course_lesson, user_course, json_response
@@ -37,10 +37,10 @@ module Course
 
     def check_quizzes
       data = JSON.parse request.body.read
-      lesson = Course::Lesson.find(data['ID'])
+      lesson = Course::Lesson.find(data['id'])
       user_course = Course::UserCourse.find_by(user: current_user, course_course_datum: lesson.course_course_datum)
       id = lesson.id.to_s
-      json_response = {'ID' => id, 'is_correct' => false}
+      json_response = {'id' => id, 'is_correct' => false}
       if Course::CourseChecker.check_quizes lesson, data, json_response
         correct_quizzes id, lesson, user_course, json_response
       end
