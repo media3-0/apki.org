@@ -30,6 +30,9 @@ gem 'rails_admin'
 # MongoDB
 gem 'mongoid', '~> 4'
 
+# Redis
+gem 'redis-rails'
+
 # kompilator typescript
 # gem 'typescript-rails'
 # gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
