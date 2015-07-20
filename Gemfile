@@ -83,14 +83,15 @@ gem 'thin'
 # AngularJS
 gem 'angularjs-rails'
 
-# peek jako pasek debuga (zamiast rails-footnotes oraz rails-miniprofiler)
-gem 'peek'
-gem 'peek-gc' # Garbage Collector monitor
-gem 'peek-moped' # Moped (sterownik do MongoDB) monitor
-gem 'peek-performance_bar' # Performance monitor
-
 # Windows fixer
 gem 'tzinfo-data'
+
+gem 'rack-mini-profiler'
+gem 'stackprof'
+gem 'flamegraph'
+
+# Kolorowanie logów
+gem 'shog'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
