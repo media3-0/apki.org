@@ -185,4 +185,6 @@ describe Course::UserCoursesController, type: :controller do
     lesson.save!
     @course.save!
   end
+
+  # TODO : Testy dla zadań
 end

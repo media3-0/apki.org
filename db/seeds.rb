@@ -46,6 +46,14 @@ quizzes.each do |quiz|
   quiz.save!
 end
 
+exercises = []
+exercises << Course::Exercise.create!(data: { 'expected_output' => '55', 'lang' => 'RUBY' })
+
+lesson.course_exercises.concat exercises
+exercises.each do |exercise|
+  exercise.save!
+end
+
 Course::Achievement.create!(data: {'name' => 'Achievement 2' }, lesson_id: lesson.id.to_s)
 course.course_lessons << lesson
 lesson.save!

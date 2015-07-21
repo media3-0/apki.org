@@ -9,6 +9,3 @@
 //= require vendor/ace/ace
 //= require vendor/bootstrap-select/bootstrap-select
 //= require vendor/bootstrap-select/i18n/defaults-pl_PL.min
-
-//= require peek
-//= require peek/views/performance_bar

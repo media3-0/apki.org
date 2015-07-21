@@ -1,7 +1,7 @@
 <h1>Strona główna</h1>
 <p>Witaj na stronie głównej</p>
 <%- if current_user -%>
-    <p>Zalogowano jako: <%= current_user.name -%></p>
+    <p>Zalogowano jako: <%= current_user.nickname -%></p>
     <p><%= link_to 'Wyloguj', signout_path -%></p>
     <p><%= link_to 'Panel Admina', rails_admin_path -%></p>
 <%- else -%>
