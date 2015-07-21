@@ -36,6 +36,7 @@ module ApkiOrg.CourseMgr {
         toBeInited:{};
         courseId:string;
         quizChecking:boolean;
+        quizzesAreCorrect:boolean;
 
         initCourse(courseJSON:string)
         resizeElements()
@@ -74,10 +75,16 @@ module ApkiOrg.CourseMgr {
 
                 var $QuizCtrl:CheckQuizRestAPI = new CheckQuizRestAPI($resource);
                 $QuizCtrl.res.check({}, _quiz_str, (ans:any) => {
-                    console.log(ans);
-                });
+                    $.each(ans.quizzes, (i, el) => {
+                        $('.q-'+i).removeClass('has-success has-warning has-error').addClass(el?'has-success':'has-error');
+                        $('.q-'+i).find('.field-value').next('.help-block').remove();
+                        $('.q-'+i).find('.field-value').after('<div class="help-block">'+(el?'Odpowiedź poprawna.':'Niepoprawna odpowiedź.')+'</div>');
+                    });
 
-                $scope.quizChecking = false;
+                    $scope.quizzesAreCorrect = ans.is_correct;
+
+                    $scope.quizChecking = false;
+                });
             }
             /**
              * Hold are menus visible
@@ -91,6 +98,8 @@ module ApkiOrg.CourseMgr {
             $scope.initCourse = () => {
                 var _f = () => {
                     $scope.inited = false;
+
+                    $scope.quizzesAreCorrect=false;
 
                     $scope.toBeInited = {
                         'course':false,
@@ -300,7 +309,7 @@ module ApkiOrg.CourseMgr {
                 possibleParts['article'] = true; //always enabled
                 possibleParts['end'] = true; //always enabled
                 possibleParts['quiz'] = (!!$scope.quizzes.length);
-                possibleParts['exercise'] = (!!$scope.quizzes.length);
+                possibleParts['exercise'] = (!!$scope.exercises.length);
                 var path:string[] = ['article', 'quiz', 'exercise', 'end'];
                 if (!possibleParts[part])
                     part = path[path.indexOf(part)+1];

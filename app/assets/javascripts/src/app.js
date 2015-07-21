@@ -449,9 +449,14 @@ var ApkiOrg;
                     var _quiz_str = ApkiOrg.App.app.helperObjectToJSON(_quiz);
                     var $QuizCtrl = new CourseMgr.CheckQuizRestAPI($resource);
                     $QuizCtrl.res.check({}, _quiz_str, function (ans) {
-                        console.log(ans);
+                        $.each(ans.quizzes, function (i, el) {
+                            $('.q-' + i).removeClass('has-success has-warning has-error').addClass(el ? 'has-success' : 'has-error');
+                            $('.q-' + i).find('.field-value').next('.help-block').remove();
+                            $('.q-' + i).find('.field-value').after('<div class="help-block">' + (el ? 'Odpowiedź poprawna.' : 'Niepoprawna odpowiedź.') + '</div>');
+                        });
+                        $scope.quizzesAreCorrect = ans.is_correct;
+                        $scope.quizChecking = false;
                     });
-                    $scope.quizChecking = false;
                 };
                 /**
                  * Hold are menus visible
@@ -464,6 +469,7 @@ var ApkiOrg;
                 $scope.initCourse = function () {
                     var _f = function () {
                         $scope.inited = false;
+                        $scope.quizzesAreCorrect = false;
                         $scope.toBeInited = {
                             'course': false,
                             'lessons': false
@@ -644,7 +650,7 @@ var ApkiOrg;
                     possibleParts['article'] = true; //always enabled
                     possibleParts['end'] = true; //always enabled
                     possibleParts['quiz'] = (!!$scope.quizzes.length);
-                    possibleParts['exercise'] = (!!$scope.quizzes.length);
+                    possibleParts['exercise'] = (!!$scope.exercises.length);
                     var path = ['article', 'quiz', 'exercise', 'end'];
                     if (!possibleParts[part])
                         part = path[path.indexOf(part) + 1];
@@ -696,9 +702,45 @@ var ApkiOrg;
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 //(c) Jakub Krol 2015
+/// <reference path="../../vendor/custom.d.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var CourseMgr;
+    (function (CourseMgr) {
+        /**
+         * Directive: select picker JQuerier.
+         */
+        var AutoStatusRemovalDirective = (function () {
+            function AutoStatusRemovalDirective($timeout) {
+                //        public template = '<div>{{name}}</div>';
+                this.scope = {};
+                // It's important to add `link` to the prototype or you will end up with state issues.
+                // See http://blog.aaronholmes.net/writing-angularjs-directives-as-typescript-classes/#comment-2111298002 for more information.
+                AutoStatusRemovalDirective.prototype.link = function (scope, element, attrs) {
+                    $timeout(function (element) {
+                        jQuery(element).on('click', function () {
+                            $(this).removeClass('has-success has-warning has-error').find('.form-control-feedback').remove();
+                        });
+                    }, 0, true, element);
+                };
+            }
+            AutoStatusRemovalDirective.Factory = function () {
+                var directive = function ($timeout) {
+                    return new AutoStatusRemovalDirective($timeout);
+                };
+                directive['$inject'] = ['$timeout'];
+                return directive;
+            };
+            return AutoStatusRemovalDirective;
+        })();
+        CourseMgr.AutoStatusRemovalDirective = AutoStatusRemovalDirective;
+    })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
 /// <reference path="../vendor/custom.d.ts"/>
 /// <reference path="controllers/course_ctrl.ts"/>
 /// <reference path="directives/select_picker_directive.ts"/>
+/// <reference path="directives/auto_status_removal_directive.ts"/>
 var ApkiOrg;
 (function (ApkiOrg) {
     var CourseMgr;
@@ -712,6 +754,7 @@ var ApkiOrg;
                 };
             }]);
         app.directive('selectpicker', CourseMgr.SelectPickerDirective.Factory());
+        app.directive('autostatusremoval', CourseMgr.AutoStatusRemovalDirective.Factory());
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 ///<reference path="../vendor/jquery/jquery.d.ts" />

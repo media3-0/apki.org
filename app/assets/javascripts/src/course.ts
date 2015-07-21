@@ -2,6 +2,7 @@
 /// <reference path="../vendor/custom.d.ts"/>
 /// <reference path="controllers/course_ctrl.ts"/>
 /// <reference path="directives/select_picker_directive.ts"/>
+/// <reference path="directives/auto_status_removal_directive.ts"/>
 
 declare var app:any;
 
@@ -16,4 +17,5 @@ module ApkiOrg.CourseMgr {
     }]);
 
     app.directive('selectpicker', SelectPickerDirective.Factory());
+    app.directive('autostatusremoval', AutoStatusRemovalDirective.Factory());
 }
