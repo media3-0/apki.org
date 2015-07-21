@@ -65,6 +65,9 @@ gem 'simple_form'
 # FontAwsome
 gem 'font-awesome-rails'
 
+# gem do żądań HTTP
+gem 'faraday'
+
 # API GitHub - octokit (oficjalne)
 gem 'octokit', '~> 4'
 

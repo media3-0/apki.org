@@ -372,6 +372,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   discourse_api
   factory_girl_rails
+  faraday
   faraday-http-cache
   flamegraph
   font-awesome-rails
