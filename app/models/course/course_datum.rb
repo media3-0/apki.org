@@ -21,5 +21,9 @@ module Course
     def parent_id
       ''
     end
+
+    def self.get_lessons_by_course_id(id)
+      find(id).course_lessons.sort_by { |lesson| lesson.created_at }
+    end
   end
 end

@@ -5,7 +5,7 @@ module Course
 
     # GET /course/lessons.json
     def index
-      @course_lessons = Course::CourseDatum.find(params[:course_id]).course_lessons
+      @course_lessons = Course::CourseDatum.get_lessons_by_course_id params[:course_id]
     end
 
     # GET /course/lessons/1.json
