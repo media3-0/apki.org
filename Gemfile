@@ -93,8 +93,8 @@ gem 'angularjs-rails'
 gem 'tzinfo-data'
 
 gem 'rack-mini-profiler'
-gem 'stackprof'
-gem 'flamegraph'
+# gem 'stackprof'
+# gem 'flamegraph'
 
 # Kolorowanie logów
 gem 'shog'
