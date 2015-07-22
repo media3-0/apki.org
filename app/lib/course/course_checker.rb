@@ -24,10 +24,14 @@ module Course
         faraday.adapter  Faraday.default_adapter
       end
 
+      code = exercise.data['before_code']
+      code << data['code']
+      code << exercise.data['after_code']
+
       response = conn.post do |req|
         req.url '/compile'
         req.headers['Content-Type'] = 'application/json'
-        req.body = { :lang => exercise.data['lang'], :code => data['code'], :user_input => data['user_input'] }.to_json
+        req.body = { :lang => exercise.data['lang'], :code => code, :user_input => data['user_input'] }.to_json
       end
 
       output = JSON.parse response.body.to_s
