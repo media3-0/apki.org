@@ -24,7 +24,8 @@ module Course
         faraday.adapter  Faraday.default_adapter
       end
 
-      code = exercise.data['before_code']
+      code = ''
+      code << exercise.data['before_code']
       code << data['code']
       code << exercise.data['after_code']
 
