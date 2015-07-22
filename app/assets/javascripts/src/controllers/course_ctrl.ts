@@ -7,13 +7,16 @@
 /// <reference path="../models/lesson_model.ts" />
 /// <reference path="../models/quiz_model.ts" />
 /// <reference path="../models/comm_send_quiz.ts" />
+/// <reference path="../models/comm_send_exercise.ts" />
 /// <reference path="../../vendor/angularjs/angular.d.ts"/>
 /// <reference path="../resources/course_rest_api.ts"/>
 /// <reference path="../resources/lesson_rest_api.ts"/>
 /// <reference path="../resources/quizzes_rest_api.ts"/>
 /// <reference path="../resources/exercises_rest_api.ts"/>
 /// <reference path="../resources/check_quiz_rest_api.ts"/>
+/// <reference path="../resources/check_exercise_rest_api.ts"/>
 /// <reference path="../../vendor/custom.d.ts"/>
+/// <reference path="../main.ts"/>
 
 declare var app:any;
 
@@ -37,6 +40,9 @@ module ApkiOrg.CourseMgr {
         courseId:string;
         quizChecking:boolean;
         quizzesAreCorrect:boolean;
+        exerciseCurrOutput:string;
+        exerciseChecking:boolean;
+        exerciseIsCorrect:boolean;
 
         initCourse(courseJSON:string)
         resizeElements()
@@ -48,7 +54,9 @@ module ApkiOrg.CourseMgr {
         checkIsLoaded(data:any, elId:string, clbOnFinish:() => any)
         buildCourse()
         getLesson():MLesson
+        getExercise():MExercise
         checkQuiz(element:{}, $event:any)
+        checkExercise(element:{}, $event:any)
         loadLesson()
     }
 
@@ -84,6 +92,33 @@ module ApkiOrg.CourseMgr {
                     $scope.quizzesAreCorrect = ans.is_correct;
 
                     $scope.quizChecking = false;
+                });
+            }
+
+            $scope.checkExercise = (element:any, $event:any) => {
+                $scope.exerciseChecking = true;
+                $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span></div>';
+
+                var _exerc:MCommSendExercise = new MCommSendExercise();
+                _exerc.id = $scope.getExercise().id;
+                _exerc.user_input = $('#codeUserInput').val();
+                _exerc.code = ApkiOrg.App.app.getEditor().getCode();
+
+                var _exerc_str:string = ApkiOrg.App.app.helperObjectToJSON(_exerc);
+
+                var $ExercCtrl:CheckExerciseRestAPI = new CheckExerciseRestAPI($resource);
+                $ExercCtrl.res.check({}, _exerc_str, (ans:any) => {
+                    $scope.exerciseCurrOutput = ans.output.output_html;
+
+                    $scope.exerciseIsCorrect = ans.is_correct;
+
+                    $scope.exerciseChecking = false;
+                }, () => {
+                    $scope.exerciseCurrOutput = '<div class="alert alert-danger" role="alert"><b>Błąd!</b> Przepraszamy, serwer w tej chwili nie odpowiada, spróbuj ponownie lub skontaktuj się z nami.</div>';
+
+                    $scope.exerciseIsCorrect = false;
+
+                    $scope.exerciseChecking = false;
                 });
             }
             /**
@@ -163,6 +198,10 @@ module ApkiOrg.CourseMgr {
                     'exercises':false
                 };
 
+                $scope.exerciseCurrOutput = 'Tutaj pojawi się wynik Twojego programu lub ewentualne błędy.<br>Kliknij "Sprawdź" aby wykonać kod.';
+
+                $scope.exerciseIsCorrect = false;
+
                 $scope.quizzes = $scope.apiQuizzes.res.list({'lesson_id':$scope.getLesson().id}, '', (data) => { $scope.checkIsLoaded(data, 'quizzes', $scope.buildCourse) });
                 $scope.exercises = $scope.apiExercises.res.list({'lesson_id':$scope.getLesson().id}, '', (data) => { $scope.checkIsLoaded(data, 'exercises', $scope.buildCourse) });
             }
@@ -187,6 +226,30 @@ module ApkiOrg.CourseMgr {
                 return _less;
             }
 
+
+            /**
+             * Gets current exercise.
+             * @return MExercise Current exercise or null if none
+             */
+            $scope.getExercise = ():MExercise => {
+                var _less:MLesson = $scope.getLesson();
+                if (_less === null) return null;
+
+                var _exerc = null;
+                $.each($scope.exercises, (i, el):any => {
+                    if (_less.data.exercisesPassed.length==0){
+                        _exerc = el;
+                        return false; //Break
+                    }
+                    if (el.id == _less.data.exercisesPassed[_less.data.exercisesPassed.length-1]){
+                        _exerc = el;
+                        return false; //Break
+                    }
+                });
+
+                return _exerc;
+            }
+
             /**
              * Hides or shows one of the menus.
              * @param string which
@@ -204,6 +267,11 @@ module ApkiOrg.CourseMgr {
                     $('#courseContent').height(freeHeight);
                     $('#courseContent').find('.col').height($('#courseContent').height());
                     $('#courseContent').find('.col.col-line-height-100-pro').css('line-height', $('#courseContent').height()+'px');
+                    $('.code-etc-window').height($('#courseContent').height());
+                    $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible')?$('.user-input-window').height():0) - ($('.send-code-window').is(':visible')?$('.send-code-window').height():0) - ($('.code-ok-window').is(':visible')?$('.code-ok-window').height():0));
+                    $('.exercise-instruction').height(Math.round($('#courseContent').height() / 2 - 1));
+                    $('.exercise-console').height($('#courseContent').height() - $('.exercise-instruction').height());
+
                     var freeWidth = $('#courseContent').width()-($('#courseContent').find('.col.first').is(':visible')?$('#courseContent').find('.col.first').width():0)-$('#courseContent').find('.firstHidePanelBar').width();
                     $('#courseContent').find('.col.sec').width(freeWidth);
 

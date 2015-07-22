@@ -12,9 +12,12 @@ module Editor {
 
             this.div = $('#'+divId);
             this.ace = ace.edit(divId);
-            this.ace.setTheme("ace/theme/monokai");
+            this.ace.setTheme("ace/theme/chrome");
             this.ace.getSession().setMode("ace/mode/"+langId);
             this.ace.$blockScrolling = Infinity;
+        }
+        getCode():string{
+            return this.ace.getValue();
         }
         disableRange(sRow,sCol,eRow,eCol:number){
             var session  = this.ace.getSession()

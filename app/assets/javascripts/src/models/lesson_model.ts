@@ -20,5 +20,12 @@ module ApkiOrg.CourseMgr {
     export class MLessonData{
         title               :string;            //Title of lesson
         article             :string;            //Conent of article in lesson (HTML)
+
+        //User metadata:
+        exercisesPassed      :string[];         //List of IDs of passed lessons
+
+        constructor() {
+            this.exercisesPassed = new Array();
+        }
     }
 }
