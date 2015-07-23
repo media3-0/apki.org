@@ -25,9 +25,9 @@ module Course
       end
 
       code = ''
-      code << exercise.data['before_code']
+      code << exercise.data['code_before']
       code << data['code']
-      code << exercise.data['after_code']
+      code << exercise.data['code_after']
 
       response = conn.post do |req|
         req.url '/compile'
@@ -35,7 +35,7 @@ module Course
         req.body = { :lang => exercise.data['lang'], :code => code, :user_input => data['user_input'] }.to_json
       end
 
-      output = JSON.parse response.body.to_s
+      output.merge! JSON.parse(response.body.to_s)
       json_response['output'] = output
       if exercise.data['expected_output'] == output['output']
         return true

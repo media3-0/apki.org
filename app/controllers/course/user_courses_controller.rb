@@ -24,7 +24,7 @@ module Course
       course = exercise.course_lesson.course_course_datum
       user_course = Course::UserCourse.find_by(course_course_datum: course)
       id = exercise.id.to_s
-      output = ''
+      output = {}
       json_response = {'id' => id, 'output' => output, 'is_correct' => false}
       if Course::CourseChecker.check_excercise exercise, data, json_response, output
         correct_exercise id, data, output, exercise.course_lesson, user_course, json_response
