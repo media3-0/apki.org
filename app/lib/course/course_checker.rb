@@ -24,9 +24,11 @@ module Course
         faraday.adapter  Faraday.default_adapter
       end
 
-      code = exercise.data['before_code']
+      code = exercise.data['code_before']
       code << data['code']
-      code << exercise.data['after_code']
+      code << exercise.data['code_before']
+
+        Rails.logger.debug({ :lang => exercise.data['lang'], :code => code, :user_input => data['user_input'] }.to_json);
 
       response = conn.post do |req|
         req.url '/compile'

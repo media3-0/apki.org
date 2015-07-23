@@ -29,8 +29,17 @@ module ApkiOrg.App {
             var new_obj:T = JSON.parse(json_str);
             return new_obj;
         }
-        helperObjectToJSON<T>(obj:T):string{
-            return JSON.stringify(obj);
+        helperObjectToJSON<T>(obj:T, emit_unicode:boolean=true):string{
+            var _json:string = JSON.stringify(obj);
+
+            /**
+             * emit_unicode thanks to http://stackoverflow.com/questions/4901133/json-and-escaping-characters/4901205#4901205
+             */
+            return emit_unicode ? _json : _json.replace(/[\u007f-\uffff]/g,
+                function(c) {
+                    return '\\u'+('0000'+c.charCodeAt(0).toString(16)).slice(-4);
+                }
+            );
         }
     }
 

@@ -548,8 +548,15 @@ var ApkiOrg;
                 var new_obj = JSON.parse(json_str);
                 return new_obj;
             };
-            AppMgr.prototype.helperObjectToJSON = function (obj) {
-                return JSON.stringify(obj);
+            AppMgr.prototype.helperObjectToJSON = function (obj, emit_unicode) {
+                if (emit_unicode === void 0) { emit_unicode = true; }
+                var _json = JSON.stringify(obj);
+                /**
+                 * emit_unicode thanks to http://stackoverflow.com/questions/4901133/json-and-escaping-characters/4901205#4901205
+                 */
+                return emit_unicode ? _json : _json.replace(/[\u007f-\uffff]/g, function (c) {
+                    return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+                });
             };
             return AppMgr;
         })();
@@ -670,7 +677,7 @@ var ApkiOrg;
                     _exerc.id = $scope.getExercise().id;
                     _exerc.user_input = $('#codeUserInput').val();
                     _exerc.code = ApkiOrg.App.app.getEditor().getCode();
-                    var _exerc_str = ApkiOrg.App.app.helperObjectToJSON(_exerc);
+                    var _exerc_str = ApkiOrg.App.app.helperObjectToJSON(_exerc, false);
                     var $ExercCtrl = new CourseMgr.CheckExerciseRestAPI($resource);
                     $ExercCtrl.res.check({}, _exerc_str, function (ans) {
                         $scope.exerciseCurrOutput = ans.output.output_html;

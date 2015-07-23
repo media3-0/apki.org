@@ -104,7 +104,7 @@ module ApkiOrg.CourseMgr {
                 _exerc.user_input = $('#codeUserInput').val();
                 _exerc.code = ApkiOrg.App.app.getEditor().getCode();
 
-                var _exerc_str:string = ApkiOrg.App.app.helperObjectToJSON(_exerc);
+                var _exerc_str:string = ApkiOrg.App.app.helperObjectToJSON(_exerc, false);
 
                 var $ExercCtrl:CheckExerciseRestAPI = new CheckExerciseRestAPI($resource);
                 $ExercCtrl.res.check({}, _exerc_str, (ans:any) => {
