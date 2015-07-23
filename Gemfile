@@ -71,7 +71,7 @@ gem 'faraday'
 # API GitHub - octokit (oficjalne)
 gem 'octokit', '~> 4'
 
-# cachowanie zapytań http robiony przez faraday (używane przez octokit) https://github.com/plataformatec/faraday-http-cache
+# cachowanie zapytań http robionych przez faraday (używane przez octokit) https://github.com/plataformatec/faraday-http-cache
 gem 'faraday-http-cache'
 
 # komunikacja z api forum
@@ -93,11 +93,16 @@ gem 'angularjs-rails'
 gem 'tzinfo-data'
 
 gem 'rack-mini-profiler'
+
+# 2 gemy poniżej nie działają na systemie windows
 # gem 'stackprof'
 # gem 'flamegraph'
 
 # Kolorowanie logów
 gem 'shog'
+
+# Lepsza inteaktywna konsola
+gem 'pry-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -3,6 +3,7 @@ cache: bundler
 rvm:
   - 2.2.2
   - 2.1.6
+  - 2.0.0p643
 services:
   - mongodb
 addons:
