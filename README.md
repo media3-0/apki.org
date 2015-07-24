@@ -7,7 +7,7 @@ Aby poprawnie uruchomić aplikację  należy stworzyć plik `config/local_env.ym
 
 Do działania aplikacji w trybie developerskim wymagane są tylko 4 klucze:
 
-```
+```yaml
 SECRET_KEY_BASE: losowy secret_key_base
 GITHUB_KEY: klucz_github_key
 GITHUB_SECRET: klucz_github_secret
