@@ -25,6 +25,8 @@ module ApkiOrg.CourseMgr {
         exercisesPassed      :string[];         //List of IDs of passed lessons
 
         constructor() {
+            this.title='';
+            this.article='';
             this.exercisesPassed = new Array();
         }
     }

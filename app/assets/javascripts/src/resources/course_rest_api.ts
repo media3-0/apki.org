@@ -23,6 +23,7 @@ module ApkiOrg.CourseMgr {
                 }
                 ,'show':{
                     'method':'GET'
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false) }
                 }
                 ,'create':{
                     'method':'POST',

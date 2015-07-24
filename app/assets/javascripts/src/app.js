@@ -137,6 +137,8 @@ var ApkiOrg;
          */
         var MLessonData = (function () {
             function MLessonData() {
+                this.title = '';
+                this.article = '';
                 this.exercisesPassed = new Array();
             }
             return MLessonData;
@@ -268,7 +270,8 @@ var ApkiOrg;
                         'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, true); }
                     },
                     'show': {
-                        'method': 'GET'
+                        'method': 'GET',
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                     },
                     'create': {
                         'method': 'POST',
@@ -312,7 +315,8 @@ var ApkiOrg;
                     },
                     'create': {
                         'method': 'POST',
-                        'url': '/course/lessons.json'
+                        'url': '/course/lessons.json',
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                     },
                     'update': {
                         'method': 'PUT'
@@ -517,111 +521,6 @@ var Editor;
     })();
     Editor.EditorManager = EditorManager;
 })(Editor || (Editor = {}));
-///<reference path="../vendor/jquery/jquery.d.ts" />
-///<reference path="editor.ts" />
-///<reference path="course.ts" />
-var ApkiOrg;
-(function (ApkiOrg) {
-    var App;
-    (function (App) {
-        App.app;
-        var AppMgr = (function () {
-            function AppMgr() {
-            }
-            AppMgr.prototype.initEditor = function (langId) {
-                this.editor = new Editor.EditorManager('editorTest', langId);
-            };
-            AppMgr.prototype.getEditor = function () {
-                return this.editor;
-            };
-            AppMgr.prototype.helperImageCircle = function (element, imgSrc, widthAndHeight) {
-                if (jQuery(element).length == 0)
-                    return;
-                jQuery(element).addClass('circular').css({
-                    'background-image': 'url(https://images.weserv.nl/?h=' + widthAndHeight + '&w=' + widthAndHeight + '&url=' + encodeURIComponent(imgSrc.substr(imgSrc.indexOf('://') + 3)) + ')',
-                    'border-radius': Math.round(widthAndHeight / 2) + 'px',
-                    'width': widthAndHeight + 'px',
-                    'height': widthAndHeight + 'px'
-                });
-            };
-            AppMgr.prototype.helperObjectFromJSON = function (json_str) {
-                var new_obj = JSON.parse(json_str);
-                return new_obj;
-            };
-            AppMgr.prototype.helperObjectToJSON = function (obj, emit_unicode) {
-                if (emit_unicode === void 0) { emit_unicode = true; }
-                var _json = JSON.stringify(obj);
-                /**
-                 * emit_unicode thanks to http://stackoverflow.com/questions/4901133/json-and-escaping-characters/4901205#4901205
-                 */
-                return emit_unicode ? _json : _json.replace(/[\u007f-\uffff]/g, function (c) {
-                    return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
-                });
-            };
-            return AppMgr;
-        })();
-        App.AppMgr = AppMgr;
-    })(App = ApkiOrg.App || (ApkiOrg.App = {}));
-})(ApkiOrg || (ApkiOrg = {}));
-jQuery(function () {
-    ApkiOrg.App.app = new ApkiOrg.App.AppMgr();
-    //Layout, elements etc:
-    ApkiOrg.App.app.helperImageCircle('#loginImage', jQuery('#loginImage').data('src'), 35);
-    var elems = jQuery('.selectpicker');
-    elems.selectpicker();
-    jQuery('.auto-status-removal').on('click', function () {
-        $(this).removeClass('has-success has-warning has-error').find('.form-control-feedback').remove();
-    });
-    //    var newCommSendExercise = new Course.CommSendExercise();
-    //    newCommSendExercise.code = 'Jakiś kod...';
-    //    newCommSendExercise.ID = 1;
-    //    newCommSendExercise.user_input = '';
-    //
-    //    var tekst = Course.objectToJSON<Course.CommSendExercise>(newCommSendExercise);
-    //
-    //    console.log(tekst);
-    //    var tekst = '{"code":"Jakiś kod...","ID":1,"user_input":""}';
-    //
-    //    var newCommSendExercise = Course.objectFromJSON<Course.CommSendExercise>(tekst);
-    //    console.log(newCommSendExercise);
-    //    var c = new ApkiOrg.CourseMgr.Course();
-    //    c.ID = 1;
-    //    c.title = 'Halo halo!';
-    //    c.lessonsPassed = [1, 2, 3];
-    //    c.lessonCurrent = 1;
-    //
-    //    c.lessons = new Array();
-    //    var newLess = new ApkiOrg.CourseMgr.Lesson();
-    //    newLess.achievement = null;
-    //    newLess.article = '<h1>HWDP JP 100%!</h1>';
-    //    newLess.ID = 0;
-    //    newLess.quizzes=[];
-    //    newLess.exercises = new Array();
-    //
-    //    var newExecrise = new ApkiOrg.CourseMgr.Exercise();
-    //    newExecrise.ID=777;
-    //    newExecrise.content_of_exercise='Zrób coś!';
-    //    newExecrise.lang = 'javascript';
-    //    newExecrise.code='heheheh';
-    //    newExecrise.code_locks = new Array();
-    //
-    //    var newAch = new ApkiOrg.CourseMgr.Achivement();
-    //    newAch.ID=1;
-    //    newAch.title='Heheszki';
-    //    newAch.points=100;
-    //
-    //    newExecrise.achievement = newAch;
-    //    newLess.exercises.push(newExecrise);
-    //    c.lessons.push(newLess);
-    //
-    //    var tekst = apkiOrg.helperObjectToJSON<ApkiOrg.CourseMgr.Course>(c);
-    //
-    //    console.log(tekst);
-    //
-    //    var newC = apkiOrg.helperObjectFromJSON<ApkiOrg.CourseMgr.Course>(tekst);
-    //
-    //    console.log(newC);
-});
 //(c) Jakub Krol 2015
 /// <reference path="../models/code_lock_coord_model.ts" />
 /// <reference path="../models/base_course_model.ts" />
@@ -677,7 +576,7 @@ var ApkiOrg;
                     _exerc.id = $scope.getExercise().id;
                     _exerc.user_input = $('#codeUserInput').val();
                     _exerc.code = ApkiOrg.App.app.getEditor().getCode();
-                    var _exerc_str = ApkiOrg.App.app.helperObjectToJSON(_exerc, false);
+                    var _exerc_str = ApkiOrg.App.app.helperObjectToJSON(_exerc);
                     var $ExercCtrl = new CourseMgr.CheckExerciseRestAPI($resource);
                     $ExercCtrl.res.check({}, _exerc_str, function (ans) {
                         $scope.exerciseCurrOutput = ans.output.output_html;
@@ -1087,6 +986,269 @@ var ApkiOrg;
         app.directive('autostatusremoval', CourseMgr.AutoStatusRemovalDirective.Factory());
         app.directive('codeeditor', CourseMgr.CodeEditorDirective.Factory());
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+///<reference path="../vendor/jquery/jquery.d.ts" />
+///<reference path="editor.ts" />
+///<reference path="course.ts" />
+var ApkiOrg;
+(function (ApkiOrg) {
+    var App;
+    (function (App) {
+        App.app;
+        var AppMgr = (function () {
+            function AppMgr() {
+            }
+            AppMgr.prototype.initEditor = function (langId) {
+                this.editor = new Editor.EditorManager('editorTest', langId);
+            };
+            AppMgr.prototype.getEditor = function () {
+                return this.editor;
+            };
+            AppMgr.prototype.helperImageCircle = function (element, imgSrc, widthAndHeight) {
+                if (jQuery(element).length == 0)
+                    return;
+                jQuery(element).addClass('circular').css({
+                    'background-image': 'url(https://images.weserv.nl/?h=' + widthAndHeight + '&w=' + widthAndHeight + '&url=' + encodeURIComponent(imgSrc.substr(imgSrc.indexOf('://') + 3)) + ')',
+                    'border-radius': Math.round(widthAndHeight / 2) + 'px',
+                    'width': widthAndHeight + 'px',
+                    'height': widthAndHeight + 'px'
+                });
+            };
+            AppMgr.prototype.helperObjectFromJSON = function (json_str) {
+                var new_obj = JSON.parse(json_str);
+                return new_obj;
+            };
+            AppMgr.prototype.helperObjectToJSON = function (obj) {
+                var _json = JSON.stringify(obj);
+                return _json;
+            };
+            return AppMgr;
+        })();
+        App.AppMgr = AppMgr;
+    })(App = ApkiOrg.App || (ApkiOrg.App = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+jQuery(function () {
+    ApkiOrg.App.app = new ApkiOrg.App.AppMgr();
+    //Layout, elements etc:
+    ApkiOrg.App.app.helperImageCircle('#loginImage', jQuery('#loginImage').data('src'), 35);
+    var elems = jQuery('.selectpicker');
+    elems.selectpicker();
+    jQuery('.auto-status-removal').on('click', function () {
+        $(this).removeClass('has-success has-warning has-error').find('.form-control-feedback').remove();
+    });
+    //    var newCommSendExercise = new Course.CommSendExercise();
+    //    newCommSendExercise.code = 'Jakiś kod...';
+    //    newCommSendExercise.ID = 1;
+    //    newCommSendExercise.user_input = '';
+    //
+    //    var tekst = Course.objectToJSON<Course.CommSendExercise>(newCommSendExercise);
+    //
+    //    console.log(tekst);
+    //    var tekst = '{"code":"Jakiś kod...","ID":1,"user_input":""}';
+    //
+    //    var newCommSendExercise = Course.objectFromJSON<Course.CommSendExercise>(tekst);
+    //    console.log(newCommSendExercise);
+    //    var c = new ApkiOrg.CourseMgr.Course();
+    //    c.ID = 1;
+    //    c.title = 'Halo halo!';
+    //    c.lessonsPassed = [1, 2, 3];
+    //    c.lessonCurrent = 1;
+    //
+    //    c.lessons = new Array();
+    //    var newLess = new ApkiOrg.CourseMgr.Lesson();
+    //    newLess.achievement = null;
+    //    newLess.article = '<h1>HWDP JP 100%!</h1>';
+    //    newLess.ID = 0;
+    //    newLess.quizzes=[];
+    //    newLess.exercises = new Array();
+    //
+    //    var newExecrise = new ApkiOrg.CourseMgr.Exercise();
+    //    newExecrise.ID=777;
+    //    newExecrise.content_of_exercise='Zrób coś!';
+    //    newExecrise.lang = 'javascript';
+    //    newExecrise.code='heheheh';
+    //    newExecrise.code_locks = new Array();
+    //
+    //    var newAch = new ApkiOrg.CourseMgr.Achivement();
+    //    newAch.ID=1;
+    //    newAch.title='Heheszki';
+    //    newAch.points=100;
+    //
+    //    newExecrise.achievement = newAch;
+    //    newLess.exercises.push(newExecrise);
+    //    c.lessons.push(newLess);
+    //
+    //    var tekst = apkiOrg.helperObjectToJSON<ApkiOrg.CourseMgr.Course>(c);
+    //
+    //    console.log(tekst);
+    //
+    //    var newC = apkiOrg.helperObjectFromJSON<ApkiOrg.CourseMgr.Course>(tekst);
+    //
+    //    console.log(newC);
+});
+//(c) Jakub Krol 2015
+/// <reference path="../models/code_lock_coord_model.ts" />
+/// <reference path="../models/base_course_model.ts" />
+/// <reference path="../models/achievement_model.ts" />
+/// <reference path="../models/course_model.ts" />
+/// <reference path="../models/exercise_model.ts" />
+/// <reference path="../models/lesson_model.ts" />
+/// <reference path="../models/quiz_model.ts" />
+/// <reference path="../models/comm_send_quiz.ts" />
+/// <reference path="../models/comm_send_exercise.ts" />
+/// <reference path="../../vendor/angularjs/angular.d.ts"/>
+/// <reference path="../resources/course_rest_api.ts"/>
+/// <reference path="../resources/lesson_rest_api.ts"/>
+/// <reference path="../resources/quizzes_rest_api.ts"/>
+/// <reference path="../resources/exercises_rest_api.ts"/>
+/// <reference path="../resources/check_quiz_rest_api.ts"/>
+/// <reference path="../resources/check_exercise_rest_api.ts"/>
+/// <reference path="../../vendor/custom.d.ts"/>
+/// <reference path="../main.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var APanelMgr;
+    (function (APanelMgr) {
+        var aPanelCtrl = (function () {
+            function aPanelCtrl($scope, $timeout, $compile, $resource) {
+                this.$scope = $scope;
+                this.$timeout = $timeout;
+                this.$compile = $compile;
+                this.$resource = $resource;
+                $scope.saveLesson = function () {
+                    $scope.inited = false;
+                    var _lesson_data_str = ApkiOrg.App.app.helperObjectToJSON($scope.currLess.data);
+                    $scope.newLess = $scope.apiLesson.res.update({ 'id': $scope.currLess.id }, _lesson_data_str, function (data) {
+                        $scope.inited = true;
+                    });
+                };
+                $scope.reloadPageIfWant = function () {
+                    if (confirm('Na pewno odrzucić WSZYSTKIE niezapisane zmiany na tej stronie? To w przeciwieństwie do zapisu dotyczy wszystkich miejsc w których coś zostało zmienione.')) {
+                        window.location.reload();
+                    }
+                };
+                $scope.saveCourse = function () {
+                    $scope.inited = false;
+                    var _course_data_str = ApkiOrg.App.app.helperObjectToJSON($scope.course.data);
+                    $scope.newLess = $scope.apiCourse.res.update({ 'id': $scope.course.id }, _course_data_str, function (data) {
+                        $scope.inited = true;
+                    });
+                };
+                $scope.addNewDependecy = function () {
+                    if (($scope.newDependency === null)
+                        ||
+                            ($scope.newDependency.id == $scope.course.id)
+                        ||
+                            ($scope.course.data.dependencies.indexOf($scope.newDependency.id) > -1)) {
+                        alert('Nie można dodać tego kursu do zależności, sprawdź czy jest wybrany kurs, czy nie jest już w zależnościach i czy nie dodajesz kursu do samego siebie.');
+                        return;
+                    }
+                    $scope.course.data.dependencies.push($scope.newDependency.id);
+                    $scope.newDependency = null;
+                };
+                $scope.removeDependecy = function () {
+                    if (($scope.newDependency === null)
+                        ||
+                            ($scope.newDependency == $scope.course.id)
+                        ||
+                            ($scope.course.data.dependencies.indexOf($scope.newDependency) == -1)) {
+                        alert('Nie można usunąć tego kursu z zależności, sprawdź czy jest wybrany kurs, czy nie jest już usunięty z zależności i czy nie usuwasz kursu z samego siebie.');
+                        return;
+                    }
+                    $scope.course.data.dependencies.splice($scope.course.data.dependencies.indexOf($scope.newDependency.id), 1);
+                    $scope.newDependency = null;
+                };
+                $scope.addNewLesson = function () {
+                    $scope.inited = false;
+                    $scope.apiLesson.res.create({ 'course_id': $scope.courseId }, '', function (data) {
+                        $scope.newLess = new ApkiOrg.CourseMgr.MLesson();
+                        var _n_less_data_str = ApkiOrg.App.app.helperObjectToJSON($scope.newLess.data);
+                        $scope.newLess = $scope.apiLesson.res.update({ 'id': data.id }, _n_less_data_str, function (data) {
+                            $scope.lessons.push($scope.newLess);
+                            $scope.newLess = null;
+                            $scope.inited = true;
+                        });
+                    });
+                };
+                /**
+                 * This will init Course. Required at the beginning. Called in ng-init.
+                 */
+                $scope.initAPanel = function () {
+                    var _f = function () {
+                        $scope.inited = false;
+                        $scope.toBeInited = {
+                            'course': false,
+                            'courses': false,
+                            'lessons': false
+                        };
+                        $scope.newDependency = null;
+                        $scope.currLess = null;
+                        $scope.apiCourse = new ApkiOrg.CourseMgr.CourseRestAPI($resource);
+                        $scope.apiLesson = new ApkiOrg.CourseMgr.LessonRestAPI($resource);
+                        $scope.apiQuizzes = new ApkiOrg.CourseMgr.QuizzesRestAPI($resource);
+                        $scope.apiExercises = new ApkiOrg.CourseMgr.ExercisesRestAPI($resource);
+                        $scope.course = new ApkiOrg.CourseMgr.MCourse();
+                        $scope.lessons = new Array();
+                        $scope.course = $scope.apiCourse.res.show({ 'id': $scope.courseId }, '', function (data) { $scope.checkIsLoaded(data, 'course', $scope.loadView); });
+                        $scope.courses = $scope.apiCourse.res.list({}, '', function (data) { $scope.checkIsLoaded(data, 'courses', $scope.loadView); });
+                        $scope.lessons = $scope.apiLesson.res.list({ 'course_id': $scope.courseId }, '', function (data) { $scope.checkIsLoaded(data, 'lessons', $scope.loadView); });
+                    };
+                    $timeout(_f, 1, false);
+                };
+                $scope.loadView = function () {
+                    $scope.inited = true;
+                };
+                /**
+                 * This will create course object, init rest of app and set application as initialized.
+                 * Private.
+                 * @param any data Data from JSON
+                 * @param string elId Element to be inited id
+                 * @param function clbOnFinish Callback to run when all is inited.
+                 */
+                $scope.checkIsLoaded = function (data, elId, clbOnFinish) {
+                    $scope.toBeInited[elId] = true;
+                    var _inited = true;
+                    $($scope.toBeInited).each(function (i, el) {
+                        if (!el)
+                            _inited = false;
+                    });
+                    if (_inited) {
+                        clbOnFinish();
+                    }
+                };
+            }
+            aPanelCtrl.$inject = [
+                '$scope',
+                '$timeout',
+                '$compile',
+                '$resource'
+            ];
+            return aPanelCtrl;
+        })();
+        APanelMgr.aPanelCtrl = aPanelCtrl;
+    })(APanelMgr = ApkiOrg.APanelMgr || (ApkiOrg.APanelMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="../vendor/custom.d.ts"/>
+/// <reference path="controllers/apanel_ctrl.ts"/>
+/// <reference path="directives/select_picker_directive.ts"/>
+/// <reference path="directives/auto_status_removal_directive.ts"/>
+/// <reference path="directives/code_editor_directive.ts"/>
+/// <reference path="filters/to_trusted_filter.ts"/>
+/// <reference path="filters/server_source_lang_to_ace_lang_filter.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var APanelMgr;
+    (function (APanelMgr) {
+        //Init Angular app
+        app = angular.module('aPanelApp', ['ngResource']);
+        app.controller('myCtrl', APanelMgr.aPanelCtrl);
+        app.filter('to_trusted', ApkiOrg.CourseMgr.ToTrustedFilter);
+        app.filter('server_source_lang_to_ace_lang', ApkiOrg.CourseMgr.ServerSourceLangToACELangFilter);
+        app.directive('selectpicker', ApkiOrg.CourseMgr.SelectPickerDirective.Factory());
+        app.directive('autostatusremoval', ApkiOrg.CourseMgr.AutoStatusRemovalDirective.Factory());
+        app.directive('codeeditor', ApkiOrg.CourseMgr.CodeEditorDirective.Factory());
+    })(APanelMgr = ApkiOrg.APanelMgr || (ApkiOrg.APanelMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 /// <reference path="../vendor/jquery/jquery.d.ts"/>
 /// <reference path="../vendor/angularjs/angular.d.ts"/>

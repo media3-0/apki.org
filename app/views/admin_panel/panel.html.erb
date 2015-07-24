@@ -1,0 +1,132 @@
+<form ng-app="aPanelApp" ng-controller="myCtrl" ng-init="courseId='55af6172416d692464000005'; initAPanel()">
+    <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
+        <div class="progress progress-striped active">
+            <div class="progress-bar" role="progressbar" style="width: 100%;">
+                Wczytywanie kursu...
+            </div>
+        </div>
+    </div>
+
+    <div ng-hide="!inited">
+    <h2>Kurs</h2>
+    <div class="caption">Główne informacje</div>
+
+    <div class="form-group">
+        <div class="field-name">
+            <label for="test1">Nazwa:</label>
+            <small>Tytuł kursu widoczny dla Usera.</small>
+        </div>
+        <div class="field-value">
+            <input type="text" class="form-control" ng-bind="course.data.title" ng-model="course.data.title">
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="form-group">
+        <div class="field-name">
+            <label for="test1">Opis:</label>
+            <small>Krótki opis max 1-2 zdania na temat kursu.</small>
+        </div>
+        <div class="field-value">
+            <textarea class="form-control" ng-bind="course.data.description" ng-model="course.data.description"></textarea>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="form-group">
+        <div class="field-name">
+            <label for="test1">Adres ikony:</label>
+            <small>Bezwzględny adres do ikony w formacie PNG.</small>
+        </div>
+        <div class="field-value">
+            <input type="text" class="form-control" ng-bind="course.data.icon_src" ng-model="course.data.icon_src">
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="form-group">
+        <div class="field-name">
+            <label for="test1">Poziom trudności:</label>
+        </div>
+        <div class="field-value">
+            <select
+                    ng-model="course.data.difficulty_level"
+                    ng-change="course.data.difficulty_level"
+                    ng-options="n for n in [1, 2, 3]"></select>
+        </div>
+    </div>
+
+    <div class="caption">Zależności<br><small>Powiązane kursy, które są sugerowane do wyboru gdy chce się włączyć ten kurs a nie przeszło się ich.</small></div>
+
+        <div class="form-group">
+            <div class="field-name">
+                Już wybrane:
+            </div>
+            <div class="field-value">
+                <select
+                        ng-model="newDependency"
+                        ng-options="crs_id for crs_id in course.data.dependencies"></select>
+                <button class="btn btn-secondary" ng-click="removeDependecy()">Usuń powiązanie</button>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                Do wybrania:
+            </div>
+            <div class="field-value">
+                <select
+                        ng-model="newDependency"
+                        ng-options="crs.data.title for crs in courses"></select>
+                <button class="btn btn-secondary" ng-click="addNewDependecy()">Dodaj powiązanie</button>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="buttons">
+            <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel" value="Odrzuć">
+            <input type="button" ng-click="saveCourse()" class="btn btn-lg btn-primary btn-save" value="Zapisz dane kursu">
+        </div>
+
+        <br><br><hr><br>
+        <h2>Lekcja</h2>
+        <div class="clearfix"></div>
+        <button class="btn btn-secondary" ng-click="addNewLesson()">Dodaj lekcję</button><br>
+        <select
+                ng-model="currLess"
+                ng-change="currLess"
+                ng-options="less.data.title for less in lessons"></select>
+        <br>
+        <div ng-repeat="less in lessons" ng-hide="currLess!=less">
+            <div class="caption">Informacje</div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Tytuł:
+                    <small>Bardzo krótki, max 2-3 słowa.</small>
+                </div>
+                <div class="field-value">
+                    <input type="text" class="form-control" ng-bind="less.data.title" ng-model="less.data.title">
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    <label for="test1">Treść artykułu:</label>
+                    <small>Kod HTML.</small>
+                </div>
+                <div class="field-value">
+                    <textarea class="form-control" ng-bind="less.data.article" ng-model="less.data.article" rows="10"></textarea>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="buttons">
+                <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel" value="Odrzuć">
+                <input type="button" ng-click="saveLesson()" class="btn btn-lg btn-primary btn-save" value="Zapisz lekcję '{{ less.data.title }}'">
+            </div>
+        </div>
+    </div>
+</form>

@@ -24,6 +24,7 @@ module ApkiOrg.CourseMgr {
                 ,'create':{
                     'method':'POST',
                     'url':'/course/lessons.json'
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                 }
                 ,'update':{
                     'method':'PUT'
