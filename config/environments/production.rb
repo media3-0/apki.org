@@ -11,7 +11,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
@@ -55,8 +55,20 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', { expires_in: 60.minutes }
-  config.session_store :redis_store, servers: 'redis://localhost:6379/0/sessions'
+  config.cache_store = :readthis_store, 'redis://localhost:6379/0', {
+      expires_in: 60.minutes,
+      namespace: 'cache'
+  }
+  config.session_store :redis_session_store, {
+                                               key: 'session_key',
+                                               redis: {
+                                                   db: 1,
+                                                   expire_after: 365.days,
+                                                   key_prefix: 'sessions:',
+                                                   host: 'localhost',
+                                                   port: 6379
+                                               }
+                                           }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
