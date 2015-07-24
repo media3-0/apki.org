@@ -22,6 +22,10 @@ Do instalacji zależności potrzebny jest gem bundler (`gem install bundler`). P
 
 Po tym procesie wystarczy uruchomić serwer poleceniem `rails s`.
 
+## Kompilacja kodu zadań
+
+Aby kompilować kod wysyłany do zadań należy uruchomić osobny serwer (drobne api napisane w PHP za pomocą frameworka Slim) kompilacji. Jest on dostępny [tutaj](https://github.com/media3-0/apki.org-Code-Compiler).
+
 ## Konfiguracja Vagranta do pracy z portalem apki.org
 
 Pełna instrukcja dostępna na naszym [devblogu](http://devblog.apki.org/vagrant-ustawienie-srodowiska-developerskiego/).
