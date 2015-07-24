@@ -58,11 +58,6 @@ Rails.application.configure do
   config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', { expires_in: 60.minutes }
   config.session_store :redis_store, servers: 'redis://localhost:6379/0/sessions'
 
-  config.action_dispatch.rack_cache = {
-      metastore:   'redis://localhost:6379/1/metastore',
-      entitystore: 'redis://localhost:6379/1/entitystore'
-  }
-
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
