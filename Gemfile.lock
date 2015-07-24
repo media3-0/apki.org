@@ -99,6 +99,7 @@ GEM
     connection_pool (2.2.0)
     daemons (1.2.3)
     debug_inspector (0.0.2)
+    dentaku (1.2.6)
     diff-lcs (1.2.5)
     discourse_api (0.4.4)
       faraday (~> 0.9.0)
@@ -382,6 +383,7 @@ DEPENDENCIES
   carrierwave-mongoid
   ckeditor
   codeclimate-test-reporter
+  dentaku (~> 1.2)
   discourse_api
   factory_girl_rails
   faraday
