@@ -7,7 +7,7 @@ Aby poprawnie uruchomić aplikację  należy stworzyć plik `config/local_env.ym
 
 Do działania aplikacji w trybie developerskim wymagane są tylko 4 klucze:
 
-```
+```yaml
 SECRET_KEY_BASE: losowy secret_key_base
 GITHUB_KEY: klucz_github_key
 GITHUB_SECRET: klucz_github_secret
@@ -21,6 +21,10 @@ Do uruchomienia potrzebne jest środowisko Ruby. Zalecaną przez nas wersją jes
 Do instalacji zależności potrzebny jest gem bundler (`gem install bundler`). Po jego zainstalowaniu wystarczy w katalogu projektu wykonać polecenie `bundle` i zaczekać na pobranie i instalację wszystkich zależności.
 
 Po tym procesie wystarczy uruchomić serwer poleceniem `rails s`.
+
+## Kompilacja kodu zadań
+
+Aby kompilować kod wysyłany do zadań należy uruchomić osobny serwer (drobne api napisane w PHP za pomocą frameworka Slim) kompilacji. Jest on dostępny [tutaj](https://github.com/media3-0/apki.org-Code-Compiler).
 
 ## Konfiguracja Vagranta do pracy z portalem apki.org
 

@@ -30,9 +30,6 @@ gem 'rails_admin'
 # MongoDB
 gem 'mongoid', '~> 4'
 
-# Redis
-gem 'redis-rails'
-
 # kompilator typescript
 # gem 'typescript-rails'
 # gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
@@ -106,6 +103,13 @@ gem 'shog'
 
 # Lepsza inteaktywna konsola
 gem 'pry-rails'
+
+group :production do
+  # Cachowanie w redisie
+  gem 'hiredis'
+  gem 'readthis'
+  gem 'redis-session-store'
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
