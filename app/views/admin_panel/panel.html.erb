@@ -1,63 +1,81 @@
 <form ng-app="aPanelApp" ng-controller="myCtrl" ng-init="courseId='55af6172416d692464000005'; initAPanel()">
-    <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
-        <div class="progress progress-striped active">
-            <div class="progress-bar" role="progressbar" style="width: 100%;">
-                Wczytywanie kursu...
+<div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
+    <div class="progress progress-striped active">
+        <div class="progress-bar" role="progressbar" style="width: 100%;">
+            Wczytywanie kursu...
+        </div>
+    </div>
+</div>
+
+<div ng-hide="!inited || achievementEditorActive">
+
+<div class="buttons">
+        <span ng-repeat="tab in ['Ustawienia kursu', 'Lekcje']">
+            <button ng-click="getScope().currTab=tab" class="btn "
+                    ng-class="getScope().currTab== '{{ tab }}'?' btn-primary':' btn-secondary'">{{ tab }}
+            </button>
+        </span>
+</div>
+
+<div class="clearfix"></div>
+
+<div ng-hide="currTab!='Ustawienia kursu'">
+    <h2>Kurs</h2>
+
+    <div class="caption" slidingcontent>Główne informacje</div>
+    <div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="test1">Nazwa:</label>
+                <small>Tytuł kursu widoczny dla Usera.</small>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" ng-bind="course.data.title" ng-model="course.data.title">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="test1">Opis:</label>
+                <small>Krótki opis max 1-2 zdania na temat kursu.</small>
+            </div>
+            <div class="field-value">
+                <textarea class="form-control" ng-bind="course.data.description"
+                          ng-model="course.data.description"></textarea>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="test1">Adres ikony:</label>
+                <small>Bezwzględny adres do ikony w formacie PNG.</small>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" ng-bind="course.data.icon_src" ng-model="course.data.icon_src">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                <label for="test1">Poziom trudności:</label>
+            </div>
+            <div class="field-value">
+                <select
+                        ng-model="course.data.difficulty_level"
+                        ng-change="course.data.difficulty_level"
+                        ng-options="n for n in [1, 2, 3]"></select>
             </div>
         </div>
     </div>
 
-    <div ng-hide="!inited">
-    <h2>Kurs</h2>
-    <div class="caption">Główne informacje</div>
-
-    <div class="form-group">
-        <div class="field-name">
-            <label for="test1">Nazwa:</label>
-            <small>Tytuł kursu widoczny dla Usera.</small>
-        </div>
-        <div class="field-value">
-            <input type="text" class="form-control" ng-bind="course.data.title" ng-model="course.data.title">
-        </div>
+    <div class="caption" slidingcontent>Zależności<br>
+        <small>Powiązane kursy, które są sugerowane do wyboru gdy chce się włączyć ten kurs a nie przeszło się ich.
+        </small>
     </div>
-
-    <div class="clearfix"></div>
-    <div class="form-group">
-        <div class="field-name">
-            <label for="test1">Opis:</label>
-            <small>Krótki opis max 1-2 zdania na temat kursu.</small>
-        </div>
-        <div class="field-value">
-            <textarea class="form-control" ng-bind="course.data.description" ng-model="course.data.description"></textarea>
-        </div>
-    </div>
-
-    <div class="clearfix"></div>
-    <div class="form-group">
-        <div class="field-name">
-            <label for="test1">Adres ikony:</label>
-            <small>Bezwzględny adres do ikony w formacie PNG.</small>
-        </div>
-        <div class="field-value">
-            <input type="text" class="form-control" ng-bind="course.data.icon_src" ng-model="course.data.icon_src">
-        </div>
-    </div>
-
-    <div class="clearfix"></div>
-    <div class="form-group">
-        <div class="field-name">
-            <label for="test1">Poziom trudności:</label>
-        </div>
-        <div class="field-value">
-            <select
-                    ng-model="course.data.difficulty_level"
-                    ng-change="course.data.difficulty_level"
-                    ng-options="n for n in [1, 2, 3]"></select>
-        </div>
-    </div>
-
-    <div class="caption">Zależności<br><small>Powiązane kursy, które są sugerowane do wyboru gdy chce się włączyć ten kurs a nie przeszło się ich.</small></div>
-
+    <div>
         <div class="form-group">
             <div class="field-name">
                 Już wybrane:
@@ -82,24 +100,59 @@
                 <button class="btn btn-secondary" ng-click="addNewDependecy()">Dodaj powiązanie</button>
             </div>
         </div>
+    </div>
 
-        <div class="clearfix"></div>
-        <div class="buttons">
-            <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel" value="Odrzuć">
-            <input type="button" ng-click="saveCourse()" class="btn btn-lg btn-primary btn-save" value="Zapisz dane kursu">
+    <div class="caption" slidingcontent>Produkcja<br>
+        <small>Tu można uruchomić kurs.</small>
+    </div>
+    <div>
+        <div class="form-group">
+            <div class="field-name">
+                Kurs skończony?<br>
+                <small>Zaznaczone - tak, kurs skończony i JEST opublikowany do produkcji. Odznaczone - kurs widać
+                    jedynie u admina, nie widać na stronie kursowej.
+                </small>
+            </div>
+            <div class="field-value">
+                <input type="checkbox" class="form-control" ng-model="crs.data.finished">
+            </div>
         </div>
+    </div>
 
-        <br><br><hr><br>
-        <h2>Lekcja</h2>
-        <div class="clearfix"></div>
-        <button class="btn btn-secondary" ng-click="addNewLesson()">Dodaj lekcję</button><br>
-        <select
-                ng-model="currLess"
-                ng-change="currLess"
-                ng-options="less.data.title for less in lessons"></select>
-        <br>
-        <div ng-repeat="less in lessons" ng-hide="currLess!=less">
-            <div class="caption">Informacje</div>
+    <div class="clearfix"></div>
+    <div class="buttons">
+        <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel" value="Odrzuć">
+        <input type="button" ng-click="saveCourse()" class="btn btn-lg btn-primary btn-save" value="Zapisz dane kursu">
+    </div>
+</div>
+
+<div ng-hide="currTab!='Lekcje'">
+<h2>Lekcje</h2>
+
+<button class="btn btn-secondary" ng-click="addNewLesson()">Dodaj lekcję</button>
+<br>
+<select
+        ng-model="currLess"
+        ng-change="setCurrLess()"
+        ng-options="less.data.title for less in lessons"></select>
+<br>
+
+<div class="clearfix"></div>
+<div class="buttons" ng-hide="currLess===null">
+                <span ng-repeat="tab in ['Ustawienia i artykuł', 'Quizy', 'Zadania']">
+                    <button ng-click="getScope().currLessTab=tab" class="btn "
+                            ng-class="getScope().currLessTab== '{{ tab }}'?' btn-primary':' btn-secondary'">{{ tab }}
+                    </button>
+                </span>
+</div>
+
+<div class="clearfix"></div>
+<div ng-hide="currLessTab!='Ustawienia i artykuł'">
+    <div ng-repeat="less in lessons" ng-hide="currLess!=less">
+        <h3>Ustawienia i artykuł</h3>
+
+        <div class="caption" slidingcontent>Informacje</div>
+        <div>
             <div class="clearfix"></div>
             <div class="form-group">
                 <div class="field-name">
@@ -118,15 +171,264 @@
                     <small>Kod HTML.</small>
                 </div>
                 <div class="field-value">
-                    <textarea class="form-control" ng-bind="less.data.article" ng-model="less.data.article" rows="10"></textarea>
+                    <textarea class="form-control" ng-bind="less.data.article" ng-model="less.data.article"
+                              rows="10"></textarea>
                 </div>
             </div>
 
             <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Osiągnięcie/odznaka:
+                </div>
+                <div class="field-value">
+                    <input type="button" class="btn btn-secondary"
+                           ng-click="getScope().achievementEditor('osiągnięcie dla lekcji '+less.data.title, 'lesson_id', less.id)"
+                           value="Edytuj...">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="buttons">
+            <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel"
+                   value="Odrzuć">
+            <input type="button" ng-click="saveLesson()" class="btn btn-lg btn-primary btn-save"
+                   value="Zapisz lekcję '{{ less.data.title }}'">
+        </div>
+    </div>
+</div>
+<div ng-hide="currLessTab!='Quizy'">
+    <h3>Quizy</h3>
+    <br>
+    <button class="btn btn-secondary" ng-click="addNewQuiz()">Dodaj pytanie quizu</button>
+    <br>
+
+    <div class="clearfix"></div>
+    <div ng-repeat="quiz in quizzes">
+        <div class="caption" slidingcontent>Quiz {{ quiz.id }} ("{{ quiz.data.question }}")</div>
+        <div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Pytanie:
+                </div>
+                <div class="field-value">
+                    <input type="text" class="form-control" ng-bind="quiz.data.question" ng-model="quiz.data.question">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Odpowiedzi:
+                </div>
+                <div class="field-value">
+                    <div ng-repeat="ans in quiz.data.answers track by $index">
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" ng-model="quiz.data.answers[$index]">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="button" class="btn btn-secondary"
+                                   ng-click="getScope().removeQuizAns(quiz, $index)" value="Usuń">
+                        </div>
+                    </div>
+                    <br>
+                    <input type="button" class="btn btn-secondary" ng-click="getScope().addQuizAns(quiz)"
+                           value="Dodaj nową odpowiedź">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Poprawna odpowiedź:
+                </div>
+                <div class="field-value">
+                    <select
+                            ng-model="quiz.data.answer_idx"
+                            ng-change="quiz.data.answer_idx"
+                            ng-options="getScope().parseInt(idx) as ans for (idx, ans) in quiz.data.answers"></select>
+                </div>
+            </div>
+            <div class="clearfix"></div>
             <div class="buttons">
-                <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel" value="Odrzuć">
-                <input type="button" ng-click="saveLesson()" class="btn btn-lg btn-primary btn-save" value="Zapisz lekcję '{{ less.data.title }}'">
+                <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel"
+                       value="Odrzuć">
+                <input type="button" ng-click="saveQuiz(quiz)" class="btn btn-lg btn-primary btn-save"
+                       value="Zapisz pytanie {{ quiz.id }}">
             </div>
         </div>
     </div>
+</div>
+<div ng-hide="currLessTab!='Zadania'">
+    <h3>Zadania</h3>
+    <br>
+    <button class="btn btn-secondary" ng-click="addNewExercise()">Dodaj zadanie</button>
+    <br>
+
+    <div class="clearfix"></div>
+    <div ng-repeat="exerc in exercises">
+        <div class="caption" slidingcontent>Zadanie {{ exerc.id }}</div>
+        <div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Treść zadania:<br>
+                    <small>Można użyć HTML (dobrze nazwę dać w h2).</small>
+                </div>
+                <div class="field-value">
+                    <textarea class="form-control" ng-bind="exerc.data.content_of_exercise"
+                              ng-model="exerc.data.content_of_exercise"></textarea>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Włączyć okienko danych wejściowych użytkownika?
+                </div>
+                <div class="field-value">
+                    <input type="checkbox" class="form-control" ng-bind="exerc.data.allow_user_input"
+                           ng-model="exerc.data.allow_user_input">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Domyślna wartość danych wejściowych użytkownika:
+                </div>
+                <div class="field-value">
+                    <input type="text" class="form-control" ng-bind="exerc.data.default_user_input"
+                           ng-model="exerc.data.default_user_input">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Oczekiwana wartość:<br>
+                    <small>Można użyć wyrażenia...</small>
+                </div>
+                <div class="field-value">
+                    <input type="text" class="form-control" ng-bind="exerc.data.expected_result_expr"
+                           ng-model="exerc.data.expected_result_expr">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Język:
+                </div>
+                <div class="field-value">
+                    <select
+                            ng-model="exerc.data.lang"
+                            ng-change="exerc.data.lang"
+                            ng-options="l for l in ['C', 'CPP', 'CPP11', 'CLOJURE', 'CSHARP', 'JAVA', 'JAVASCRIPT', 'HASKELL', 'PERL', 'PHP', 'PYTHON', 'RUBY']"></select>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Kod źródłowy:<br>
+                    <small>Zwróć uwagę, że pierwsze i trzecie okno zostaną dodane odpowiednio przed i po kodzie
+                        użytkownika, okienko środkowe to kod użytkownika.
+                    </small>
+                </div>
+                <div class="field-value">
+                    <b>Przed (ukryte, nieedytowalne):</b><br>
+                    <textarea class="form-control" ng-model="exerc.data.code_before" rows="15"></textarea><br><br>
+                    <b>Domyślny kod użytkownika (widoczny, edytowalny):</b><br>
+                    <textarea class="form-control" ng-model="exerc.data.code" rows="15"></textarea><br><br>
+                    <b>Blokady kodu (miejsca w domyślnym kodzie użytkownika których nie da się edytować):</b><br>
+                    <input type="button" class="btn btn-secondary" ng-click="getScope().addCodeLock(exerc)"
+                           value="Dodaj nową blokadę"><br>
+
+                    <div ng-repeat="c_lock in exerc.data.code_locks track by $index">
+                        <div class="col-md-1">Od</div>
+                        <div class="col-md-1"><input type="text" class="form-control" ng-model="c_lock.rowStart"></div>
+                        <div class="col-md-1">x</div>
+                        <div class="col-md-2"><input type="text" class="form-control" ng-model="c_lock.colStart"></div>
+                        <div class="col-md-1">do</div>
+                        <div class="col-md-1"><input type="text" class="form-control" ng-model="c_lock.rowEnd"></div>
+                        <div class="col-md-1">x</div>
+                        <div class="col-md-2"><input type="text" class="form-control" ng-model="c_lock.colEnd"></div>
+                        <div class="col-md-2"><input type="button" class="btn btn-secondary"
+                                                     ng-click="getScope().removeCodeLock(exerc, $index)" value="Usuń">
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <br><br>
+                    <b>Po (ukryte, nieedytowalne):</b><br>
+                    <textarea class="form-control" ng-model="exerc.data.code_after" rows="15"></textarea><br><br>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <div class="field-name">
+                    Osiągnięcie/odznaka:
+                </div>
+                <div class="field-value">
+                    <input type="button" class="btn btn-secondary"
+                           ng-click="getScope().achievementEditor('osiągnięcie dla zadania '+exerc.id, 'exercise_id', exerc.id)"
+                           value="Edytuj...">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="buttons">
+                <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel"
+                       value="Odrzuć">
+                <input type="button" ng-click="saveExercise(exerc)" class="btn btn-lg btn-primary btn-save"
+                       value="Zapisz zadanie {{ exerc.id }}">
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div ng-hide="!inited || !achievementEditorActive">
+    <h2>Edytor osiągnięcia/odznaki: {{ achievementEditorSubTitle }}</h2>
+    <div ng-if="achievement===null">
+        <b>Brak osiągnięcia.</b>
+        <input type="button" style="btn btn-secondary" ng-click="addNewAchivement()" value="Dodaj osiągnięcie">
+    </div>
+    <div ng-if="achievement!==null">
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                Nazwa:<br>
+                <small>Krótki tytuł odznaki, max kilka słów.</small>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" ng-model="achievement.data.title">
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                Ikona:<br>
+                <small>Bezwzględny adres do ikony w formacie PNG.</small>
+            </div>
+            <div class="field-value">
+                <input type="text" class="form-control" ng-model="achievement.data.icon_src">
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="field-name">
+                Liczba punktów:<br>
+                <small>Liczba przyznawanych punktów. Liczbą całkowita nieujemna.</small>
+            </div>
+            <div class="field-value">
+                <input type="number" class="form-control" ng-model="achievement.data.points">
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="buttons">
+            <input type="button" ng-click="reloadPageIfWant();achievementEditorActive=false" class="btn btn-lg btn-secondary btn-cancel"
+                   value="Odrzuć">
+            <input type="button" ng-click="saveAchivement()" class="btn btn-lg btn-primary btn-save"
+                   value="Zapisz (i wyjdź z edytora) odznakę {{ achievementEditorSubTitle }}">
+        </div>
+    </div>
+</div>
 </form>

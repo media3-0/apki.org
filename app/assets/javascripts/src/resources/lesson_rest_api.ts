@@ -28,6 +28,7 @@ module ApkiOrg.CourseMgr {
                 }
                 ,'update':{
                     'method':'PUT'
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                 }
                 ,'delete':{
                     'method':'DELETE'

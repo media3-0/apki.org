@@ -4,6 +4,7 @@
 /// <reference path="directives/select_picker_directive.ts"/>
 /// <reference path="directives/auto_status_removal_directive.ts"/>
 /// <reference path="directives/code_editor_directive.ts"/>
+/// <reference path="directives/sliding_content_directive.ts"/>
 /// <reference path="filters/to_trusted_filter.ts"/>
 /// <reference path="filters/server_source_lang_to_ace_lang_filter.ts"/>
 
@@ -20,4 +21,5 @@ module ApkiOrg.APanelMgr {
     app.directive('selectpicker', ApkiOrg.CourseMgr.SelectPickerDirective.Factory());
     app.directive('autostatusremoval', ApkiOrg.CourseMgr.AutoStatusRemovalDirective.Factory());
     app.directive('codeeditor', ApkiOrg.CourseMgr.CodeEditorDirective.Factory());
+    app.directive('slidingcontent', ApkiOrg.CourseMgr.SlidingContentDirective.Factory());
 }

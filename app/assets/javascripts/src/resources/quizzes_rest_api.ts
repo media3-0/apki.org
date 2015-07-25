@@ -24,9 +24,11 @@ module ApkiOrg.CourseMgr {
                 ,'create':{
                     'method':'POST',
                     'url':'/course/quizzes.json'
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                 }
                 ,'update':{
                     'method':'PUT'
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                 }
                 ,'delete':{
                     'method':'DELETE'

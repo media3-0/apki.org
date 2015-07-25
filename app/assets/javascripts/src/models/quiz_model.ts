@@ -23,6 +23,8 @@ module ApkiOrg.CourseMgr {
         answer_idx          :number;            //Idx of correct answer
 
         constructor() {
+            this.question='';
+            this.answer_idx=0;
             this.answers = new Array();
         }
     }

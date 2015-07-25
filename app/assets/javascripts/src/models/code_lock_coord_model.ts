@@ -9,5 +9,12 @@ module ApkiOrg.CourseMgr {
         colStart            :number;            //Beginning of code lock - starting column
         rowEnd              :number;            //End of code lock - ending row
         colEnd              :number;            //End of code lock - ending column
+
+        constructor() {
+            this.rowStart=0;
+            this.colStart=0;
+            this.rowEnd=0;
+            this.colEnd=0;
+        }
     }
 }

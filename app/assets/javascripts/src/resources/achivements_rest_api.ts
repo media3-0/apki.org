@@ -2,16 +2,19 @@
 /// <reference path="base_rest_api.ts"/>
 
 module ApkiOrg.CourseMgr {
-    export class ExercisesRestAPI extends BaseRestAPI{
+    /**
+     * Resource [REST API]: Achivements.
+     */
+    export class AchivementsRestAPI extends BaseRestAPI{
         public res : any;
 
         constructor(private $resource : any) {
             super();
-            this.res = $resource('/course/exercises/:id.json', {}, {
+            this.res = $resource('/course/achievements/:id.json', {}, {
                 //Definition of RESTful API:
                 'list':{
                     'method':'GET',
-                    'url':'/course/exercises.json',
+                    'url':'/course/achievements.json',
                     isArray: true
 //                    'params':{
 //                        'sub_url':'course_data/'
@@ -20,15 +23,16 @@ module ApkiOrg.CourseMgr {
                 }
                 ,'show':{
                     'method':'GET'
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false) }
                 }
                 ,'create':{
                     'method':'POST',
-                    'url':'/course/exercises.json'
-                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
+                    'url':'/course/achievements.json'
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false) }
                 }
                 ,'update':{
                     'method':'PUT'
-                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
+                    ,'transformResponse':(data, headersGetter) => { return this.transformFromBackEndToFrontEnd(data, headersGetter, false) }
                 }
                 ,'delete':{
                     'method':'DELETE'
