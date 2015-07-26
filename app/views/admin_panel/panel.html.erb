@@ -2,7 +2,7 @@
 <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
     <div class="progress progress-striped active">
         <div class="progress-bar" role="progressbar" style="width: 100%;">
-            Wczytywanie kursu...
+            Wczytywanie danych...
         </div>
     </div>
 </div>
@@ -114,7 +114,7 @@
                 </small>
             </div>
             <div class="field-value">
-                <input type="checkbox" class="form-control" ng-model="crs.data.finished">
+                <input type="checkbox" class="form-control" ng-model="course.data.finished">
             </div>
         </div>
     </div>
@@ -130,6 +130,7 @@
 <h2>Lekcje</h2>
 
 <button class="btn btn-secondary" ng-click="addNewLesson()">Dodaj lekcję</button>
+<button class="btn btn-danger" ng-click="removeLesson()">Usuń lekcję</button>
 <br>
 <select
         ng-model="currLess"
@@ -254,6 +255,7 @@
             <div class="buttons">
                 <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel"
                        value="Odrzuć">
+                <button class="btn btn-lg btn-danger" ng-click="removeQuiz(quiz)">Usuń quiz</button>
                 <input type="button" ng-click="saveQuiz(quiz)" class="btn btn-lg btn-primary btn-save"
                        value="Zapisz pytanie {{ quiz.id }}">
             </div>
@@ -375,6 +377,7 @@
             <div class="buttons">
                 <input type="button" ng-click="reloadPageIfWant()" class="btn btn-lg btn-secondary btn-cancel"
                        value="Odrzuć">
+                <button class="btn btn-lg btn-danger" ng-click="removeExercise(exerc)">Usuń zadanie</button>
                 <input type="button" ng-click="saveExercise(exerc)" class="btn btn-lg btn-primary btn-save"
                        value="Zapisz zadanie {{ exerc.id }}">
             </div>
@@ -388,8 +391,13 @@
 <div ng-hide="!inited || !achievementEditorActive">
     <h2>Edytor osiągnięcia/odznaki: {{ achievementEditorSubTitle }}</h2>
     <div ng-if="achievement===null">
-        <b>Brak osiągnięcia.</b>
-        <input type="button" style="btn btn-secondary" ng-click="addNewAchivement()" value="Dodaj osiągnięcie">
+        <b>Brak osiągnięcia.</b><Br>
+        <input type="button" class="btn btn-secondary" ng-click="addNewAchievement()" value="Dodaj osiągnięcie"><br>
+        <div class="clearfix"></div>
+        <div class="buttons">
+            <input type="button" ng-click="closeAchievementsEditor()" class="btn btn-lg btn-secondary btn-cancel"
+                   value="Zamknij">
+        </div>
     </div>
     <div ng-if="achievement!==null">
         <div class="clearfix"></div>
@@ -424,10 +432,11 @@
         </div>
         <div class="clearfix"></div>
         <div class="buttons">
-            <input type="button" ng-click="reloadPageIfWant();achievementEditorActive=false" class="btn btn-lg btn-secondary btn-cancel"
-                   value="Odrzuć">
-            <input type="button" ng-click="saveAchivement()" class="btn btn-lg btn-primary btn-save"
-                   value="Zapisz (i wyjdź z edytora) odznakę {{ achievementEditorSubTitle }}">
+            <input type="button" ng-click="closeAchievementsEditor()" class="btn btn-lg btn-secondary btn-cancel"
+                   value="Zamknij">
+            <button class="btn btn-lg btn-danger" ng-click="removeAchievement()">Usuń odznakę</button>
+            <input type="button" ng-click="saveAchievement()" class="btn btn-lg btn-primary btn-save"
+                   value="Zapisz odznakę {{ achievementEditorSubTitle }}">
         </div>
     </div>
 </div>

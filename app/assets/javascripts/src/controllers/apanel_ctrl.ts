@@ -13,7 +13,7 @@
 /// <reference path="../resources/lesson_rest_api.ts"/>
 /// <reference path="../resources/quizzes_rest_api.ts"/>
 /// <reference path="../resources/exercises_rest_api.ts"/>
-/// <reference path="../resources/achivements_rest_api.ts"/>
+/// <reference path="../resources/achievements_rest_api.ts"/>
 /// <reference path="../resources/check_quiz_rest_api.ts"/>
 /// <reference path="../resources/check_exercise_rest_api.ts"/>
 /// <reference path="../../vendor/custom.d.ts"/>
@@ -35,7 +35,7 @@ module ApkiOrg.APanelMgr {
         apiLesson:ApkiOrg.CourseMgr.LessonRestAPI;
         apiQuizzes:ApkiOrg.CourseMgr.QuizzesRestAPI;
         apiExercises:ApkiOrg.CourseMgr.ExercisesRestAPI;
-        apiAchievements:ApkiOrg.CourseMgr.AchivementsRestAPI;
+        apiAchievements:ApkiOrg.CourseMgr.AchievementsRestAPI;
         inited:boolean;
         toBeInited:{};
         courseId:string;
@@ -76,8 +76,13 @@ module ApkiOrg.APanelMgr {
         saveExercise(exerc:ApkiOrg.CourseMgr.MExercise)
         addNewExercise()
         achievementEditor(desc:string, id_query_name:string, id:string)
-        saveAchivement()
-        addNewAchivement()
+        saveAchievement()
+        addNewAchievement()
+        removeLesson()
+        removeQuiz(quiz:ApkiOrg.CourseMgr.MQuiz)
+        removeExercise(exerc:ApkiOrg.CourseMgr.MExercise)
+        removeAchievement()
+        closeAchievementsEditor()
     }
 
     export class aPanelCtrl {
@@ -89,12 +94,70 @@ module ApkiOrg.APanelMgr {
         ];
         constructor(private $scope: IAppCtrlScope, private $timeout: ng.ITimeoutService, private $compile:ng.ICompileService, private $resource:any) {
 
-            $scope.saveAchivement = () => {
-                $scope.standardSaveObject($scope.achievement, $scope.apiAchievements.res, $scope.achievement.id);
+            $scope.closeAchievementsEditor = () => {
                 $scope.achievementEditorActive=false;
             }
 
-            $scope.addNewAchivement = () => {
+            $scope.removeExercise = (exerc:ApkiOrg.CourseMgr.MExercise) => {
+                if (exerc === null) return;
+                if (!confirm('Czy jesteś pewien że chcesz usunąć całe to zadanie?')) return;
+
+                $scope.inited = false;
+
+                $scope.apiExercises.res.delete({'id':exerc.id}, '', (data) => {
+                    $scope.exercises.splice($scope.exercises.indexOf(exerc), 1);
+                    exerc = null;
+
+                    $scope.inited = true;
+                });
+            }
+
+            $scope.removeQuiz = (quiz:ApkiOrg.CourseMgr.MQuiz) => {
+                if (quiz === null) return;
+                if (!confirm('Czy jesteś pewien że chcesz usunąć całe to pytanie quizowe?')) return;
+
+                $scope.inited = false;
+
+                $scope.apiQuizzes.res.delete({'id':quiz.id}, '', (data) => {
+                    $scope.quizzes.splice($scope.quizzes.indexOf(quiz), 1);
+                    quiz = null;
+
+                    $scope.inited = true;
+                });
+            }
+
+            $scope.removeAchievement = () => {
+                if ($scope.achievement === null) return;
+                if (!confirm('Czy jesteś pewien że chcesz usunąć całą tą odznakę/osiągnięcie?')) return;
+
+                $scope.inited = false;
+
+                $scope.apiAchievements.res.delete({'id':$scope.achievement.id}, '', (data) => {
+                    $scope.achievement = null;
+
+                    $scope.inited = true;
+                });
+            }
+
+            $scope.removeLesson = () => {
+                if ($scope.currLess === null) return;
+                if (!confirm('Czy jesteś pewien że chcesz usunąć całą tą lekcją wraz z całą jej zawartością?')) return;
+
+                $scope.inited = false;
+
+                $scope.apiLesson.res.delete({'id':$scope.currLess.id}, '', (data) => {
+                    $scope.lessons.splice($scope.lessons.indexOf($scope.currLess), 1);
+                    $scope.currLess = null;
+
+                    $scope.inited = true;
+                });
+            }
+
+            $scope.saveAchievement = () => {
+                $scope.standardSaveObject($scope.achievement, $scope.apiAchievements.res, $scope.achievement.id);
+            }
+
+            $scope.addNewAchievement = () => {
                 $scope.inited = false;
 
                 var _ask_data = {};
@@ -106,7 +169,7 @@ module ApkiOrg.APanelMgr {
 
                     var _n_achiv_data_str:string = ApkiOrg.App.app.helperObjectToJSON($scope.achievement.data);
 
-                    $scope.achievement = $scope.apiQuizzes.res.update({'id':data.id}, _n_achiv_data_str, (data) => {
+                    $scope.achievement = $scope.apiAchievements.res.update({'id':data.id}, _n_achiv_data_str, (data) => {
                         $scope.inited = true;
                     });
                 })
@@ -310,7 +373,7 @@ module ApkiOrg.APanelMgr {
                     $scope.apiLesson = new ApkiOrg.CourseMgr.LessonRestAPI($resource);
                     $scope.apiQuizzes = new ApkiOrg.CourseMgr.QuizzesRestAPI($resource);
                     $scope.apiExercises = new ApkiOrg.CourseMgr.ExercisesRestAPI($resource);
-                    $scope.apiAchievements = new ApkiOrg.CourseMgr.AchivementsRestAPI($resource);
+                    $scope.apiAchievements = new ApkiOrg.CourseMgr.AchievementsRestAPI($resource);
 
                     $scope.course = new ApkiOrg.CourseMgr.MCourse();
                     $scope.lessons = new Array();

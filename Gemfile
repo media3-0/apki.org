@@ -106,9 +106,9 @@ gem 'pry-rails'
 
 group :production do
   # Cachowanie w redisie
-  gem 'hiredis'
-  gem 'readthis'
-  gem 'redis-session-store'
+  # gem 'hiredis'
+  # gem 'readthis'
+  # gem 'redis-session-store'
 end
 
 group :development, :test do

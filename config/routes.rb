@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   post 'user/edit_profile'
 
   get 'admin_panel', to: 'admin_panel#panel', as: 'admin_panel'
+  get 'admin_panel_list', to: 'admin_panel#list', as: 'admin_panel_list'
 
   mount Ckeditor::Engine => '/ckeditor'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

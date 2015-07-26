@@ -31,6 +31,13 @@ module ApkiOrg.CourseMgr {
         finished            :boolean;           //True if course is finished
 
         constructor() {
+            this.title='';
+            this.description='';
+            this.icon_src='';
+            this.difficulty_level=1;
+            this.lessonCurrent='';
+            this.finished=false;
+
             this.lessonsPassed = new Array();
             this.dependencies = new Array();
         }

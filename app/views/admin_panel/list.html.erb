@@ -1,0 +1,23 @@
+<form ng-app="aPanelListApp" ng-controller="myCtrl" ng-init="initAPanelList()">
+    <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
+        <div class="progress progress-striped active">
+            <div class="progress-bar" role="progressbar" style="width: 100%;">
+                Wczytywanie danych...
+            </div>
+        </div>
+    </div>
+    <div ng-hide="!inited">
+        <h2>Lista wszystkich kursów</h2><br>
+
+        <input type="button" class="btn btn-secondary" ng-click="addNewCourse()" value="Dodaj nowy kurs"><br>
+        <div ng-repeat="crs in courses">
+            <div class="clearfix"></div>
+            <div class="caption">
+                <a href="\admin_panel?id={{ crs.id }}">{{ crs.data.title }} ({{ crs.id }})</a><br>
+                <small><span ng-if="crs.data.finished" class="label-success">Opublikowano</span><span ng-if="!crs.data.finished" class="label-warning">W trakcie opracowania</span></small>
+
+                <div style="float:right"><input type="button" class="btn btn-danger" ng-click="removeCourse(crs)" value="Usuń"> <a href="\admin_panel?id={{ crs.id }}" class="btn btn-primary" >Edytuj</a> </div>
+            </div>
+        </div>
+    </div>
+</form>

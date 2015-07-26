@@ -5,7 +5,7 @@ module ApkiOrg.CourseMgr {
     /**
      * Resource [REST API]: Achivements.
      */
-    export class AchivementsRestAPI extends BaseRestAPI{
+    export class AchievementsRestAPI extends BaseRestAPI{
         public res : any;
 
         constructor(private $resource : any) {

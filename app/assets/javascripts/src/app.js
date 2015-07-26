@@ -91,6 +91,12 @@ var ApkiOrg;
          */
         var MCourseData = (function () {
             function MCourseData() {
+                this.title = '';
+                this.description = '';
+                this.icon_src = '';
+                this.difficulty_level = 1;
+                this.lessonCurrent = '';
+                this.finished = false;
                 this.lessonsPassed = new Array();
                 this.dependencies = new Array();
             }
@@ -293,10 +299,12 @@ var ApkiOrg;
                     },
                     'create': {
                         'method': 'POST',
-                        'url': '/course/course_data.json'
+                        'url': '/course/course_data.json',
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                     },
                     'update': {
-                        'method': 'PUT'
+                        'method': 'PUT',
+                        'transformResponse': function (data, headersGetter) { return _this.transformFromBackEndToFrontEnd(data, headersGetter, false); }
                     },
                     'delete': {
                         'method': 'DELETE'
@@ -443,9 +451,9 @@ var ApkiOrg;
         /**
          * Resource [REST API]: Achivements.
          */
-        var AchivementsRestAPI = (function (_super) {
-            __extends(AchivementsRestAPI, _super);
-            function AchivementsRestAPI($resource) {
+        var AchievementsRestAPI = (function (_super) {
+            __extends(AchievementsRestAPI, _super);
+            function AchievementsRestAPI($resource) {
                 var _this = this;
                 _super.call(this);
                 this.$resource = $resource;
@@ -475,9 +483,9 @@ var ApkiOrg;
                     }
                 });
             }
-            return AchivementsRestAPI;
+            return AchievementsRestAPI;
         })(CourseMgr.BaseRestAPI);
-        CourseMgr.AchivementsRestAPI = AchivementsRestAPI;
+        CourseMgr.AchievementsRestAPI = AchievementsRestAPI;
     })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 //(c) Jakub Krol 2015
@@ -1170,7 +1178,7 @@ jQuery(function () {
 /// <reference path="../resources/lesson_rest_api.ts"/>
 /// <reference path="../resources/quizzes_rest_api.ts"/>
 /// <reference path="../resources/exercises_rest_api.ts"/>
-/// <reference path="../resources/achivements_rest_api.ts"/>
+/// <reference path="../resources/achievements_rest_api.ts"/>
 /// <reference path="../resources/check_quiz_rest_api.ts"/>
 /// <reference path="../resources/check_exercise_rest_api.ts"/>
 /// <reference path="../../vendor/custom.d.ts"/>
@@ -1185,18 +1193,67 @@ var ApkiOrg;
                 this.$timeout = $timeout;
                 this.$compile = $compile;
                 this.$resource = $resource;
-                $scope.saveAchivement = function () {
-                    $scope.standardSaveObject($scope.achievement, $scope.apiAchievements.res, $scope.achievement.id);
+                $scope.closeAchievementsEditor = function () {
                     $scope.achievementEditorActive = false;
                 };
-                $scope.addNewAchivement = function () {
+                $scope.removeExercise = function (exerc) {
+                    if (exerc === null)
+                        return;
+                    if (!confirm('Czy jesteś pewien że chcesz usunąć całe to zadanie?'))
+                        return;
+                    $scope.inited = false;
+                    $scope.apiExercises.res.delete({ 'id': exerc.id }, '', function (data) {
+                        $scope.exercises.splice($scope.exercises.indexOf(exerc), 1);
+                        exerc = null;
+                        $scope.inited = true;
+                    });
+                };
+                $scope.removeQuiz = function (quiz) {
+                    if (quiz === null)
+                        return;
+                    if (!confirm('Czy jesteś pewien że chcesz usunąć całe to pytanie quizowe?'))
+                        return;
+                    $scope.inited = false;
+                    $scope.apiQuizzes.res.delete({ 'id': quiz.id }, '', function (data) {
+                        $scope.quizzes.splice($scope.quizzes.indexOf(quiz), 1);
+                        quiz = null;
+                        $scope.inited = true;
+                    });
+                };
+                $scope.removeAchievement = function () {
+                    if ($scope.achievement === null)
+                        return;
+                    if (!confirm('Czy jesteś pewien że chcesz usunąć całą tą odznakę/osiągnięcie?'))
+                        return;
+                    $scope.inited = false;
+                    $scope.apiAchievements.res.delete({ 'id': $scope.achievement.id }, '', function (data) {
+                        $scope.achievement = null;
+                        $scope.inited = true;
+                    });
+                };
+                $scope.removeLesson = function () {
+                    if ($scope.currLess === null)
+                        return;
+                    if (!confirm('Czy jesteś pewien że chcesz usunąć całą tą lekcją wraz z całą jej zawartością?'))
+                        return;
+                    $scope.inited = false;
+                    $scope.apiLesson.res.delete({ 'id': $scope.currLess.id }, '', function (data) {
+                        $scope.lessons.splice($scope.lessons.indexOf($scope.currLess), 1);
+                        $scope.currLess = null;
+                        $scope.inited = true;
+                    });
+                };
+                $scope.saveAchievement = function () {
+                    $scope.standardSaveObject($scope.achievement, $scope.apiAchievements.res, $scope.achievement.id);
+                };
+                $scope.addNewAchievement = function () {
                     $scope.inited = false;
                     var _ask_data = {};
                     _ask_data[$scope.achievementParentIdQueryName] = $scope.achievementParentId;
                     $scope.apiAchievements.res.create(_ask_data, '', function (data) {
                         $scope.achievement = new ApkiOrg.CourseMgr.MAchievement();
                         var _n_achiv_data_str = ApkiOrg.App.app.helperObjectToJSON($scope.achievement.data);
-                        $scope.achievement = $scope.apiQuizzes.res.update({ 'id': data.id }, _n_achiv_data_str, function (data) {
+                        $scope.achievement = $scope.apiAchievements.res.update({ 'id': data.id }, _n_achiv_data_str, function (data) {
                             $scope.inited = true;
                         });
                     });
@@ -1359,7 +1416,7 @@ var ApkiOrg;
                         $scope.apiLesson = new ApkiOrg.CourseMgr.LessonRestAPI($resource);
                         $scope.apiQuizzes = new ApkiOrg.CourseMgr.QuizzesRestAPI($resource);
                         $scope.apiExercises = new ApkiOrg.CourseMgr.ExercisesRestAPI($resource);
-                        $scope.apiAchievements = new ApkiOrg.CourseMgr.AchivementsRestAPI($resource);
+                        $scope.apiAchievements = new ApkiOrg.CourseMgr.AchievementsRestAPI($resource);
                         $scope.course = new ApkiOrg.CourseMgr.MCourse();
                         $scope.lessons = new Array();
                         $scope.course = $scope.apiCourse.res.show({ 'id': $scope.courseId }, '', function (data) { $scope.checkIsLoaded(data, 'course', $scope.loadView); });
@@ -1464,6 +1521,101 @@ var ApkiOrg;
         app.directive('codeeditor', ApkiOrg.CourseMgr.CodeEditorDirective.Factory());
         app.directive('slidingcontent', ApkiOrg.CourseMgr.SlidingContentDirective.Factory());
     })(APanelMgr = ApkiOrg.APanelMgr || (ApkiOrg.APanelMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="../models/code_lock_coord_model.ts" />
+/// <reference path="../models/base_course_model.ts" />
+/// <reference path="../models/achievement_model.ts" />
+/// <reference path="../models/course_model.ts" />
+/// <reference path="../models/exercise_model.ts" />
+/// <reference path="../models/lesson_model.ts" />
+/// <reference path="../models/quiz_model.ts" />
+/// <reference path="../models/comm_send_quiz.ts" />
+/// <reference path="../models/comm_send_exercise.ts" />
+/// <reference path="../../vendor/angularjs/angular.d.ts"/>
+/// <reference path="../resources/course_rest_api.ts"/>
+/// <reference path="../resources/lesson_rest_api.ts"/>
+/// <reference path="../resources/quizzes_rest_api.ts"/>
+/// <reference path="../resources/exercises_rest_api.ts"/>
+/// <reference path="../resources/achievements_rest_api.ts"/>
+/// <reference path="../resources/check_quiz_rest_api.ts"/>
+/// <reference path="../resources/check_exercise_rest_api.ts"/>
+/// <reference path="../../vendor/custom.d.ts"/>
+/// <reference path="../main.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var APanelListMgr;
+    (function (APanelListMgr) {
+        var aPanelListCtrl = (function () {
+            function aPanelListCtrl($scope, $timeout, $compile, $resource) {
+                this.$scope = $scope;
+                this.$timeout = $timeout;
+                this.$compile = $compile;
+                this.$resource = $resource;
+                $scope.removeCourse = function (course) {
+                    if (course === null)
+                        return;
+                    if (!confirm('Czy jesteś pewien że chcesz usunąć cały ten kurs, wraz z wszystkimi lekcjami i całą jego zawartością??'))
+                        return;
+                    $scope.inited = false;
+                    $scope.apiCourse.res.delete({ 'id': course.id }, '', function (data) {
+                        $scope.courses.splice($scope.courses.indexOf(course), 1);
+                        course = null;
+                        $scope.inited = true;
+                    });
+                };
+                $scope.addNewCourse = function () {
+                    $scope.inited = false;
+                    $scope.apiCourse.res.create({}, '', function (data) {
+                        var newCourse = new ApkiOrg.CourseMgr.MCourse();
+                        var _n_course_data_str = ApkiOrg.App.app.helperObjectToJSON(newCourse.data);
+                        newCourse = $scope.apiCourse.res.update({ 'id': data.id }, _n_course_data_str, function (data) {
+                            $scope.courses.push(newCourse);
+                            $scope.inited = true;
+                        });
+                    });
+                };
+                /**
+                 * This will init Course. Required at the beginning. Called in ng-init.
+                 */
+                $scope.initAPanelList = function () {
+                    var _f = function () {
+                        $scope.inited = false;
+                        $scope.courses = new Array();
+                        $scope.apiCourse = new ApkiOrg.CourseMgr.CourseRestAPI($resource);
+                        $scope.courses = $scope.apiCourse.res.list({}, '', function (data) {
+                            $scope.inited = true;
+                        });
+                    };
+                    $timeout(_f, 1, false);
+                };
+            }
+            aPanelListCtrl.$inject = [
+                '$scope',
+                '$timeout',
+                '$compile',
+                '$resource'
+            ];
+            return aPanelListCtrl;
+        })();
+        APanelListMgr.aPanelListCtrl = aPanelListCtrl;
+    })(APanelListMgr = ApkiOrg.APanelListMgr || (ApkiOrg.APanelListMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="../vendor/custom.d.ts"/>
+/// <reference path="controllers/apanel_list_ctrl.ts"/>
+/// <reference path="filters/to_trusted_filter.ts"/>
+/// <reference path="filters/server_source_lang_to_ace_lang_filter.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var APanelListMgr;
+    (function (APanelListMgr) {
+        //Init Angular app
+        app = angular.module('aPanelListApp', ['ngResource']);
+        app.controller('myCtrl', APanelListMgr.aPanelListCtrl);
+        app.filter('to_trusted', ApkiOrg.CourseMgr.ToTrustedFilter);
+        app.filter('server_source_lang_to_ace_lang', ApkiOrg.CourseMgr.ServerSourceLangToACELangFilter);
+    })(APanelListMgr = ApkiOrg.APanelListMgr || (ApkiOrg.APanelListMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 /// <reference path="../vendor/jquery/jquery.d.ts"/>
 /// <reference path="../vendor/angularjs/angular.d.ts"/>
