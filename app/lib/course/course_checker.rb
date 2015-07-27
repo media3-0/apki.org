@@ -37,11 +37,7 @@ module Course
 
       output.merge! JSON.parse(response.body.to_s)
       json_response['output'] = output
-      if exercise.data['expected_output'] == output['output']
-        return true
-      else
-        return false
-      end
+      return (exercise.data['expected_result_expr'] == output['output'])
     end
 
     private
