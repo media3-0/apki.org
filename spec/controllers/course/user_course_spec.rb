@@ -7,7 +7,7 @@ describe Course::UserCoursesController, type: :controller do
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = {:test => 'data'}
+    @data = {'test' => 'data'}
   end
 
   before(:each) do
