@@ -24,7 +24,7 @@ Po tym procesie wystarczy uruchomić serwer poleceniem `rails s`.
 
 ## Kompilacja kodu zadań
 
-Aby kompilować kod wysyłany do zadań należy uruchomić osobny serwer (drobne api napisane w PHP za pomocą frameworka Slim) kompilacji. Jest on dostępny [tutaj](https://github.com/media3-0/apki.org-Code-Compiler).
+Aby kompilować kod wysyłany do zadań należy uruchomić osobny serwer kompilacji (drobne api napisane w PHP za pomocą frameworka Slim). Jest on dostępny [tutaj](https://github.com/media3-0/apki.org-Code-Compiler).
 
 ## Konfiguracja Vagranta do pracy z portalem apki.org
 
