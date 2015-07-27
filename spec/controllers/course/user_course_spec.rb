@@ -7,7 +7,7 @@ describe Course::UserCoursesController, type: :controller do
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = {'test' => 'data'}
+    @data = {:test => 'data'}
   end
 
   before(:each) do
@@ -36,7 +36,7 @@ describe Course::UserCoursesController, type: :controller do
     # Nie zakończona lekcja
     expect(Course::CourseChecker.check_lesson lesson, user_course).to eq false
 
-    json_request = {'id' => lesson.id.to_s, 'quizzes' => {
+    json_request = {:id => lesson.id.to_s, :quizzes => {
         @quizzes[0].id.to_s => 3,
         @quizzes[1].id.to_s => 0,
         @quizzes[2].id.to_s => 1
@@ -77,7 +77,7 @@ describe Course::UserCoursesController, type: :controller do
       session[:user_id] = @user.id.to_s
       user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
       lesson = @course.course_lessons.first
-      json_request = {'id' => lesson.id.to_s, 'quizzes' => {
+      json_request = {:id => lesson.id.to_s, :quizzes => {
           @quizzes[0].id.to_s => 3,
           @quizzes[1].id.to_s => 0,
           @quizzes[2].id.to_s => 1
@@ -99,7 +99,7 @@ describe Course::UserCoursesController, type: :controller do
       session[:user_id] = @user.id.to_s
       user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
       lesson = @course.course_lessons.first
-      json_request = {'id' => lesson.id.to_s, 'quizzes' => {
+      json_request = {:id => lesson.id.to_s, :quizzes => {
           @quizzes[0].id.to_s => 3,
           @quizzes[1].id.to_s => 1,
           @quizzes[2].id.to_s => 1
@@ -123,7 +123,7 @@ describe Course::UserCoursesController, type: :controller do
 
     it 'Bad lesson ID passed by data' do
       session[:user_id] = @user.id.to_s
-      json_request = {'id' => 'bad_id', 'quizzes' => {
+      json_request = {:id => 'bad_id', :quizzes => {
           @quizzes[0].id.to_s => 3,
           @quizzes[1].id.to_s => 1,
           @quizzes[2].id.to_s => 1
@@ -138,7 +138,7 @@ describe Course::UserCoursesController, type: :controller do
     it 'User is not participating to course' do
       session[:user_id] = @user.id.to_s
       lesson = @course.course_lessons.first
-      json_request = {'id' => lesson.id.to_s, 'quizzes' => {
+      json_request = {:id => lesson.id.to_s, :quizzes => {
           @quizzes[0].id.to_s => 3,
           @quizzes[1].id.to_s => 1,
           @quizzes[2].id.to_s => 1
@@ -172,9 +172,9 @@ describe Course::UserCoursesController, type: :controller do
     end
 
     @quizzes = []
-    @quizzes << Course::Quiz.create!(data: {'question' => 'Test question 1', 'answer_idx' => 3})
-    @quizzes << Course::Quiz.create!(data: {'question' => 'Test question 2', 'answer_idx' => 0})
-    @quizzes << Course::Quiz.create!(data: {'question' => 'Test question 3', 'answer_idx' => 1})
+    @quizzes << Course::Quiz.create!(data: {:question => 'Test question 1', :answer_idx => 3})
+    @quizzes << Course::Quiz.create!(data: {:question => 'Test question 2', :answer_idx => 0})
+    @quizzes << Course::Quiz.create!(data: {:question => 'Test question 3', :answer_idx => 1})
     lesson.course_quizs.concat @quizzes
     @quizzes.each do |quiz|
       quiz.save!

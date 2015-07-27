@@ -4,7 +4,14 @@ module Course
 
     # GET /course/achievements.json
     def index
-      @course_achievements = Course::Achievement.all
+      course = Course::CourseDatum.find(params[:course_id])
+      lessons = course.course_lessons
+      lessons_ids = lessons.map { |lesson| lesson.id.to_s }
+      exercises_ids = []
+      lessons.each do |lesson|
+        exercises_ids.concat lesson.course_exercises.map { |exercise| exercise.id.to_s }
+      end
+      @course_achievements = Course::Achievement.or({:lesson_id.in => lessons_ids}, {:exercise_id.in => exercises_ids})
     end
 
     # GET /course/achievements/1.json
