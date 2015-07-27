@@ -5,7 +5,7 @@ module Course
 
     field :data, type: Hash, :default => {}
 
-    has_many :course_lessons, :class_name => 'Course::Lesson'
+    has_many :course_lessons, :class_name => 'Course::Lesson', dependent: :destroy
 
     has_many :course_user_courses, :class_name => 'Course::UserCourse'
 
