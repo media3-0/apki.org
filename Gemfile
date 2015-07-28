@@ -94,10 +94,6 @@ gem 'tzinfo-data'
 
 gem 'rack-mini-profiler'
 
-# 2 gemy poniżej nie działają na systemie windows
-# gem 'stackprof'
-# gem 'flamegraph'
-
 # Kolorowanie logów
 gem 'shog'
 
@@ -106,9 +102,11 @@ gem 'pry-rails'
 
 group :production do
   # Cachowanie w redisie
-  # gem 'hiredis'
-  # gem 'readthis'
-  # gem 'redis-session-store'
+  unless Gem.win_platform?
+    gem 'hiredis'
+    gem 'readthis'
+    gem 'redis-session-store'
+  end
 end
 
 group :development, :test do
@@ -137,4 +135,4 @@ group :development, :test do
 end
 
 gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'newrelic_rpm', group: [ :production, :development ]
+gem 'newrelic_rpm', group: [:production, :development]

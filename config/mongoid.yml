@@ -107,6 +107,9 @@ production:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
       database: <%= ENV['DATABASE_PRODUCTION_NAME'] %>
+
+      username: <%= ENV['DATABASE_PRODUCTION_NAME'] %>
+      password: <%= ENV['DATABASE_PRODUCTION_PASSWORD'] %>
       # Provides the hosts the default session can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:

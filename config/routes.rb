@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   get 'main/test'
   root 'main#index'
   get 'news', to: 'main#news'
+  get 'news/:id', to: 'main#view_news', as: 'view_news'
   get 'main/forms_test'
   get 'course_front/index'
   get '/auth/:provider/callback' => 'sessions#create'

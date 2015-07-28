@@ -1,0 +1,28 @@
+<div class="col-lg-8">
+
+  <!-- Blog Post -->
+
+  <!-- Title -->
+  <h1><%= @news.title -%></h1>
+
+  <!-- Author -->
+  <p class="lead">
+    autor: <a href="<%= url_for profile_view_path(@news.user) -%>"><%= @news.user.nickname -%></a>
+  </p>
+
+  <hr>
+
+  <!-- Date/Time -->
+  <p><span class="glyphicon glyphicon-time"></span> Opublikowane <%= @news.created_at.strftime('%F %T') -%></p>
+
+
+  <hr>
+
+  <!-- Post Content -->
+  <%= raw @news.content -%>
+  <hr>
+
+  <%- if current_user and current_user.is_admin? -%>
+      <%= link_to 'Edytuj newsa', rails_admin.edit_path(model_name: 'News', id: @news.id.to_s) -%>
+  <%- end -%>
+</div>

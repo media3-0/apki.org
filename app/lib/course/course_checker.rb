@@ -18,7 +18,7 @@ module Course
     end
 
     def self.check_excercise(exercise, data, json_response, output)
-      conn = Faraday.new(:url => 'http://localhost:4000') do |faraday|
+      conn = Faraday.new(:url => Rails.configuration.x.compile_api_host) do |faraday|
         faraday.request  :url_encoded
         faraday.response :logger
         faraday.adapter  Faraday.default_adapter
