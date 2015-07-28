@@ -4,14 +4,26 @@ module Course
 
     # GET /course/achievements.json
     def index
-      course = Course::CourseDatum.find(params[:course_id])
-      lessons = course.course_lessons
-      lessons_ids = lessons.map { |lesson| lesson.id.to_s }
-      exercises_ids = []
-      lessons.each do |lesson|
-        exercises_ids.concat lesson.course_exercises.map { |exercise| exercise.id.to_s }
+      if params[:course_id].present?
+        course = Course::CourseDatum.find(params[:course_id])
+        lessons = course.course_lessons
+        lessons_ids = lessons.map { |lesson| lesson.id.to_s }
+        exercises_ids = []
+        lessons.each do |lesson|
+          exercises_ids.concat lesson.course_exercises.map { |exercise| exercise.id.to_s }
+        end
+        @course_achievements = Course::Achievement.or({:lesson_id.in => lessons_ids}, {:exercise_id.in => exercises_ids})
       end
-      @course_achievements = Course::Achievement.or({:lesson_id.in => lessons_ids}, {:exercise_id.in => exercises_ids})
+
+      if params[:lesson_id].present?
+        lesson = Course::Lesson.find(params[:lesson_id])
+        @course_achievements = Course::Achievement.where(lesson_id: lesson.id.to_s)
+      end
+
+      if params[:exercise_id].present?
+        exercise = Course::Exercise.find(params[:exercise_id])
+        @course_achievements = Course::Achievement.where(exercise_id: exercise.id.to_s)
+      end
     end
 
     # GET /course/achievements/1.json
