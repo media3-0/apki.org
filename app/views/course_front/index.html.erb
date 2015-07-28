@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="pad0a exercise-console">
-                        <div class="console-window" ng-bind-html="exerciseCurrOutput | to_trusted">
+                        <div class="console-window mrg0a" ng-bind-html="exerciseCurrOutput | to_trusted">
                         </div>
                     </div>
                 </div>
@@ -73,11 +73,11 @@
                     <div class="user-input-window" ng-hide="!getExercise().data.allow_user_input">
                         <input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}">
                     </div>
-                    <div class="send-code-window buttons pad0a" ng-hide="exerciseIsCorrect">
-                        <button ng-disabled="quizChecking" ng-class="exerciseChecking?'active':''" type="button" ng-click="checkExercise(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span><span class="not-spinner">Sprawdź odpowiedź</span></button>
+                    <div class="send-code-window buttons pad0a mrg0a" ng-hide="exerciseIsCorrect">
+                        <button ng-disabled="quizChecking" ng-class="exerciseChecking?'active':''" type="button" ng-click="checkExercise(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner mrg5r" style="margin-top: 4px;"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span><span class="not-spinner">Sprawdź odpowiedź</span></button>
                     </div>
-                    <div class="code-ok-window buttons pad0a" ng-hide="!exerciseIsCorrect || !isPartVisible('exercise')">
-                        Gratulacje, Twój kod jest poprawny <input type="submit" class="btn btn-lg btn-primary btn-save" value="Kliknij tutaj aby przejść dalej" ng-click="goToPart('end')">
+                    <div class="code-ok-window buttons pad0a mrg0a" ng-hide="!exerciseIsCorrect || !isPartVisible('exercise')">
+                        Gratulacje, Twój kod jest poprawny <input type="submit" class="btn btn-lg btn-primary btn-save mrg5r" style="margin-top: 4px;" value="Kliknij tutaj aby przejść dalej" ng-click="goToPart('end')">
                     </div>
                 </div>
             </div>

@@ -310,6 +310,9 @@ module ApkiOrg.CourseMgr {
              */
             $scope.resizeElements = (delay:number=0) => {
                 var _resFnc = () => {
+                    $('body').css({
+                        'overflow':'hidden' //Yea, I know its very dirsty, but Man, I have 15 mins to deadline xD
+                    });
                     var freeHeight = $(window).height()-$('nav.navbar').height()-($('#courseLessons').is(':visible')?$('#courseLessons').height():3/*why required ??*/)-$('#courseContent').find('.secHidePanelBar').height();
                     $('#courseContent').height(freeHeight);
                     $('#courseContent').find('.col').height($('#courseContent').height());

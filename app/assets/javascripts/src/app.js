@@ -129,6 +129,14 @@ var ApkiOrg;
          */
         var MExerciseData = (function () {
             function MExerciseData() {
+                this.content_of_exercise = '';
+                this.code = '';
+                this.allow_user_input = false;
+                this.default_user_input = '';
+                this.lang = 'CSHARP';
+                this.expected_result_expr = '';
+                this.code_before = '';
+                this.code_after = '';
                 this.code_locks = new Array();
             }
             return MExerciseData;
@@ -814,6 +822,9 @@ var ApkiOrg;
                 $scope.resizeElements = function (delay) {
                     if (delay === void 0) { delay = 0; }
                     var _resFnc = function () {
+                        $('body').css({
+                            'overflow': 'hidden' //Yea, I know its very dirsty, but Man, I have 15 mins to deadline xD
+                        });
                         var freeHeight = $(window).height() - $('nav.navbar').height() - ($('#courseLessons').is(':visible') ? $('#courseLessons').height() : 3 /*why required ??*/) - $('#courseContent').find('.secHidePanelBar').height();
                         $('#courseContent').height(freeHeight);
                         $('#courseContent').find('.col').height($('#courseContent').height());

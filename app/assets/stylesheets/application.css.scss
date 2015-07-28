@@ -11,8 +11,57 @@
  * file per style scope.
  */
 
-@import "bootstrap-sprockets";
-@import "bootstrap";
+$icon-font-path: "/fonts/bootstrap/";
+
+@import "_bootstrap";
+
+@import "vendors";
+
+@import "tomek";
+
+$color-main: #955AA4;
+$color-sec:  #a468b3;
+$color-text-on-main: #ffffff;
+
+.navbar{
+  background-color: $color-main;
+  color: $color-text-on-main;
+  left:0px;
+  height:48px;
+
+  .navbar-brand,.nav{
+    color:$color-text-on-main;
+  }
+}
+
+.navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > .dropdown > a:hover .caret, .navbar-default .navbar-nav > .dropdown > a:focus .caret, .navbar-default .navbar-nav > .dropdown > a .caret {
+  color:$color-text-on-main;
+  border-bottom-color: $color-text-on-main;
+  border-top-color: $color-text-on-main;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{
+  background-color: $color-sec;
+  color: $color-text-on-main;
+}
+
+.navbar-brand{
+  @extend .pad10t;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus{
+  background-color: $color-sec;
+  color: $color-text-on-main;
+}
+
+.navbar-nav > li > a{
+  padding-top:15px;
+  padding-bottom:15px;
+}
+
+.jumbotron{
+  background-color: #d3d3d3;
+}
 
 .code-editor {
   @extend .pad0a;
@@ -143,15 +192,15 @@ form{
     margin:0;
 
     &.first{
+      color: $color-text-on-main;
       width:180px;
-      background-color: $gray-lighter;
+      background-color: $color-sec;
       margin-right:-1px;
-      border-right:{
-        width: 1px;
-        style: solid;
-        color: #e7e7e7;
-      }
       overflow-y: auto;
+
+      & a{
+        color: $color-text-on-main;
+      }
 
       ul {
         padding-top: 10px;
@@ -178,7 +227,7 @@ form{
 
     &.firstHidePanelBar{
       width:10px;
-      background-color: $gray-light;
+      background-color: $color-main;
       text-align: center;
       color: white;
       cursor: pointer;
@@ -189,22 +238,18 @@ form{
     width:100%;
     height:10px;
     line-height:10px;
-    background-color: $gray-light;
+    background-color: $color-main;
     text-align: center;
     color: white;
     cursor: pointer;
   }
 
   #courseLessons{
+    color: $color-text-on-main;
     width:100%;
     height:110px;
-    background-color: $gray-lighter;
+    background-color: $color-sec;
     margin-top:-1px;
-    border-top:{
-      width: 1px;
-      style: solid;
-      color: #e7e7e7;
-    }
     overflow-x: hidden;
     overflow-y: hidden;
 
@@ -225,15 +270,18 @@ form{
         height:50px;
         margin-left: auto;
         margin-right: auto;
-        color: gray;
+        color: $color-main;
         font-size:18px;
 
         &.active{
-          background-color: deepskyblue;
+          background-color: $color-main;
+          &>a{
+            color: $color-text-on-main;
+          }
         }
 
         &.inactive{
-          background-color: $gray-lighter;
+          background-color: #d3d3d3;
         }
       }
     }
@@ -252,6 +300,13 @@ form{
 
     .course-article{
       padding:25px;
+
+      code{
+        @extend .mrg25l;
+        @extend .mrg25r;
+
+        display: block;
+      }
     }
 
     &.full-screen-art-element{

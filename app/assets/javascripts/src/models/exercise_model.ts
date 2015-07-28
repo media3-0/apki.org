@@ -31,6 +31,15 @@ module ApkiOrg.CourseMgr {
         code_after          :string;            //Code added after
 
         constructor() {
+            this.content_of_exercise = '';
+            this.code = '';
+            this.allow_user_input = false;
+            this.default_user_input = '';
+            this.lang = 'CSHARP';
+            this.expected_result_expr = '';
+            this.code_before = '';
+            this.code_after = '';
+
             this.code_locks = new Array();
         }
     }

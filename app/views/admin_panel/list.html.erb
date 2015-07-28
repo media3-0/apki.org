@@ -13,10 +13,10 @@
         <div ng-repeat="crs in courses">
             <div class="clearfix"></div>
             <div class="caption">
-                <a href="\admin_panel?id={{ crs.id }}">{{ crs.data.title }} ({{ crs.id }})</a><br>
+                <a href="/admin_panel?id={{ crs.id }}">{{ crs.data.title }} ({{ crs.id }})</a><br>
                 <small><span ng-if="crs.data.finished" class="label-success">Opublikowano</span><span ng-if="!crs.data.finished" class="label-warning">W trakcie opracowania</span></small>
 
-                <div style="float:right"><input type="button" class="btn btn-danger" ng-click="removeCourse(crs)" value="Usuń"> <a href="\admin_panel?id={{ crs.id }}" class="btn btn-primary" >Edytuj</a> </div>
+                <div style="float:right"><input type="button" class="btn btn-danger" ng-click="removeCourse(crs)" value="Usuń"> <a href="/admin_panel?id={{ crs.id }}" class="btn btn-primary" >Edytuj</a> </div>
             </div>
         </div>
     </div>
