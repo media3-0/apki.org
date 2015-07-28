@@ -1,4 +1,4 @@
-<form ng-app="aPanelApp" ng-controller="myCtrl" ng-init="courseId='55af6172416d692464000005'; initAPanel()">
+<form ng-app="aPanelApp" ng-controller="myCtrl" ng-init="courseId='<%= params[:id] %>'; initAPanel()">
 <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
     <div class="progress progress-striped active">
         <div class="progress-bar" role="progressbar" style="width: 100%;">

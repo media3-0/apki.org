@@ -43,6 +43,7 @@ module ApkiOrg.CourseMgr {
         exerciseCurrOutput:string;
         exerciseChecking:boolean;
         exerciseIsCorrect:boolean;
+        oldLessonCurrent:string;
 
         initCourse(courseJSON:string)
         resizeElements()
@@ -58,6 +59,11 @@ module ApkiOrg.CourseMgr {
         checkQuiz(element:{}, $event:any)
         checkExercise(element:{}, $event:any)
         loadLesson()
+        userGoToLesson(lessId:string)
+        getScope()
+        countLessonProgress()
+        nextLesson()
+        isCourseFinished()
     }
 
     export class appCourseCtrl {
@@ -68,6 +74,39 @@ module ApkiOrg.CourseMgr {
             '$resource'
         ];
         constructor(private $scope: IAppCtrlScope, private $timeout: ng.ITimeoutService, private $compile:ng.ICompileService, private $resource:any) {
+
+            $scope.isCourseFinished = () => {
+                var _idx = $scope.lessons.indexOf($scope.getLesson())+1;
+                return (_idx>=$scope.lessons.length);
+            }
+
+            $scope.nextLesson = () => {
+                var _idx = $scope.lessons.indexOf($scope.getLesson())+1;
+                if (!$scope.isCourseFinished()){
+                    $scope.course.data.lessonCurrent = $scope.lessons[_idx].id;
+                    $scope.loadLesson();
+                }
+            }
+
+            $scope.countLessonProgress = () => {
+                var _perc:number = 1 + ((100/($scope.lessons.length - 1)) * ($scope.course.data.lessonsPassed.length));
+
+                _perc = Math.round(_perc);
+
+                return {'width':_perc+'%'};
+            }
+
+            $scope.getScope = () => {
+                return $scope;
+            }
+
+            $scope.userGoToLesson = (lessId:string) => {
+                if (($scope.course.data.lessonsPassed.indexOf(lessId)>-1)||($scope.course.data.lessonCurrent == lessId)||($scope.oldLessonCurrent == lessId)){
+                    $scope.oldLessonCurrent == $scope.course.data.lessonCurrent;
+                    $scope.course.data.lessonCurrent = lessId;
+                    $scope.loadLesson();
+                }
+            }
 
             $scope.checkQuiz = (element:any, $event:any) => {
                 $scope.quizChecking = true;
@@ -165,6 +204,8 @@ module ApkiOrg.CourseMgr {
 
                 $scope.parseArticle();
 
+                $scope.goToPart('article');
+
                 $scope.inited = true;
                 $scope.resizeElements();
             }
@@ -193,6 +234,9 @@ module ApkiOrg.CourseMgr {
             $scope.loadLesson = () => {
                 $scope.inited = false;
 
+                if ($scope.course.data.lessonsPassed.indexOf($scope.course.data.lessonCurrent)==-1)
+                    $scope.course.data.lessonsPassed.push($scope.course.data.lessonCurrent);
+
                 $scope.toBeInited = {
                     'quizzes':false,
                     'exercises':false
@@ -215,13 +259,16 @@ module ApkiOrg.CourseMgr {
                 if ($scope.course.data.lessonCurrent == "")
                     $scope.course.data.lessonCurrent = $scope.lessons[0].id;
 
-                var _less = null;
+                var _less:MLesson = null;
                 $.each($scope.lessons, (i, el):any => {
                     if (el.id == $scope.course.data.lessonCurrent){
                         _less = el;
                         return false; //Break
                     }
                 });
+
+                if (_less === null)
+                    _less = $scope.lessons[0]; //In case of invalid ID (for example when course is changed when User is inside)
 
                 return _less;
             }
@@ -271,6 +318,12 @@ module ApkiOrg.CourseMgr {
                     $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible')?$('.user-input-window').height():0) - ($('.send-code-window').is(':visible')?$('.send-code-window').height():0) - ($('.code-ok-window').is(':visible')?$('.code-ok-window').height():0));
                     $('.exercise-instruction').height(Math.round($('#courseContent').height() / 2 - 1));
                     $('.exercise-console').height($('#courseContent').height() - $('.exercise-instruction').height());
+
+                    $('.oneLessonDiv').css({'width':Math.floor($('#courseContent').width()/$scope.lessons.length)+'px'});
+                    $('.lessonsProgressBar').css({
+                        'padding-left':Math.floor($('#courseContent').width()/$scope.lessons.length/2)+'px',
+                        'padding-right':Math.floor($('#courseContent').width()/$scope.lessons.length/2)+'px'
+                    });
 
                     var freeWidth = $('#courseContent').width()-($('#courseContent').find('.col.first').is(':visible')?$('#courseContent').find('.col.first').width():0)-$('#courseContent').find('.firstHidePanelBar').width();
                     $('#courseContent').find('.col.sec').width(freeWidth);
@@ -379,7 +432,7 @@ module ApkiOrg.CourseMgr {
                 possibleParts['quiz'] = (!!$scope.quizzes.length);
                 possibleParts['exercise'] = (!!$scope.exercises.length);
                 var path:string[] = ['article', 'quiz', 'exercise', 'end'];
-                if (!possibleParts[part])
+                while (!possibleParts[part])
                     part = path[path.indexOf(part)+1];
 
                 $scope.currPart = part;
