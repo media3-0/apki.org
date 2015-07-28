@@ -627,6 +627,32 @@ var ApkiOrg;
                 this.$timeout = $timeout;
                 this.$compile = $compile;
                 this.$resource = $resource;
+                $scope.isCourseFinished = function () {
+                    var _idx = $scope.lessons.indexOf($scope.getLesson()) + 1;
+                    return (_idx >= $scope.lessons.length);
+                };
+                $scope.nextLesson = function () {
+                    var _idx = $scope.lessons.indexOf($scope.getLesson()) + 1;
+                    if (!$scope.isCourseFinished()) {
+                        $scope.course.data.lessonCurrent = $scope.lessons[_idx].id;
+                        $scope.loadLesson();
+                    }
+                };
+                $scope.countLessonProgress = function () {
+                    var _perc = 1 + ((100 / ($scope.lessons.length - 1)) * ($scope.course.data.lessonsPassed.length));
+                    _perc = Math.round(_perc);
+                    return { 'width': _perc + '%' };
+                };
+                $scope.getScope = function () {
+                    return $scope;
+                };
+                $scope.userGoToLesson = function (lessId) {
+                    if (($scope.course.data.lessonsPassed.indexOf(lessId) > -1) || ($scope.course.data.lessonCurrent == lessId) || ($scope.oldLessonCurrent == lessId)) {
+                        $scope.oldLessonCurrent == $scope.course.data.lessonCurrent;
+                        $scope.course.data.lessonCurrent = lessId;
+                        $scope.loadLesson();
+                    }
+                };
                 $scope.checkQuiz = function (element, $event) {
                     $scope.quizChecking = true;
                     var _quiz = new CourseMgr.MCommSendQuiz();
@@ -700,6 +726,7 @@ var ApkiOrg;
                     if ($scope.inited)
                         return;
                     $scope.parseArticle();
+                    $scope.goToPart('article');
                     $scope.inited = true;
                     $scope.resizeElements();
                 };
@@ -723,6 +750,8 @@ var ApkiOrg;
                 };
                 $scope.loadLesson = function () {
                     $scope.inited = false;
+                    if ($scope.course.data.lessonsPassed.indexOf($scope.course.data.lessonCurrent) == -1)
+                        $scope.course.data.lessonsPassed.push($scope.course.data.lessonCurrent);
                     $scope.toBeInited = {
                         'quizzes': false,
                         'exercises': false
@@ -746,6 +775,8 @@ var ApkiOrg;
                             return false; //Break
                         }
                     });
+                    if (_less === null)
+                        _less = $scope.lessons[0]; //In case of invalid ID (for example when course is changed when User is inside)
                     return _less;
                 };
                 /**
@@ -791,6 +822,11 @@ var ApkiOrg;
                         $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible') ? $('.user-input-window').height() : 0) - ($('.send-code-window').is(':visible') ? $('.send-code-window').height() : 0) - ($('.code-ok-window').is(':visible') ? $('.code-ok-window').height() : 0));
                         $('.exercise-instruction').height(Math.round($('#courseContent').height() / 2 - 1));
                         $('.exercise-console').height($('#courseContent').height() - $('.exercise-instruction').height());
+                        $('.oneLessonDiv').css({ 'width': Math.floor($('#courseContent').width() / $scope.lessons.length) + 'px' });
+                        $('.lessonsProgressBar').css({
+                            'padding-left': Math.floor($('#courseContent').width() / $scope.lessons.length / 2) + 'px',
+                            'padding-right': Math.floor($('#courseContent').width() / $scope.lessons.length / 2) + 'px'
+                        });
                         var freeWidth = $('#courseContent').width() - ($('#courseContent').find('.col.first').is(':visible') ? $('#courseContent').find('.col.first').width() : 0) - $('#courseContent').find('.firstHidePanelBar').width();
                         $('#courseContent').find('.col.sec').width(freeWidth);
                         if ($('.full-screen-element').length == 1) {
@@ -886,7 +922,7 @@ var ApkiOrg;
                     possibleParts['quiz'] = (!!$scope.quizzes.length);
                     possibleParts['exercise'] = (!!$scope.exercises.length);
                     var path = ['article', 'quiz', 'exercise', 'end'];
-                    if (!possibleParts[part])
+                    while (!possibleParts[part])
                         part = path[path.indexOf(part) + 1];
                     $scope.currPart = part;
                 };

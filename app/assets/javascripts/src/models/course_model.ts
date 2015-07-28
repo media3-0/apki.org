@@ -26,7 +26,7 @@ module ApkiOrg.CourseMgr {
         dependencies        :string[];          //Dependencies array of IDs of previous course
 
         //User-variable-metadata
-        lessonsPassed       :number[];          //List of IDs of passed lessons
+        lessonsPassed       :string[];          //List of IDs of passed lessons
         lessonCurrent       :string;            //ID of current lesson, 0 or first lesson ID == from the beginning
         finished            :boolean;           //True if course is finished
 

@@ -1,7 +1,7 @@
 <%= render 'layouts/headers' %>
 <body data-no-turbolink="true">
 <%= render "layouts/main_menu" %>
-<div id="courseContent" ng-app="courseApp" ng-controller="myCtrl" ng-init="courseId='55b748e273332e2af8000005'; initCourse()">
+<div id="courseContent" ng-app="courseApp" ng-controller="myCtrl" ng-init="courseId='<%= params[:id] %>'; initCourse()">
     <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
         <div class="progress progress-striped active">
             <div class="progress-bar" role="progressbar" style="width: 100%;">
@@ -73,23 +73,43 @@
                     <div class="user-input-window" ng-hide="!getExercise().data.allow_user_input">
                         <input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}">
                     </div>
-                    <div class="send-code-window buttons pad0a">
+                    <div class="send-code-window buttons pad0a" ng-hide="exerciseIsCorrect">
                         <button ng-disabled="quizChecking" ng-class="exerciseChecking?'active':''" type="button" ng-click="checkExercise(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span><span class="not-spinner">Sprawdź odpowiedź</span></button>
                     </div>
                     <div class="code-ok-window buttons pad0a" ng-hide="!exerciseIsCorrect || !isPartVisible('exercise')">
-                        Gratulacje, Twój kod jest poprawny <input type="submit" class="btn btn-lg btn-primary btn-save" value="Kliknij tutaj aby przejść dalej" ng-click="goToPart('exercise')">
+                        Gratulacje, Twój kod jest poprawny <input type="submit" class="btn btn-lg btn-primary btn-save" value="Kliknij tutaj aby przejść dalej" ng-click="goToPart('end')">
                     </div>
+                </div>
+            </div>
+            <div class="course-end course-element text-center pad25a" ng-hide="!isPartVisible('end')">
+                <h2>Gratulacje, ukończyłeś lekcję <i>{{ getLesson().data.title }}</i>!</h2>
+                <div ng-if="!isCourseFinished()">
+                    <button ng-click="nextLesson()" class="btn btn-lg btn-primary mrg25a">Przejdź do następnej lekcji</button>
+                </div>
+                <div ng-if="isCourseFinished()">
+                    <h2>Gratulacje, ukończyłeś kurs <i>{{ course.data.title }}</i>! To już wszystko co przygotowaliśmy dla Ciebie w tym kursie.</h2>
+                    <a href="/courses_list" class="btn btn-lg btn-primary mrg25a">Sprawdź nasze inne kursy</a>
                 </div>
             </div>
         </div>
         <div class="clearfix"></div>
         <div class="secHidePanelBar" ng-click="hidePanelBarClick('bottom')">=</div>
         <div id="courseLessons" ng-hide="resizeElements(1);!menuVisible.bottom">
-            <div class="pad25a">
+            <div class="oneLessonDiv pad10t" style="float:left" ng-repeat="less in lessons">
+                <div class="img-circle" ng-class="getScope().course.data.lessonCurrent==less.id?'active':(getScope().course.data.lessonsPassed.indexOf(less.id)>-1?'':'inactive')" ng-click="userGoToLesson(less.id)"><a href="javascript:;">{{ $index + 1 }}</a></div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="lessonsProgressBar">
                 <div class="progress active" style="height:5px">
-                    <div class="progress-bar" role="progressbar" style="width: 50%;">
+                    <div class="progress-bar" role="progressbar" ng-style="countLessonProgress()">
                     </div>
                 </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="oneLessonDiv title" style="float:left" ng-repeat="less in lessons">
+                {{ less.data.title }}
             </div>
         </div>
     </div>

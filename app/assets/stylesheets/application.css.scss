@@ -205,6 +205,42 @@ form{
       style: solid;
       color: #e7e7e7;
     }
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    .oneLessonDiv{
+      &.title{
+        @extend .text-center;
+
+        font-size:8px;
+      }
+
+      div.img-circle{
+        @extend .text-center;
+
+        padding-top:12px;
+        border: 1px solid;
+        background-color: white;
+        width:50px;
+        height:50px;
+        margin-left: auto;
+        margin-right: auto;
+        color: gray;
+        font-size:18px;
+
+        &.active{
+          background-color: deepskyblue;
+        }
+
+        &.inactive{
+          background-color: $gray-lighter;
+        }
+      }
+    }
+
+    .lessonsProgressBar{
+      margin-bottom: -15px;
+    }
   }
 
   #courseCnt{
