@@ -94,12 +94,6 @@ gem 'tzinfo-data'
 
 gem 'rack-mini-profiler'
 
-# 2 gemy poniżej nie działają na systemie windows oraz na MRI 2.0
-unless Gem.win_platform? or RUBY_VERSION == '2.0.0'
-  gem 'stackprof'
-  gem 'flamegraph'
-end
-
 # Kolorowanie logów
 gem 'shog'
 
