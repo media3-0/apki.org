@@ -5,7 +5,7 @@
         <!-- Blog Post -->
 
         <!-- Title -->
-        <h1><%= single.title -%></h1>
+        <h1><%= link_to single.title, view_news_path(single) -%></h1>
 
         <!-- Author -->
         <p class="lead">

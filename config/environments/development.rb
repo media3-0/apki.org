@@ -40,4 +40,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Nasze ustawienia
+  config.x.compile_api_host = 'http://localhost:4000'
 end

@@ -55,7 +55,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  config.cache_store = :readthis_store, 'redis://localhost:6379/0', {
+  config.cache_store = :readthis_store, 'redis://localhost:6378/0', {
       expires_in: 60.minutes,
       namespace: 'cache'
   }
@@ -66,7 +66,7 @@ Rails.application.configure do
                                                    expire_after: 365.days,
                                                    key_prefix: 'sessions:',
                                                    host: 'localhost',
-                                                   port: 6379
+                                                   port: 6378
                                                }
                                            }
 
@@ -86,4 +86,7 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Nasze ustawienia
+  config.x.compile_api_host = 'http://compile.apki.org'
 end
