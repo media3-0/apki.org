@@ -95,8 +95,10 @@ gem 'tzinfo-data'
 gem 'rack-mini-profiler'
 
 # 2 gemy poniżej nie działają na systemie windows
-# gem 'stackprof'
-# gem 'flamegraph'
+unless Gem.win_platform?
+  gem 'stackprof'
+  gem 'flamegraph'
+end
 
 # Kolorowanie logów
 gem 'shog'
