@@ -21,16 +21,14 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    if ((not @current_user.nil?) and @current_user.is_admin?) and Rails.env.production?
+    if ((!@current_user.nil?) && @current_user.is_admin?) && Rails.env.production?
       Rack::MiniProfiler.authorize_request
     end
     @current_user
   end
 
   def is_logged_in
-    unless current_user
-      redirection 'Musisz być zalogowany aby mieć tu dostęp'
-    end
+    redirection 'Musisz być zalogowany aby mieć tu dostęp' unless current_user
   end
 
   def is_teacher
@@ -47,15 +45,11 @@ class ApplicationController < ActionController::Base
 
   def redirection(message, status = :unauthorized, spec = nil)
     redirect_path = root_path
-    if request.referrer
-      redirect_path = request.referrer
-    end
+    redirect_path = request.referrer if request.referrer
 
     if json_request?
       result = { 'error' => message }
-      unless Rails.env.production? or spec.nil?
-        result['error_message'] = spec
-      end
+      result['error_message'] = spec unless Rails.env.production? || spec.nil?
       render json: result, status: status
       return
     end

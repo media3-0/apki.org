@@ -48,13 +48,14 @@ module Course
     end
 
     private
+
     def set_course_lesson
       @course_lesson = Course::Lesson.find(params[:id])
     end
 
     def check_course_id
-      if !params.has_key?(:course_id) or (params.has_key?(:course_id) and !Course::CourseDatum.where(id: params[:course_id]).exists?)
-        raise Exceptions::NotFound
+      if !params.key?(:course_id) || (params.key?(:course_id) && !Course::CourseDatum.where(id: params[:course_id]).exists?)
+        fail Exceptions::NotFound
       end
     end
   end

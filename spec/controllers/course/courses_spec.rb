@@ -8,7 +8,7 @@ describe Course::CourseDataController, type: :controller do
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = { 'test' => 'data'}
+    @data = { 'test' => 'data' }
   end
 
   after(:each) do
@@ -54,7 +54,7 @@ describe Course::CourseDataController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: course.id.to_s }
+    patch :update, format: :json, id: course.id.to_s
     expect(response).to be_success
 
     course.reload
@@ -69,11 +69,11 @@ describe Course::CourseDataController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: course.id.to_s }
+    patch :update, format: :json, id: course.id.to_s
     expect(response.status).to eq 401
 
     session[:user_id] = @teacher.id.to_s
-    patch :update, { format: :json, id: course.id.to_s }
+    patch :update, format: :json, id: course.id.to_s
     expect(response.status).to eq 401
   end
 
@@ -82,7 +82,7 @@ describe Course::CourseDataController, type: :controller do
 
     course = Course::CourseDatum.create!(data: @data)
 
-    delete :destroy, { format: :json, id: course.id.to_s }
+    delete :destroy, format: :json, id: course.id.to_s
     expect(response).to be_success
     expect(Course::CourseDatum.where(id: course.id.to_s).exists?).to eq false
   end
@@ -92,36 +92,36 @@ describe Course::CourseDataController, type: :controller do
 
     course = Course::CourseDatum.create!(data: @data)
 
-    delete :destroy, { format: :json, id: course.id.to_s }
+    delete :destroy, format: :json, id: course.id.to_s
     expect(response.status).to eq 401
     expect(Course::CourseDatum.where(id: course.id.to_s).exists?).to eq true
 
     session[:user_id] = @teacher.id.to_s
-    delete :destroy, { format: :json, id: course.id.to_s }
+    delete :destroy, format: :json, id: course.id.to_s
     expect(response.status).to eq 401
     expect(Course::CourseDatum.where(id: course.id.to_s).exists?).to eq true
   end
 
   it 'Everybody can show single finished course' do
-    course = Course::CourseDatum.create!(data: {:finished => true})
+    course = Course::CourseDatum.create!(data: { finished: true })
 
-    get :show, { format: :json, id: course.id.to_s }
+    get :show, format: :json, id: course.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response['id']['$oid']).to eq course.id.to_s
   end
 
   it 'Only admin can show single unfinished course' do
-    course = Course::CourseDatum.create!(data: {:finished => false})
+    course = Course::CourseDatum.create!(data: { finished: false })
 
-    get :show, { format: :json, id: course.id.to_s }
+    get :show, format: :json, id: course.id.to_s
     expect(response.status).to eq 401
 
     bypass_rescue
-    expect { get :show, { format: :json, id: course.id.to_s }}.to raise_error(Exceptions::AccessDenied)
+    expect { get :show, format: :json, id: course.id.to_s }.to raise_error(Exceptions::AccessDenied)
 
     session[:user_id] = @admin.id.to_s
-    get :show, { format: :json, id: course.id.to_s }
+    get :show, format: :json, id: course.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response['id']['$oid']).to eq course.id.to_s
@@ -134,45 +134,44 @@ describe Course::CourseDataController, type: :controller do
       course = Course::CourseDatum.create!(data: @data)
     end
 
-    get :index, { format: :json }
+    get :index, format: :json
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
   end
 
   it 'Everybody can list only finished courses' do
-
     3.times do
       Course::CourseDatum.create!(data: @data)
     end
 
-    Course::CourseDatum.create!(data: {:finished => false})
-    Course::CourseDatum.create!(data: {:finished => true})
+    Course::CourseDatum.create!(data: { finished: false })
+    Course::CourseDatum.create!(data: { finished: true })
 
-    get :index, { format: :json }
+    get :index, format: :json
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 1
 
     session[:user_id] = @user.id.to_s
-    get :index, { format: :json }
+    get :index, format: :json
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 1
 
     session[:user_id] = @teacher.id.to_s
-    get :index, { format: :json }
+    get :index, format: :json
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 1
   end
 
   it 'Not logged user cannot access to POST courses' do
-    post :create, { format: :json }
+    post :create, format: :json
     expect(response.status).to eq 401
-    patch :update, { format: :json, id: 'asdf' }
+    patch :update, format: :json, id: 'asdf'
     expect(response.status).to eq 401
-    delete :destroy, { format: :json, id: 'asdf' }
+    delete :destroy, format: :json, id: 'asdf'
     expect(response.status).to eq 401
   end
 end

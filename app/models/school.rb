@@ -10,9 +10,10 @@ class School
   belongs_to :user
 
   public
+
   def get_proper_user_list
-    @users = User.where(:account_type => :student) # pobranie wszystkich uczniów
-    @users = @users.reject { |user| user.school != nil and user.school.id != self.id } # Odrzucenie ludzi którzy są przypisani do innych szkół
+    @users = User.where(account_type: :student) # pobranie wszystkich uczniów
+    @users = @users.reject { |user| !user.school.nil? && user.school.id != id } # Odrzucenie ludzi którzy są przypisani do innych szkół
   end
 
   rails_admin do

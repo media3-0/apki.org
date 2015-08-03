@@ -8,7 +8,7 @@ describe Course::AchievementsController, type: :controller do
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = { 'test' => 'data'}
+    @data = { 'test' => 'data' }
   end
 
   after(:each) do
@@ -27,7 +27,7 @@ describe Course::AchievementsController, type: :controller do
 
     lesson = Course::Lesson.create!
 
-    post :create, { format: :json, lesson_id: lesson.id.to_s }
+    post :create, format: :json, lesson_id: lesson.id.to_s
     expect(response).to be_success
     expect(Course::Achievement.count).to be > 0
 
@@ -37,7 +37,7 @@ describe Course::AchievementsController, type: :controller do
 
     exercise = Course::Exercise.create!
 
-    post :create, { format: :json, exercise_id: exercise.id.to_s }
+    post :create, format: :json, exercise_id: exercise.id.to_s
     expect(response).to be_success
     expect(Course::Achievement.count).to be > 0
 
@@ -51,13 +51,13 @@ describe Course::AchievementsController, type: :controller do
 
     lesson = Course::Lesson.create!
 
-    post :create, { format: :json, lesson_id: lesson.id.to_s }
+    post :create, format: :json, lesson_id: lesson.id.to_s
     expect(response.status).to eq 401
     expect(Course::Achievement.count).to eq 0
 
     session[:user_id] = @teacher.id.to_s
 
-    post :create, { format: :json, lesson_id: lesson.id.to_s }
+    post :create, format: :json, lesson_id: lesson.id.to_s
     expect(response.status).to eq 401
     expect(Course::Achievement.count).to eq 0
   end
@@ -65,15 +65,15 @@ describe Course::AchievementsController, type: :controller do
   it 'New achievement cannot be created without any id (or bad one)' do
     session[:user_id] = @admin.id.to_s
 
-    post :create, { format: :json }
+    post :create, format: :json
     expect(response.status).to eq 404
     expect(Course::Achievement.count).to eq 0
 
-    post :create, { format: :json, lesson_id: 'bad_id' }
+    post :create, format: :json, lesson_id: 'bad_id'
     expect(response.status).to eq 404
     expect(Course::Achievement.count).to eq 0
 
-    post :create, { format: :json, exercise_id: 'bad_id' }
+    post :create, format: :json, exercise_id: 'bad_id'
     expect(response.status).to eq 404
     expect(Course::Achievement.count).to eq 0
   end
@@ -85,7 +85,7 @@ describe Course::AchievementsController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: achievement.id.to_s }
+    patch :update, format: :json, id: achievement.id.to_s
     expect(response).to be_success
 
     achievement.reload
@@ -100,14 +100,14 @@ describe Course::AchievementsController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: achievement.id.to_s }
+    patch :update, format: :json, id: achievement.id.to_s
     expect(response.status).to eq 401
 
     session[:user_id] = @teacher.id.to_s
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: achievement.id.to_s }
+    patch :update, format: :json, id: achievement.id.to_s
     expect(response.status).to eq 401
   end
 
@@ -116,7 +116,7 @@ describe Course::AchievementsController, type: :controller do
 
     achievement = Course::Achievement.create!
 
-    delete :destroy, { format: :json, id: achievement.id.to_s }
+    delete :destroy, format: :json, id: achievement.id.to_s
     expect(response).to be_success
     expect(Course::Achievement.where(id: achievement.id.to_s).exists?).to eq false
   end
@@ -126,12 +126,12 @@ describe Course::AchievementsController, type: :controller do
 
     achievement = Course::Achievement.create!
 
-    delete :destroy, { format: :json, id: achievement.id.to_s }
+    delete :destroy, format: :json, id: achievement.id.to_s
     expect(response.status).to eq 401
     expect(Course::Achievement.where(id: achievement.id.to_s).exists?).to eq true
 
     session[:user_id] = @teacher.id.to_s
-    delete :destroy, { format: :json, id: achievement.id.to_s }
+    delete :destroy, format: :json, id: achievement.id.to_s
     expect(response.status).to eq 401
     expect(Course::Achievement.where(id: achievement.id.to_s).exists?).to eq true
   end
@@ -139,7 +139,7 @@ describe Course::AchievementsController, type: :controller do
   it 'Everybody can show single achievement' do
     achievement = Course::Achievement.create!(data: @data)
 
-    get :show, { format: :json, id: achievement.id.to_s }
+    get :show, format: :json, id: achievement.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response['id']['$oid']).to eq achievement.id.to_s
@@ -151,11 +151,11 @@ describe Course::AchievementsController, type: :controller do
   end
 
   it 'Not logged user cannot access to POST achievements' do
-    post :create, { format: :json }
+    post :create, format: :json
     expect(response.status).to eq 401
-    patch :update, { format: :json, id: 'asdf' }
+    patch :update, format: :json, id: 'asdf'
     expect(response.status).to eq 401
-    delete :destroy, { format: :json, id: 'asdf' }
+    delete :destroy, format: :json, id: 'asdf'
     expect(response.status).to eq 401
   end
 end

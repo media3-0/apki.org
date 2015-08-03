@@ -12,7 +12,7 @@ module Course
         lessons.each do |lesson|
           exercises_ids.concat lesson.course_exercises.map { |exercise| exercise.id.to_s }
         end
-        @course_achievements = Course::Achievement.or({:lesson_id.in => lessons_ids}, {:exercise_id.in => exercises_ids})
+        @course_achievements = Course::Achievement.or({ :lesson_id.in => lessons_ids }, :exercise_id.in => exercises_ids)
       end
 
       if params[:lesson_id].present?
@@ -32,9 +32,7 @@ module Course
 
     # POST /course/achievements.json
     def create
-      unless check_achievement_type
-        raise Exceptions::NotFound
-      end
+      fail Exceptions::NotFound unless check_achievement_type
 
       respond_to do |format|
         if @course_achievement.save
@@ -66,6 +64,7 @@ module Course
     end
 
     private
+
     def set_course_achievement
       @course_achievement = Course::Achievement.find(params[:id])
     end
@@ -74,11 +73,11 @@ module Course
       id_present = false
       @course_achievement = Course::Achievement.new
 
-      if params.has_key?(:lesson_id) and Course::Lesson.where(id: params[:lesson_id]).exists?
+      if params.key?(:lesson_id) && Course::Lesson.where(id: params[:lesson_id]).exists?
         id_present = true
         @course_achievement.lesson_id = params[:lesson_id]
       end
-      if !id_present and params.has_key?(:exercise_id) and Course::Exercise.where(id: params[:exercise_id]).exists?
+      if !id_present && params.key?(:exercise_id) && Course::Exercise.where(id: params[:exercise_id]).exists?
         id_present = true
         @course_achievement.exercise_id = params[:exercise_id]
       end

@@ -6,14 +6,14 @@ module Course
     # GET /course/course_data.json
     def index
       @course_course_data = Course::CourseDatum.get_list(current_user) # TODO : Włączyć po testach
-      #@course_course_data = Course::CourseDatum.all
+      # @course_course_data = Course::CourseDatum.all
     end
 
     # GET /course/course_data/1.json
     def show
-      unless current_user.present? and current_user.is_admin?
-        if !@course_course_datum.data.has_key?('finished') || @course_course_datum.data['finished'] == false
-          raise Exceptions::AccessDenied.new('Ten kurs nie został jeszcze opublikowany')
+      unless current_user.present? && current_user.is_admin?
+        if !@course_course_datum.data.key?('finished') || @course_course_datum.data['finished'] == false
+          fail Exceptions::AccessDenied.new('Ten kurs nie został jeszcze opublikowany')
         end
       end
     end
@@ -52,6 +52,7 @@ module Course
     end
 
     private
+
     def set_course_course_datum
       @course_course_datum = Course::CourseDatum.find(params[:id])
     end

@@ -1,7 +1,7 @@
 module Course
   class CourseChecker
     def self.check_lesson(lesson, user_course)
-      lesson.course_exercises.each { |exercise| return false unless user_course.exercises.has_key? exercise.id.to_s }
+      lesson.course_exercises.each { |exercise| return false unless user_course.exercises.key? exercise.id.to_s }
       return false unless user_course.quizzes.include? lesson.id.to_s
       true
     end
@@ -10,18 +10,16 @@ module Course
       json_response['quizzes'] = {}
       lesson_correct = true
       lesson.course_quizs.each do |quiz|
-        unless check_quiz data, json_response, quiz
-          lesson_correct = false
-        end
+        lesson_correct = false unless check_quiz data, json_response, quiz
       end
       lesson_correct
     end
 
     def self.check_excercise(exercise, data, json_response, output)
-      conn = Faraday.new(:url => Rails.configuration.x.compile_api_host) do |faraday|
-        faraday.request  :url_encoded
+      conn = Faraday.new(url: Rails.configuration.x.compile_api_host) do |faraday|
+        faraday.request :url_encoded
         faraday.response :logger
-        faraday.adapter  Faraday.default_adapter
+        faraday.adapter Faraday.default_adapter
       end
 
       code = ''
@@ -32,7 +30,7 @@ module Course
       response = conn.post do |req|
         req.url '/compile'
         req.headers['Content-Type'] = 'application/json'
-        req.body = { :lang => exercise.data['lang'], :code => code, :user_input => data['user_input'] }.to_json
+        req.body = { lang: exercise.data['lang'], code: code, user_input: data['user_input'] }.to_json
       end
 
       output.merge! JSON.parse(response.body.to_s)
@@ -45,9 +43,10 @@ module Course
     end
 
     private
+
     def self.check_quiz(data, json_response, quiz)
       correct = true
-      unless data['quizzes'].has_key? quiz.id.to_s
+      unless data['quizzes'].key? quiz.id.to_s
         json_response['quizzes'][quiz.id.to_s] = false
         correct = false
       end

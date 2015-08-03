@@ -8,7 +8,7 @@ describe Course::LessonsController, type: :controller do
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = { 'test' => 'data'}
+    @data = { 'test' => 'data' }
   end
 
   before(:each) do
@@ -28,7 +28,7 @@ describe Course::LessonsController, type: :controller do
   it 'Admin can create new lesson' do
     session[:user_id] = @admin.id.to_s
 
-    post :create, { format: :json, course_id: @course.id.to_s }
+    post :create, format: :json, course_id: @course.id.to_s
     expect(response).to be_success
 
     expect(Course::Lesson.count).to be > 0
@@ -40,14 +40,14 @@ describe Course::LessonsController, type: :controller do
   it 'User or teacher cannot create new lesson' do
     session[:user_id] = @user.id.to_s
 
-    post :create, { format: :json, course_id: @course.id.to_s }
+    post :create, format: :json, course_id: @course.id.to_s
     expect(response.status).to eq 401
 
     expect(Course::Lesson.count).to eq 1
 
     session[:user_id] = @teacher.id.to_s
 
-    post :create, { format: :json, course_id: @course.id.to_s }
+    post :create, format: :json, course_id: @course.id.to_s
     expect(response.status).to eq 401
 
     expect(Course::Lesson.count).to eq 1
@@ -56,12 +56,12 @@ describe Course::LessonsController, type: :controller do
   it 'New lesson cannot be created without course_id (or bad one)' do
     session[:user_id] = @admin.id.to_s
 
-    post :create, { format: :json }
+    post :create, format: :json
     expect(response.status).to eq 404
 
     expect(Course::Lesson.count).to eq 1
 
-    post :create, { format: :json, course_id: 'bad_id' }
+    post :create, format: :json, course_id: 'bad_id'
     expect(response.status).to eq 404
 
     expect(Course::Lesson.count).to eq 1
@@ -72,7 +72,7 @@ describe Course::LessonsController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: @lesson.id.to_s }
+    patch :update, format: :json, id: @lesson.id.to_s
     expect(response).to be_success
 
     @lesson.reload
@@ -85,21 +85,21 @@ describe Course::LessonsController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: @lesson.id.to_s }
+    patch :update, format: :json, id: @lesson.id.to_s
     expect(response.status).to eq 401
 
     session[:user_id] = @teacher.id.to_s
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: @lesson.id.to_s }
+    patch :update, format: :json, id: @lesson.id.to_s
     expect(response.status).to eq 401
   end
 
   it 'Admin can destroy lesson' do
     session[:user_id] = @admin.id.to_s
 
-    delete :destroy, { format: :json, id: @lesson.id.to_s }
+    delete :destroy, format: :json, id: @lesson.id.to_s
     expect(response).to be_success
     expect(Course::Lesson.where(id: @lesson.id.to_s).exists?).to eq false
   end
@@ -107,12 +107,12 @@ describe Course::LessonsController, type: :controller do
   it 'User or Teacher cannot destroy lesson' do
     session[:user_id] = @user.id.to_s
 
-    delete :destroy, { format: :json, id: @lesson.id.to_s }
+    delete :destroy, format: :json, id: @lesson.id.to_s
     expect(response.status).to eq 401
     expect(Course::Lesson.where(id: @lesson.id.to_s).exists?).to eq true
 
     session[:user_id] = @teacher.id.to_s
-    delete :destroy, { format: :json, id: @lesson.id.to_s }
+    delete :destroy, format: :json, id: @lesson.id.to_s
     expect(response.status).to eq 401
     expect(Course::Lesson.where(id: @lesson.id.to_s).exists?).to eq true
   end
@@ -120,7 +120,7 @@ describe Course::LessonsController, type: :controller do
   it 'Everybody can show single lesson' do
     lesson = Course::Lesson.create!(data: @data, course_course_datum: @course)
 
-    get :show, { format: :json, id: lesson.id.to_s }
+    get :show, format: :json, id: lesson.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response['id']['$oid']).to eq lesson.id.to_s
@@ -133,19 +133,19 @@ describe Course::LessonsController, type: :controller do
       Course::Lesson.create!(data: @data, course_course_datum: course)
     end
 
-    get :index, { format: :json, course_id: course.id.to_s }
+    get :index, format: :json, course_id: course.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
 
     session[:user_id] = @user.id.to_s
-    get :index, { format: :json, course_id: course.id.to_s }
+    get :index, format: :json, course_id: course.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
 
     session[:user_id] = @teacher.id.to_s
-    get :index, { format: :json, course_id: course.id.to_s }
+    get :index, format: :json, course_id: course.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
@@ -157,19 +157,19 @@ describe Course::LessonsController, type: :controller do
       Course::Lesson.create!(data: @data, course_course_datum: course)
     end
 
-    get :index, { format: :json }
+    get :index, format: :json
     expect(response.status).to eq 404
 
-    get :index, { format: :json, course_id: 'bad_id' }
+    get :index, format: :json, course_id: 'bad_id'
     expect(response.status).to eq 404
   end
 
   it 'Not logged user cannot access to POST lessons' do
-    post :create, { format: :json }
+    post :create, format: :json
     expect(response.status).to eq 401
-    patch :update, { format: :json, id: 'asdf' }
+    patch :update, format: :json, id: 'asdf'
     expect(response.status).to eq 401
-    delete :destroy, { format: :json, id: 'asdf' }
+    delete :destroy, format: :json, id: 'asdf'
     expect(response.status).to eq 401
   end
 end
