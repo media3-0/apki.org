@@ -132,7 +132,7 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
 
-  gem 'rubocop'
+  gem 'did_you_mean'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
@@ -141,5 +141,6 @@ group :development, :test do
   gem 'spring'
 end
 
-gem 'codeclimate-test-reporter', group: :test, require: nil
+gem 'codeclimate-test-reporter', group: :test, require: false
 gem 'newrelic_rpm', group: [:production]
+gem 'rbkit', group: :development, require: false
