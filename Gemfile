@@ -93,6 +93,11 @@ gem 'angularjs-rails'
 gem 'tzinfo-data'
 
 gem 'rack-mini-profiler'
+unless Gem.win_platform?
+  gem 'flamegraph'
+  gem 'stackprof'
+  gem 'memory_profiler'
+end
 
 # Kolorowanie logów
 gem 'shog'
@@ -137,4 +142,4 @@ group :development, :test do
 end
 
 gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'newrelic_rpm', group: [:production, :development]
+gem 'newrelic_rpm', group: [:production]
