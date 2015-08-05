@@ -125,6 +125,88 @@ describe Course::ExercisesController, type: :controller do
     expect(Course::Exercise.where(id: exercise.id.to_s).exists?).to eq true
   end
 
+  it 'Admin can list filtered fields' do
+    data = {
+      'expected_result_expr' => 'test',
+      'code_before' => 'some code',
+      'code_after' => 'other code'
+    }
+    exercise = Course::Exercise.create!(data: data, course_lesson: @lesson)
+
+    3.times do
+      Course::Exercise.create!(data: data, course_lesson: @lesson)
+    end
+
+    session[:user_id] = @admin.id.to_s
+    get :show, format: :json, id: exercise.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq exercise.id.to_s
+    expect(json_response['data'].key?('expected_result_expr')).to eq true
+    expect(json_response['data'].key?('code_before')).to eq true
+    expect(json_response['data'].key?('code_after')).to eq true
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('expected_result_expr')).to eq true
+      expect(element['data'].key?('code_before')).to eq true
+      expect(element['data'].key?('code_after')).to eq true
+    end
+  end
+
+  it 'Everybody cannot list filtered fields' do
+    data = {
+      'expected_result_expr' => 'test',
+      'code_before' => 'some code',
+      'code_after' => 'other code'
+    }
+    exercise = Course::Exercise.create!(data: data, course_lesson: @lesson)
+
+    3.times do
+      Course::Exercise.create!(data: data, course_lesson: @lesson)
+    end
+
+    get :show, format: :json, id: exercise.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq exercise.id.to_s
+    expect(json_response['data'].key?('expected_result_expr')).to eq false
+    expect(json_response['data'].key?('code_before')).to eq false
+    expect(json_response['data'].key?('code_after')).to eq false
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('expected_result_expr')).to eq false
+      expect(element['data'].key?('code_before')).to eq false
+      expect(element['data'].key?('code_after')).to eq false
+    end
+
+    session[:user_id] = @user.id.to_s
+    get :show, format: :json, id: exercise.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq exercise.id.to_s
+    expect(json_response['data'].key?('expected_result_expr')).to eq false
+    expect(json_response['data'].key?('code_before')).to eq false
+    expect(json_response['data'].key?('code_after')).to eq false
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('expected_result_expr')).to eq false
+      expect(element['data'].key?('code_before')).to eq false
+      expect(element['data'].key?('code_after')).to eq false
+    end
+  end
+
   it 'Everybody can show single exercise' do
     exercise = Course::Exercise.create!(data: @data, course_lesson: @lesson)
 

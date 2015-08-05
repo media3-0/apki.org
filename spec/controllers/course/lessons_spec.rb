@@ -14,11 +14,20 @@ describe Course::LessonsController, type: :controller do
   before(:each) do
     @course = Course::CourseDatum.create!
     @lesson = Course::Lesson.create!(course_course_datum: @course)
+
+    @exercises = []
+    3.times do
+      @exercises << Course::Exercise.create!(course_lesson: @lesson)
+    end
+
+    @user_course = Course::UserCourse.create!(course_course_datum: @course, user: @user)
   end
 
   after(:each) do
     Course::CourseDatum.destroy_all
     Course::Lesson.destroy_all
+    Course::Exercise.destroy_all
+    Course::UserCourse.destroy_all
   end
 
   after(:all) do
@@ -124,7 +133,7 @@ describe Course::LessonsController, type: :controller do
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response['id']['$oid']).to eq lesson.id.to_s
-    expect(json_response['data']).to eq @data
+    expect(json_response['data']['test']).to eq @data['test']
   end
 
   it 'Everybody can list all lessons' do
@@ -171,5 +180,51 @@ describe Course::LessonsController, type: :controller do
     expect(response.status).to eq 401
     delete :destroy, format: :json, id: 'asdf'
     expect(response.status).to eq 401
+  end
+
+  it 'User metadata is correctly attached to lesson data' do
+    # Niezalogowany
+    get :show, format: :json, id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['data']['exercisesPassed'].count).to eq 0
+
+    get :index, format: :json, course_id: @course.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    json_response.each do |lesson|
+      expect(lesson['data']['exercisesPassed'].count).to eq 0
+    end
+
+    # Użytkownik
+    session[:user_id] = @user.id.to_s
+    get :show, format: :json, id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['data']['exercisesPassed'].count).to eq 0
+
+    get :index, format: :json, course_id: @course.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    json_response.each do |lesson|
+      expect(lesson['data']['exercisesPassed'].count).to eq 0
+    end
+
+    # Użytkownik z zaliczonymi zadaniami
+    @user_course.exercises[@exercises[0].id.to_s] = {}
+    @user_course.save!
+
+    get :show, format: :json, id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['data']['exercisesPassed'].count).to eq 1
+    expect(json_response['data']['exercisesPassed'][0]).to eq @exercises[0].id.to_s
+
+    get :index, format: :json, course_id: @course.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    json_response.each do |lesson|
+      expect(lesson['data']['exercisesPassed'].count).to eq 1
+    end
   end
 end

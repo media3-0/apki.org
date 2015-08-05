@@ -6,10 +6,16 @@ module Course
     # GET /course/quizzes.json
     def index
       @course_quizzes = Course::Lesson.find(params[:lesson_id]).course_quizs
+      if !current_user || (current_user && !current_user.is_admin?)
+        @course_quizzes.each { |quiz| quiz.data.delete('answer_idx') }
+      end
     end
 
     # GET /course/quizzes/1.json
     def show
+      if !current_user || (current_user && !current_user.is_admin?)
+        @course_quiz.data.delete('answer_idx')
+      end
     end
 
     # POST /course/quizzes.json

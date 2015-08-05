@@ -125,6 +125,72 @@ describe Course::QuizzesController, type: :controller do
     expect(Course::Quiz.where(id: quiz.id.to_s).exists?).to eq true
   end
 
+  it 'Admin can list filtered fields' do
+    data = {
+      'answer_idx' => 1
+    }
+    quiz = Course::Quiz.create!(data: data, course_lesson: @lesson)
+
+    3.times do
+      Course::Quiz.create!(data: data, course_lesson: @lesson)
+    end
+
+    session[:user_id] = @admin.id.to_s
+    get :show, format: :json, id: quiz.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq quiz.id.to_s
+    expect(json_response['data'].key?('answer_idx')).to eq true
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('answer_idx')).to eq true
+    end
+  end
+
+  it 'Everybody cannot list filtered fields' do
+    data = {
+      'answer_idx' => 1
+    }
+    quiz = Course::Quiz.create!(data: data, course_lesson: @lesson)
+
+    3.times do
+      Course::Quiz.create!(data: data, course_lesson: @lesson)
+    end
+
+    get :show, format: :json, id: quiz.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq quiz.id.to_s
+    expect(json_response['data'].key?('answer_idx')).to eq false
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('answer_idx')).to eq false
+    end
+
+    session[:user_id] = @user.id.to_s
+    get :show, format: :json, id: quiz.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq quiz.id.to_s
+    expect(json_response['data'].key?('answer_idx')).to eq false
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('answer_idx')).to eq false
+    end
+  end
+
   it 'Everybody can show single quiz' do
     quiz = Course::Quiz.create!(data: @data, course_lesson: @lesson)
 
