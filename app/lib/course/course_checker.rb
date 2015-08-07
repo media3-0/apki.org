@@ -36,7 +36,7 @@ module Course
       output.merge! JSON.parse(response.body.to_s)
       json_response['output'] = output
 
-      exercise.data['expected_result_expr'] == output['output']
+      check_compiled_code data['code'], exercise.data['expected_result_expr'], output, data['user_input']
     end
 
     private
@@ -55,6 +55,33 @@ module Course
         correct = false
       end
       correct
+    end
+
+    def self.check_compiled_code(code, expected_result_expr, output, user_input)
+      return false if expected_result_expr.empty?
+      type = expected_result_expr[0]
+      expression = expected_result_expr[1..-1]
+
+      case type
+        when 'c' # Kod dentaku
+          begin
+            int_input = Integer(user_input)
+            int_output = Integer(output)
+          rescue ArgumentError
+            return false
+          end
+          calculator = Dentaku::Calculator.new
+          calculator.store(input: int_input)
+          calculator.store(output: int_output)
+          return calculator.evaluate(expression)
+        when 'r' # regexp
+          regexp = /#{expression.gsub('{user_input}', Regexp.escape(user_input)).gsub('{code}', Regexp.escape(code))}/
+          return (regexp =~ output) != nil
+        when 's' # simple (zwykły oczekiwany output)
+          return expression == output
+        else # Nie rozpoznano wyrażenia
+          fail Exceptions::ExpressionTypeNotRecognized
+      end
     end
   end
 end

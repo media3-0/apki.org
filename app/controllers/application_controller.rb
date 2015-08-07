@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
   rescue_from Exceptions::NotFound do |exception|
     redirection exception.message, :not_found
   end
+  rescue_from Exceptions::ExpressionTypeNotRecognized do |exception|
+    redirection exception.message
+  end
   rescue_from Mongoid::Errors::DocumentNotFound do |exception|
     redirection 'Nie znaleziono takiego zasobu', :not_found, exception.message
   end
