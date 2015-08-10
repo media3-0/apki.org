@@ -99,6 +99,8 @@ var ApkiOrg;
                 this.finished = false;
                 this.lessonsPassed = new Array();
                 this.dependencies = new Array();
+                this.userInside = false;
+                this.userFinished = false;
             }
             return MCourseData;
         })();
@@ -129,6 +131,7 @@ var ApkiOrg;
          */
         var MExerciseData = (function () {
             function MExerciseData() {
+                this.title = '';
                 this.content_of_exercise = '';
                 this.code = '';
                 this.allow_user_input = false;
@@ -170,6 +173,7 @@ var ApkiOrg;
                 this.title = '';
                 this.article = '';
                 this.exercisesPassed = new Array();
+                this.quizPassed = false;
             }
             return MLessonData;
         })();
@@ -546,15 +550,20 @@ var ApkiOrg;
 var Editor;
 (function (Editor) {
     var EditorManager = (function () {
-        function EditorManager(divId, langId) {
+        function EditorManager(divId, langId, initCode) {
             this._disabled_ranges = Array();
             ace.config.set("basePath", "/ace");
             this.div = $('#' + divId);
+            this.div.text(initCode);
             this.ace = ace.edit(divId);
             this.ace.setTheme("ace/theme/chrome");
             this.ace.getSession().setMode("ace/mode/" + langId);
             this.ace.$blockScrolling = Infinity;
         }
+        EditorManager.prototype.destroy = function () {
+            this.ace.destroy();
+            this.div.contents().remove();
+        };
         EditorManager.prototype.getCode = function () {
             return this.ace.getValue();
         };
@@ -677,6 +686,9 @@ var ApkiOrg;
                             $('.q-' + i).find('.field-value').after('<div class="help-block">' + (el ? 'Odpowiedź poprawna.' : 'Niepoprawna odpowiedź.') + '</div>');
                         });
                         $scope.quizzesAreCorrect = ans.is_correct;
+                        if ($scope.quizzesAreCorrect) {
+                            $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
+                        }
                         $scope.quizChecking = false;
                     });
                 };
@@ -692,6 +704,9 @@ var ApkiOrg;
                     $ExercCtrl.res.check({}, _exerc_str, function (ans) {
                         $scope.exerciseCurrOutput = ans.output.output_html;
                         $scope.exerciseIsCorrect = ans.is_correct;
+                        if ($scope.exerciseIsCorrect) {
+                            $('.menu-exerc-' + _exerc.id + '>i').attr('class', 'glyphicon glyphicon-ok');
+                        }
                         $scope.exerciseChecking = false;
                     }, function () {
                         $scope.exerciseCurrOutput = '<div class="alert alert-danger" role="alert"><b>Błąd!</b> Przepraszamy, serwer w tej chwili nie odpowiada, spróbuj ponownie lub skontaktuj się z nami.</div>';
@@ -717,6 +732,10 @@ var ApkiOrg;
                         };
                         $scope.currPart = 'article';
                         $(window).resize($scope.resizeElements);
+                        setInterval(function () {
+                            $('body').scrollTop(0);
+                            $(window).scrollLeft(0);
+                        }, 50); //Sorry, need it here :(
                         $scope.apiCourse = new CourseMgr.CourseRestAPI($resource);
                         $scope.apiLesson = new CourseMgr.LessonRestAPI($resource);
                         $scope.apiQuizzes = new CourseMgr.QuizzesRestAPI($resource);
@@ -735,6 +754,12 @@ var ApkiOrg;
                         return;
                     $scope.parseArticle();
                     $scope.goToPart('article');
+                    if ($scope.getLesson().data.quizPassed) {
+                        $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
+                    }
+                    $.each(($scope.getLesson().data.exercisesPassed || []), function (i, el) {
+                        $('.menu-exerc-' + el + '>i').attr('class', 'glyphicon glyphicon-ok');
+                    });
                     $scope.inited = true;
                     $scope.resizeElements();
                 };
@@ -764,8 +789,7 @@ var ApkiOrg;
                         'quizzes': false,
                         'exercises': false
                     };
-                    $scope.exerciseCurrOutput = 'Tutaj pojawi się wynik Twojego programu lub ewentualne błędy.<br>Kliknij "Sprawdź" aby wykonać kod.';
-                    $scope.exerciseIsCorrect = false;
+                    $scope.exerciseNum = 0;
                     $scope.quizzes = $scope.apiQuizzes.res.list({ 'lesson_id': $scope.getLesson().id }, '', function (data) { $scope.checkIsLoaded(data, 'quizzes', $scope.buildCourse); });
                     $scope.exercises = $scope.apiExercises.res.list({ 'lesson_id': $scope.getLesson().id }, '', function (data) { $scope.checkIsLoaded(data, 'exercises', $scope.buildCourse); });
                 };
@@ -797,11 +821,11 @@ var ApkiOrg;
                         return null;
                     var _exerc = null;
                     $.each($scope.exercises, function (i, el) {
-                        if (_less.data.exercisesPassed.length == 0) {
+                        if (_less.data.exercisesPassed.indexOf(el.id) == _less.data.exercisesPassed.length - 1) {
                             _exerc = el;
                             return false; //Break
                         }
-                        if (el.id == _less.data.exercisesPassed[_less.data.exercisesPassed.length - 1]) {
+                        if (_less.data.exercisesPassed.length == 0) {
                             _exerc = el;
                             return false; //Break
                         }
@@ -830,9 +854,9 @@ var ApkiOrg;
                         $('#courseContent').find('.col').height($('#courseContent').height());
                         $('#courseContent').find('.col.col-line-height-100-pro').css('line-height', $('#courseContent').height() + 'px');
                         $('.code-etc-window').height($('#courseContent').height());
-                        $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible') ? $('.user-input-window').height() : 0) - ($('.send-code-window').is(':visible') ? $('.send-code-window').height() : 0) - ($('.code-ok-window').is(':visible') ? $('.code-ok-window').height() : 0));
-                        $('.exercise-instruction').height(Math.round($('#courseContent').height() / 2 - 1));
-                        $('.exercise-console').height($('#courseContent').height() - $('.exercise-instruction').height());
+                        $('.exercise-console').height(Math.floor($('.code-etc-window').height() / 2 - 1)); //$('#courseContent').height() - $('.exercise-instruction').height() - $('.exercise-console').height());
+                        $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible') ? $('.user-input-window').height() : 0) - ($('.send-code-window').is(':visible') ? $('.send-code-window').height() : 0) - ($('.code-ok-window').is(':visible') ? $('.code-ok-window').height() : 0) - ($('.exercise-console').is(':visible') ? $('.exercise-console').height() : 0));
+                        $('.exercise-instruction').css({ 'height': '100%' }); //$('.code-etc-window').height());
                         $('.oneLessonDiv').css({ 'width': Math.floor($('#courseContent').width() / $scope.lessons.length) + 'px' });
                         $('.lessonsProgressBar').css({
                             'padding-left': Math.floor($('#courseContent').width() / $scope.lessons.length / 2) + 'px',
@@ -895,7 +919,7 @@ var ApkiOrg;
                         });
                         $('#courseLessonMenu').find('ul.article-parsed').html(''); //Empty article-parsed submenu
                         $.each(sub_cats, function () {
-                            $('#courseLessonMenu').find('ul.article-parsed').append('<li><i class="glyphicon ' + this.ico + '"></i> <a href="' + this.anchor + '" ng-click="goToPart(\'article\')">' + this.title + '</a></li>');
+                            $('#courseLessonMenu').find('ul.article-parsed').append('<li class="fx-fade-down"><i class="glyphicon ' + this.ico + '"></i> <a href="' + this.anchor + '" ng-click="goToPart(\'article\')">' + this.title + '</a></li>');
                         });
                         $compile($('#courseLessonMenu').find('ul.article-parsed'))($scope);
                     }, 1, false);
@@ -926,7 +950,27 @@ var ApkiOrg;
                 $scope.isPartVisible = function (part) {
                     return $scope.currPart == part;
                 };
-                $scope.goToPart = function (part) {
+                $scope.loadExercise = function (part, forceId) {
+                    if (forceId != '') {
+                        if ($scope.getLesson().data.exercisesPassed.indexOf(forceId) > -1) {
+                            $scope.getLesson().data.exercisesPassed.splice($scope.getLesson().data.exercisesPassed.indexOf(forceId), 1);
+                        }
+                        $scope.getLesson().data.exercisesPassed.push(forceId);
+                    }
+                    else {
+                        if ($scope.getLesson().data.exercisesPassed.length == $scope.exercises.length)
+                            $scope.goToPart('end');
+                        else {
+                            $scope.getLesson().data.exercisesPassed.push($scope.exercises[$scope.getLesson().data.exercisesPassed.length].id);
+                        }
+                    }
+                    $scope.exerciseCurrOutput = 'Tutaj pojawi się wynik Twojego programu lub ewentualne błędy.<br>Kliknij "Sprawdź" aby wykonać kod.';
+                    $scope.exerciseIsCorrect = false;
+                    $scope.inited = true;
+                    $scope.$apply();
+                };
+                $scope.goToPart = function (part, forceId) {
+                    if (forceId === void 0) { forceId = ''; }
                     var possibleParts = [];
                     possibleParts['article'] = true; //always enabled
                     possibleParts['end'] = true; //always enabled
@@ -935,6 +979,27 @@ var ApkiOrg;
                     var path = ['article', 'quiz', 'exercise', 'end'];
                     while (!possibleParts[part])
                         part = path[path.indexOf(part) + 1];
+                    if (part == 'exercise') {
+                        $scope.inited = false;
+                        var _part = part;
+                        var _forceId = forceId;
+                        $timeout(function () { $scope.loadExercise(_part, _forceId); }, 1);
+                    }
+                    if (part == 'end') {
+                        //Check is it valid to let User finish.
+                        var _isOk = true;
+                        $('.menu-to-check:visible').each(function () {
+                            var _this = this;
+                            if (!$(this).find('i').is('.glyphicon-ok')) {
+                                var _el = this;
+                                _isOk = false;
+                                $timeout(function () { $(_el).find('a').click(); console.log(_this); }, 1);
+                                return false; //Break
+                            }
+                        });
+                        if (!_isOk)
+                            return;
+                    }
                     $scope.currPart = part;
                 };
             }
@@ -1035,14 +1100,19 @@ var ApkiOrg;
                 // It's important to add `link` to the prototype or you will end up with state issues.
                 // See http://blog.aaronholmes.net/writing-angularjs-directives-as-typescript-classes/#comment-2111298002 for more information.
                 CodeEditorDirective.prototype.link = function (scope, element, attrs) {
-                    $timeout(function (element) {
-                        ApkiOrg.App.app.initEditor(attrs['sourceLang']);
-                        if (scope.getExercise().data.code_locks.length > 0) {
-                            $.each(scope.getExercise().data.code_locks, function (i, el) {
-                                ApkiOrg.App.app.getEditor().disableRange(el.rowStart, el.colStart, el.rowEnd, el.colEnd);
-                            });
-                        }
-                    }, 0, true, element);
+                    var _f = function () {
+                        $timeout(function () {
+                            ApkiOrg.App.app.initEditor(attrs['sourceLang'], scope.getExercise().data.code);
+                            if (scope.getExercise().data.code_locks.length > 0) {
+                                $.each(scope.getExercise().data.code_locks, function (i, el) {
+                                    ApkiOrg.App.app.getEditor().disableRange(el.rowStart, el.colStart, el.rowEnd, el.colEnd);
+                                });
+                            }
+                        }, 0, true, element);
+                    };
+                    attrs.$observe('exercId', function () {
+                        _f();
+                    }, true);
                 };
             }
             CodeEditorDirective.Factory = function () {
@@ -1102,7 +1172,7 @@ var ApkiOrg;
     var CourseMgr;
     (function (CourseMgr) {
         //Init Angular app
-        app = angular.module('courseApp', ['ngResource']);
+        app = angular.module('courseApp', ['ngResource', 'ngFx', 'ngAnimate']);
         app.controller('myCtrl', CourseMgr.appCourseCtrl);
         app.filter('to_trusted', CourseMgr.ToTrustedFilter);
         app.filter('server_source_lang_to_ace_lang', CourseMgr.ServerSourceLangToACELangFilter);
@@ -1121,9 +1191,13 @@ var ApkiOrg;
         App.app;
         var AppMgr = (function () {
             function AppMgr() {
+                this.editor = null;
             }
-            AppMgr.prototype.initEditor = function (langId) {
-                this.editor = new Editor.EditorManager('editorTest', langId);
+            AppMgr.prototype.initEditor = function (langId, initCode) {
+                if (this.editor !== null) {
+                    this.editor.destroy();
+                }
+                this.editor = new Editor.EditorManager('editorTest', langId, initCode);
             };
             AppMgr.prototype.getEditor = function () {
                 return this.editor;
@@ -1663,6 +1737,91 @@ var ApkiOrg;
         app.filter('to_trusted', ApkiOrg.CourseMgr.ToTrustedFilter);
         app.filter('server_source_lang_to_ace_lang', ApkiOrg.CourseMgr.ServerSourceLangToACELangFilter);
     })(APanelListMgr = ApkiOrg.APanelListMgr || (ApkiOrg.APanelListMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="../models/code_lock_coord_model.ts" />
+/// <reference path="../models/base_course_model.ts" />
+/// <reference path="../models/achievement_model.ts" />
+/// <reference path="../models/course_model.ts" />
+/// <reference path="../models/exercise_model.ts" />
+/// <reference path="../models/lesson_model.ts" />
+/// <reference path="../models/quiz_model.ts" />
+/// <reference path="../models/comm_send_quiz.ts" />
+/// <reference path="../models/comm_send_exercise.ts" />
+/// <reference path="../../vendor/angularjs/angular.d.ts"/>
+/// <reference path="../resources/course_rest_api.ts"/>
+/// <reference path="../resources/lesson_rest_api.ts"/>
+/// <reference path="../resources/quizzes_rest_api.ts"/>
+/// <reference path="../resources/exercises_rest_api.ts"/>
+/// <reference path="../resources/achievements_rest_api.ts"/>
+/// <reference path="../resources/check_quiz_rest_api.ts"/>
+/// <reference path="../resources/check_exercise_rest_api.ts"/>
+/// <reference path="../../vendor/custom.d.ts"/>
+/// <reference path="../main.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var CoursesLstMgr;
+    (function (CoursesLstMgr) {
+        var appCoursesLstCtrl = (function () {
+            function appCoursesLstCtrl($scope, $timeout, $compile, $resource) {
+                this.$scope = $scope;
+                this.$timeout = $timeout;
+                this.$compile = $compile;
+                this.$resource = $resource;
+                $scope.initList = function () {
+                    $scope.inited = false;
+                    $scope.courses = new Array();
+                    $scope.apiCourse = new ApkiOrg.CourseMgr.CourseRestAPI($resource);
+                    $scope.courses = $scope.apiCourse.res.list({}, '', function (data) {
+                        $scope.inited = true;
+                    });
+                };
+                $scope._getCourseById = function (id) {
+                    var _course = null;
+                    $.each($scope.courses, function (i, el) {
+                        if (el.id == id) {
+                            _course = el;
+                            return false; //Break
+                        }
+                    });
+                    return _course;
+                };
+                $scope.checkCourse = function ($event, course) {
+                    $.each(course.data.dependencies, function (i, el) {
+                        if (($scope._getCourseById(el) !== null) && (!$scope._getCourseById(el).data.userFinished)) {
+                            $scope.invCourse = $scope._getCourseById(el);
+                            $('#oldCourseInv').attr('href', '/course_front/index?id=' + course.id);
+                            $('#md-default').modal();
+                            $event.preventDefault();
+                            return false; //Break
+                        }
+                    });
+                };
+            }
+            appCoursesLstCtrl.$inject = [
+                '$scope',
+                '$timeout',
+                '$compile',
+                '$resource'
+            ];
+            return appCoursesLstCtrl;
+        })();
+        CoursesLstMgr.appCoursesLstCtrl = appCoursesLstCtrl;
+    })(CoursesLstMgr = ApkiOrg.CoursesLstMgr || (ApkiOrg.CoursesLstMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="../vendor/custom.d.ts"/>
+/// <reference path="controllers/courses_list_ctrl.ts"/>
+/// <reference path="filters/to_trusted_filter.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var CoursesLstMgr;
+    (function (CoursesLstMgr) {
+        //Init Angular app
+        app = angular.module('coursesLstApp', ['ngResource', 'ngFx', 'ngAnimate']);
+        app.controller('myCtrl', CoursesLstMgr.appCoursesLstCtrl);
+        app.filter('to_trusted', ApkiOrg.CourseMgr.ToTrustedFilter);
+    })(CoursesLstMgr = ApkiOrg.CoursesLstMgr || (ApkiOrg.CoursesLstMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
 /// <reference path="../vendor/jquery/jquery.d.ts"/>
 /// <reference path="../vendor/angularjs/angular.d.ts"/>

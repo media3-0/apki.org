@@ -394,4 +394,78 @@ form{
 
 .exercise-instruction{
   height:100%;
+  overflow-y:auto;
+}
+
+//Animations
+@import "animate";
+
+.content-visible-when-not-loading{
+  @extend .animated;
+  @extend .lightSpeedIn;
+}
+.content-visible-when-not-loading.ng-hide-add.ng-hide-add-active{
+  display: block !important;
+}
+.content-visible-when-not-loading.ng-hide{
+  @extend .animated;
+  @extend .lightSpeedOut;
+}
+
+#courseLessonMenu{
+  @extend .animated;
+  @extend .slideInLeft;
+}
+#courseLessonMenu.ng-hide-add.ng-hide-add-active{
+  display: block !important;
+}
+#courseLessonMenu.ng-hide{
+  @extend .animated;
+  @extend .slideOutLeft;
+}
+
+#courseLessons{
+  @extend .animated;
+  @extend .slideInUp;
+}
+#courseLessons.ng-hide-add.ng-hide-add-active{
+  display: block !important;
+}
+#courseLessons.ng-hide{
+  @extend .animated;
+  @extend .slideOutDown;
+}
+
+.course-tile{
+  width:230px;
+  height:300px;
+  margin-left:auto;
+  margin-right:auto;
+
+  &>.content{
+    height: 255px;
+    text-align: center;
+    width:100%;
+
+    .course-icon{
+      @extend .img-circle;
+
+      width:125px;
+      height:125px;
+
+      border: 1px solid #e5e5e5;
+    }
+    .level{
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+    &>h2{
+      @extend .mrg0b;
+    }
+  }
+  &>.details{
+    padding-top:13px !important;
+    height:43px;
+  }
 }

@@ -7,14 +7,19 @@ module Editor {
         private div:JQuery;
         private ace:any;
         private _disabled_ranges:any[] = Array();
-        constructor(divId, langId: string) {
+        constructor(divId, langId, initCode: string) {
             ace.config.set("basePath", "/ace");
 
             this.div = $('#'+divId);
+            this.div.text(initCode);
             this.ace = ace.edit(divId);
             this.ace.setTheme("ace/theme/chrome");
             this.ace.getSession().setMode("ace/mode/"+langId);
             this.ace.$blockScrolling = Infinity;
+        }
+        destroy(){
+            this.ace.destroy();
+            this.div.contents().remove();
         }
         getCode():string{
             return this.ace.getValue();

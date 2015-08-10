@@ -1,0 +1,52 @@
+<h2>Lista kursów</h2>
+
+    <div ng-app="coursesLstApp" ng-controller="myCtrl" ng-init="initList()">
+        <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
+            <div class="progress progress-striped active">
+                <div class="progress-bar" role="progressbar" style="width: 100%;">
+                    Wczytywanie danych...
+                </div>
+            </div>
+        </div>
+        <div ng-hide="!inited">
+            <div class="col-md-4" ng-repeat="course in courses">
+                <div class="fd-tile detail clean tile-purple course-tile">
+                    <div class="content">
+                        <div class="level">
+                            <i class="glyphicon glyphicon-star color-primary" ng-repeat="n in [].constructor(course.data.difficulty_level) track by $index"></i><i class="glyphicon glyphicon-star-empty color-primary" ng-repeat="n in [].constructor(3 - course.data.difficulty_level) track by $index"></i>
+                        </div>
+                        <img src="{{ course.data.icon_src }}" class="course-icon"><br>
+                        <h2>{{ course.data.title }}</h2><p>{{ course.data.description }}</p>
+                    </div>
+                    <a class="details" ng-click="checkCourse($event, course)" href="/course_front/index?id={{course.id}}">
+                        <span ng-if="!course.data.userInside && !course.data.userFinished">Rozpocznij kurs</span>
+                        <span ng-if="course.data.userInside && !course.data.userFinished">Kontynuuj kurs</span>
+                        <span ng-if="course.data.userInside && course.data.userFinished">Powtórz kurs</span>
+                        <span><i class="fa fa-arrow-circle-right pull-right"></i></span></a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="md-default" tabindex="-1" role="dialog" ng-if="invCourse!==null">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <div class="i-circle primary"><i class="glyphicon glyphicon-remove"></i></div>
+                            <h4>Polecamy inny kurs</h4>
+                            <p>Zanim spróbujesz tego kursu polecamy najpierw wypróbować wstęp do niego "{{ invCourse.data.title }}".</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" id="oldCourseInv" type="button" class="btn btn-default btn-flat" data-dismiss="modal" ng-click="invCourse=null">Wejdź mimo wszystko</a>
+                        <a href="/course_front/index?id={{invCourse.id}}" type="button" class="btn btn-primary btn-flat" data-dismiss="modal" ng-click="invCourse=null">Spróbuj prostszy kurs</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </div>

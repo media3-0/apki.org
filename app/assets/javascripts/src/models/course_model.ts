@@ -24,11 +24,13 @@ module ApkiOrg.CourseMgr {
         icon_src            :string;            //Src to use with images to represent current course
         difficulty_level    :number;            //Difficulty level: 1-3
         dependencies        :string[];          //Dependencies array of IDs of previous course
+        finished            :boolean;           //True if course is finished
 
         //User-variable-metadata
         lessonsPassed       :string[];          //List of IDs of passed lessons
         lessonCurrent       :string;            //ID of current lesson, 0 or first lesson ID == from the beginning
-        finished            :boolean;           //True if course is finished
+        userInside          :boolean;           //True when User is in already in this course
+        userFinished        :boolean;           //True when User has already finished this course
 
         constructor() {
             this.title='';
@@ -40,6 +42,8 @@ module ApkiOrg.CourseMgr {
 
             this.lessonsPassed = new Array();
             this.dependencies = new Array();
+            this.userInside=false;
+            this.userFinished=false;
         }
     }
 }

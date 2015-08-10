@@ -23,11 +23,13 @@ module ApkiOrg.CourseMgr {
 
         //User metadata:
         exercisesPassed      :string[];         //List of IDs of passed lessons
+        quizPassed           :boolean;          //True if quiz is passed
 
         constructor() {
             this.title='';
             this.article='';
             this.exercisesPassed = new Array();
+            this.quizPassed=false;
         }
     }
 }

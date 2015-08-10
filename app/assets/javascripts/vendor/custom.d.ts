@@ -3,4 +3,5 @@ interface JQuery {
     selectpicker: any;
     load: any;
     button: any;
+    modal: any;
 }

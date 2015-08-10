@@ -9,14 +9,14 @@
             </div>
         </div>
     </div>
-    <div ng-hide="!inited">
+    <div ng-hide="!inited" class="content-visible-when-not-loading">
         <div id="courseLessonMenu" class="first col" ng-hide="resizeElements(1);!menuVisible.left">
             <ul>
                 <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#" ng-click="goToPart('article')">Artykuł</a></li>
                 <ul class="article-parsed">
                 </ul>
-                <li ng-hide="!quizzes.length"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
-                <li ng-hide="!exercises.length"><i class="glyphicon glyphicon-console"></i> <a href="#" ng-click="goToPart('exercise')">Zadanie</a></li>
+                <li ng-hide="!quizzes.length" class="menu-quiz menu-to-check"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
+                <li ng-hide="!exercises.length" ng-repeat="exerc in exercises" class="menu-exerc-{{exerc.id}} menu-to-check"><i class="glyphicon glyphicon-console"></i> <a ng-if="getLesson().data.exercisesPassed.indexOf(exerc.id)>-1" href="#" ng-click="goToPart('exercise', exerc.id)">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</a><span ng-if="getLesson().data.exercisesPassed.indexOf(exerc.id)==-1" style="color:#E8E8E8">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</span></li>
             </ul>
         </div>
         <div class="col col-line-height-100-pro firstHidePanelBar" ng-click="hidePanelBarClick('left')">||</div>
@@ -60,24 +60,24 @@
             <div class="course-exercise course-element" ng-hide="!isPartVisible('exercise')">
                 <div class="col-md-5 mrg0a pad0a">
                     <div class="exercise-instruction">
-                        <div class="pad25a exercise-instruction" ng-bind-html="getExercise().data.content_of_exercise | to_trusted">
-                        </div>
-                    </div>
-                    <div class="pad0a exercise-console">
-                        <div class="console-window mrg0a" ng-bind-html="exerciseCurrOutput | to_trusted">
+                        <div class="pad25a" ng-bind-html="getExercise().data.content_of_exercise | to_trusted">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-7 pad0a code-etc-window">
-                    <div class="code-editor" id="editorTest" codeeditor source-lang="{{ getExercise().data.lang | server_source_lang_to_ace_lang }}" ng-if="getExercise()!==null">{{ getExercise().data.code }}</div>
+                    <div class="code-editor" id="editorTest" codeeditor source-lang="{{ getExercise().data.lang | server_source_lang_to_ace_lang }}" ng-if="getExercise()!==null" exerc-id="{{ getExercise().id }}"></div>
                     <div class="user-input-window" ng-hide="!getExercise().data.allow_user_input">
-                        <input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}">
+                        <input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}" style="width:100%" placeholder="Dane wejściowe (pusty)">
                     </div>
                     <div class="send-code-window buttons pad0a mrg0a" ng-hide="exerciseIsCorrect">
                         <button ng-disabled="quizChecking" ng-class="exerciseChecking?'active':''" type="button" ng-click="checkExercise(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner mrg5r" style="margin-top: 4px;"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span><span class="not-spinner">Sprawdź odpowiedź</span></button>
                     </div>
                     <div class="code-ok-window buttons pad0a mrg0a" ng-hide="!exerciseIsCorrect || !isPartVisible('exercise')">
-                        Gratulacje, Twój kod jest poprawny <input type="submit" class="btn btn-lg btn-primary btn-save mrg5r" style="margin-top: 4px;" value="Kliknij tutaj aby przejść dalej" ng-click="goToPart('end')">
+                        Gratulacje, Twój kod jest poprawny <input type="submit" class="btn btn-lg btn-primary btn-save mrg5r" style="margin-top: 4px;" value="Kliknij tutaj aby przejść dalej" ng-click="goToPart('exercise')">
+                    </div>
+                    <div class="pad0a exercise-console">
+                        <div class="console-window mrg0a" ng-bind-html="exerciseCurrOutput | to_trusted">
+                        </div>
                     </div>
                 </div>
             </div>

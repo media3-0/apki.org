@@ -18,6 +18,7 @@ module ApkiOrg.CourseMgr {
      * Helper model: Exercise data.
      */
     export class MExerciseData{
+        title               :string;            //Very short title of exercise
         content_of_exercise :string;            //Content of exercise (command what to do) (HTML)
         code                :string;            //Initial visible code
         code_locks          :MCodeLockCoord[];  //Code locks
@@ -31,6 +32,7 @@ module ApkiOrg.CourseMgr {
         code_after          :string;            //Code added after
 
         constructor() {
+            this.title = '';
             this.content_of_exercise = '';
             this.code = '';
             this.allow_user_input = false;

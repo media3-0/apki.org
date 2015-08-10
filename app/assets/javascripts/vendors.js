@@ -1,5 +1,6 @@
 //= require angular
 //= require angular-resource
+//= require angular-animate
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
@@ -9,3 +10,5 @@
 //= require vendor/ace/ace
 //= require vendor/bootstrap-select/bootstrap-select
 //= require vendor/bootstrap-select/i18n/defaults-pl_PL.min
+//= require vendor/gsap/TweenMax
+//= require vendor/ngfx/ngFx

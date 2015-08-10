@@ -9,7 +9,7 @@ module ApkiOrg.CourseMgr {
      */
     export class CodeEditorDirective
     {
-        public link: (scope: IAppCtrlScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) => void;
+        public link: (scope: IAppCtrlScope, element: ng.IAugmentedJQuery, attrs: any) => void;
 //        public template = '<div>{{name}}</div>';
         public scope = false;
 
@@ -17,16 +17,22 @@ module ApkiOrg.CourseMgr {
         {
             // It's important to add `link` to the prototype or you will end up with state issues.
             // See http://blog.aaronholmes.net/writing-angularjs-directives-as-typescript-classes/#comment-2111298002 for more information.
-            CodeEditorDirective.prototype.link = (scope: IAppCtrlScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) =>
+            CodeEditorDirective.prototype.link = (scope: IAppCtrlScope, element: ng.IAugmentedJQuery, attrs: any) =>
             {
-                $timeout((element) => {
-                    ApkiOrg.App.app.initEditor(attrs['sourceLang']);
-                    if (scope.getExercise().data.code_locks.length>0) {
-                        $.each(scope.getExercise().data.code_locks, (i, el) => {
-                            ApkiOrg.App.app.getEditor().disableRange(el.rowStart, el.colStart, el.rowEnd, el.colEnd);
-                        });
-                    }
-                }, 0, true, element);
+                var _f = () => {
+                    $timeout(() => {
+                        ApkiOrg.App.app.initEditor(attrs['sourceLang'], scope.getExercise().data.code);
+                        if (scope.getExercise().data.code_locks.length>0) {
+                            $.each(scope.getExercise().data.code_locks, (i, el) => {
+                                ApkiOrg.App.app.getEditor().disableRange(el.rowStart, el.colStart, el.rowEnd, el.colEnd);
+                            });
+                        }
+                    }, 0, true, element);
+                };
+
+                attrs.$observe('exercId', () => {
+                    _f();
+                }, true);
             };
         }
 

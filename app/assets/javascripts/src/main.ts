@@ -8,10 +8,13 @@ module ApkiOrg.App {
     export class AppMgr {
         private editor:Editor.EditorManager;
         constructor() {
-
+            this.editor = null;
         }
-        initEditor(langId:string){
-            this.editor = new Editor.EditorManager('editorTest', langId);
+        initEditor(langId, initCode:string){
+            if (this.editor !== null){
+                this.editor.destroy();
+            }
+            this.editor = new Editor.EditorManager('editorTest', langId, initCode);
         }
         getEditor(): Editor.EditorManager{
             return this.editor;

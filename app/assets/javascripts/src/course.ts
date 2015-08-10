@@ -11,7 +11,7 @@ declare var app:any;
 
 module ApkiOrg.CourseMgr {
     //Init Angular app
-    app = angular.module('courseApp', ['ngResource']);
+    app = angular.module('courseApp', ['ngResource', 'ngFx', 'ngAnimate']);
     app.controller('myCtrl', appCourseCtrl);
 
     app.filter('to_trusted', ToTrustedFilter);
