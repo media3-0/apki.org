@@ -9,42 +9,16 @@ module Course
       course_courses_data.each do |course|
         courses_hashes << object_to_json(course)
       end
-      courses_hashes.sort! do |a, b|
-        a_weight, b_weight = 0, 0
-        a_weight = 1 if a['data']['userInside'] && !a['data']['userFinished']
-        a_weight = 0 if !a['data']['userInside'] && !a['data']['userFinished']
-        a_weight = -1 if a['data']['ubserInside'] && a['data']['userFinished']
-
-        b_weight = 1 if b['data']['userInside'] && !b['data']['userFinished']
-        b_weight = 0 if !b['data']['userInside'] && !b['data']['userFinished']
-        b_weight = -1 if b['data']['userInside'] && b['data']['userFinished']
-
-        a_weight <=> b_weight
-
-        # TEST:
-        # courses_hashes = []
-        #
-        # courses_hashes << { data: { userInside: true, userFinished: true }}
-        # courses_hashes << { data: { userInside: false, userFinished: false }}
-        # courses_hashes << { data: { userInside: true, userFinished: false }}
-        # courses_hashes << { data: { userInside: true, userFinished: false }}
-        # courses_hashes << { data: { userInside: true, userFinished: true }}
-        # courses_hashes << { data: { userInside: false, userFinished: false }}
-        #
-        # courses_hashes.sort! do |a, b|
-        #   a_weight, b_weight = 0, 0
-        #   a_weight = 1 if a[:data][:userInside] && !a[:data][:userFinished]
-        #   a_weight = 0 if !a[:data][:userInside] && !a[:data][:userFinished]
-        #   a_weight = -1 if a[:data][:ubserInside] && a[:data][:userFinished]
-        #
-        #   b_weight = 1 if b[:data][:userInside] && !b[:data][:userFinished]
-        #   b_weight = 0 if !b[:data][:userInside] && !b[:data][:userFinished]
-        #   b_weight = -1 if b[:data][:userInside] && b[:data][:userFinished]
-        #
-        #   b_weight <=> a_weight
-        # end
-        #
-        # puts courses_hashes
+      courses_hashes.each_index do |index|
+        element = courses_hashes.at(index)
+        if element['data']['userInside'] && !element['data']['userFinished']
+          courses_hashes.delete_at(index)
+          courses_hashes.unshift(element)
+        end
+        if element['data']['userInside'] && element['data']['userFinished']
+          courses_hashes.delete_at(index)
+          courses_hashes << element
+        end
       end
       render json: courses_hashes
     end
