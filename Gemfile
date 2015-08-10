@@ -28,7 +28,7 @@ gem 'sprockets-rails', github: 'rails/sprockets-rails'
 gem 'rails_admin'
 
 # MongoDB
-gem 'mongoid', '~> 4'
+gem 'mongoid', '~> 4' # TODO : Śledzić rozwój. Wersja 5 (obecnie w becie) jest na oficjalnym sterowniku MongoDB
 
 # kompilator typescript
 # gem 'typescript-rails'

@@ -71,13 +71,16 @@ module Course
       course_lesson_hash['id'] = course_lesson_hash['_id']
       course_lesson_hash['parent_id'] = lesson.parent_id
       exercises_passed = []
+      quiz_passed = false
       query = Course::UserCourse.where(course_course_datum: lesson.course_course_datum, user: current_user)
       if current_user && query.exists?
         query.first.exercises.each_key do |key|
           exercises_passed << key
         end
+        quiz_passed = query.first.quizzes.include? lesson.id.to_s
       end
       course_lesson_hash['data']['exercisesPassed'] = exercises_passed
+      course_lesson_hash['data']['quizPassed'] = quiz_passed
       course_lesson_hash
     end
   end

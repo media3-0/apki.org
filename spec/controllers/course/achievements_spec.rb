@@ -146,8 +146,56 @@ describe Course::AchievementsController, type: :controller do
     expect(json_response['data']).to eq @data
   end
 
-  it 'Everybody can list all achievements' do
-    # TODO : List achievements tests
+  it 'Listing all course achievements' do
+    course = Course::CourseDatum.create!
+    lesson = Course::Lesson.create!(course_course_datum: course)
+    Course::Achievement.create!(lesson_id: lesson.id.to_s)
+
+    2.times do
+      exercise = Course::Exercise.create!(course_lesson: lesson)
+      Course::Achievement.create!(exercise_id: exercise.id.to_s)
+    end
+
+    lesson.save!
+
+    get :index, format: :json, course_id: course.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 3
+  end
+
+  it 'Listing all lesson achievements' do
+    course = Course::CourseDatum.create!
+    lesson = Course::Lesson.create!(course_course_datum: course)
+    Course::Achievement.create!(lesson_id: lesson.id.to_s)
+
+    2.times do
+      exercise = Course::Exercise.create!(course_lesson: lesson)
+      Course::Achievement.create!(exercise_id: exercise.id.to_s)
+    end
+
+    lesson.save!
+
+    get :index, format: :json, lesson_id: lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 1
+  end
+
+  it 'Listing exercise achievement' do
+    course = Course::CourseDatum.create!
+    lesson = Course::Lesson.create!(course_course_datum: course)
+    Course::Achievement.create!(lesson_id: lesson.id.to_s)
+
+    exercise = Course::Exercise.create!(course_lesson: lesson)
+    Course::Achievement.create!(exercise_id: exercise.id.to_s)
+
+    lesson.save!
+
+    get :index, format: :json, exercise_id: exercise.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 1
   end
 
   it 'Not logged user cannot access to POST achievements' do

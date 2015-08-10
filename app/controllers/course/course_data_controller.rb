@@ -67,10 +67,14 @@ module Course
       course_hash['parent_id'] = course.parent_id
       lessons_passed = []
       course_hash['data']['lessonCurrent'] = ''
+      user_inside = false
+      user_finished = false
 
       query = Course::UserCourse.where(course_course_datum: course, user: current_user)
       if current_user && query.exists?
+        user_inside = true
         lessons_passed = query.first.lessons
+        user_finished = true if lessons_passed.count == course.course_lessons.count
         passed_count = lessons_passed.count
         lessons_list = Course::CourseDatum.get_lessons_by_course_id(course.id.to_s)
         lessons_count = lessons_list.count
@@ -81,6 +85,8 @@ module Course
         end
       end
       course_hash['data']['lessonsPassed'] = lessons_passed
+      course_hash['data']['userInside'] = user_inside
+      course_hash['data']['userFinished'] = user_finished
       course_hash
     end
   end
