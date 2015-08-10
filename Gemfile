@@ -28,7 +28,7 @@ gem 'sprockets-rails', github: 'rails/sprockets-rails'
 gem 'rails_admin'
 
 # MongoDB
-gem 'mongoid', '~> 4'
+gem 'mongoid', '~> 4' # TODO : Śledzić rozwój. Wersja 5 (obecnie w becie) jest na oficjalnym sterowniku MongoDB
 
 # kompilator typescript
 # gem 'typescript-rails'
@@ -93,6 +93,11 @@ gem 'angularjs-rails'
 gem 'tzinfo-data'
 
 gem 'rack-mini-profiler'
+unless Gem.win_platform?
+  gem 'flamegraph'
+  gem 'stackprof'
+  gem 'memory_profiler'
+end
 
 # Kolorowanie logów
 gem 'shog'
@@ -127,6 +132,8 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
 
+  gem 'did_you_mean'
+
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 
@@ -134,5 +141,6 @@ group :development, :test do
   gem 'spring'
 end
 
-gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'newrelic_rpm', group: [:production, :development]
+gem 'codeclimate-test-reporter', group: :test, require: false
+gem 'newrelic_rpm', group: [:production]
+gem 'rbkit', group: :development, require: false unless Gem.win_platform?

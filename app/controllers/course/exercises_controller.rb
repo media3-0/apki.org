@@ -6,10 +6,22 @@ module Course
     # GET /course/exercises.json
     def index
       @course_exercises = Course::Lesson.find(params[:lesson_id]).course_exercises
+      if !current_user || (current_user && !current_user.is_admin?)
+        @course_exercises.each do |exercise|
+          exercise.data.delete('expected_result_expr')
+          exercise.data.delete('code_before')
+          exercise.data.delete('code_after')
+        end
+      end
     end
 
     # GET /course/exercises/1.json
     def show
+      if !current_user || (current_user && !current_user.is_admin?)
+        @course_exercise.data.delete('expected_result_expr')
+        @course_exercise.data.delete('code_before')
+        @course_exercise.data.delete('code_after')
+      end
     end
 
     # POST /course/exercises.json
@@ -48,13 +60,14 @@ module Course
     end
 
     private
+
     def set_course_exercise
       @course_exercise = Course::Exercise.find(params[:id])
     end
 
     def check_lesson_id
-      if !params.has_key?(:lesson_id) or (params.has_key?(:lesson_id) and !Course::Lesson.where(id: params[:lesson_id]).exists?)
-        raise Exceptions::NotFound
+      if !params.key?(:lesson_id) || (params.key?(:lesson_id) && !Course::Lesson.where(id: params[:lesson_id]).exists?)
+        fail Exceptions::NotFound
       end
     end
   end

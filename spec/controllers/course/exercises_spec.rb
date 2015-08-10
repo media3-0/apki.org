@@ -8,7 +8,7 @@ describe Course::ExercisesController, type: :controller do
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = { 'test' => 'data'}
+    @data = { 'test' => 'data' }
   end
 
   before(:each) do
@@ -28,7 +28,7 @@ describe Course::ExercisesController, type: :controller do
   it 'Admin can create new exercise' do
     session[:user_id] = @admin.id.to_s
 
-    post :create, { format: :json, lesson_id: @lesson.id.to_s }
+    post :create, format: :json, lesson_id: @lesson.id.to_s
     expect(response).to be_success
 
     expect(Course::Exercise.count).to be > 0
@@ -40,14 +40,14 @@ describe Course::ExercisesController, type: :controller do
   it 'User or teacher cannot create new exercise' do
     session[:user_id] = @user.id.to_s
 
-    post :create, { format: :json, lesson_id: @lesson.id.to_s }
+    post :create, format: :json, lesson_id: @lesson.id.to_s
     expect(response.status).to eq 401
 
     expect(Course::Exercise.count).to eq 0
 
     session[:user_id] = @teacher.id.to_s
 
-    post :create, { format: :json, lesson_id: @lesson.id.to_s }
+    post :create, format: :json, lesson_id: @lesson.id.to_s
     expect(response.status).to eq 401
 
     expect(Course::Exercise.count).to eq 0
@@ -56,12 +56,12 @@ describe Course::ExercisesController, type: :controller do
   it 'New exercise cannot be created without lesson_id (or bad one)' do
     session[:user_id] = @admin.id.to_s
 
-    post :create, { format: :json }
+    post :create, format: :json
     expect(response.status).to eq 404
 
     expect(Course::Exercise.count).to eq 0
 
-    post :create, { format: :json, lesson_id: 'bad_id' }
+    post :create, format: :json, lesson_id: 'bad_id'
     expect(response.status).to eq 404
 
     expect(Course::Exercise.count).to eq 0
@@ -74,7 +74,7 @@ describe Course::ExercisesController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: exercise.id.to_s }
+    patch :update, format: :json, id: exercise.id.to_s
     expect(response).to be_success
 
     exercise.reload
@@ -89,14 +89,14 @@ describe Course::ExercisesController, type: :controller do
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: exercise.id.to_s }
+    patch :update, format: :json, id: exercise.id.to_s
     expect(response.status).to eq 401
 
     session[:user_id] = @teacher.id.to_s
 
     request.env['RAW_POST_DATA'] = @data.to_json
 
-    patch :update, { format: :json, id: exercise.id.to_s }
+    patch :update, format: :json, id: exercise.id.to_s
     expect(response.status).to eq 401
   end
 
@@ -105,7 +105,7 @@ describe Course::ExercisesController, type: :controller do
 
     exercise = Course::Exercise.create!(course_lesson: @lesson)
 
-    delete :destroy, { format: :json, id: exercise.id.to_s }
+    delete :destroy, format: :json, id: exercise.id.to_s
     expect(response).to be_success
     expect(Course::Exercise.where(id: exercise.id.to_s).exists?).to eq false
   end
@@ -115,20 +115,102 @@ describe Course::ExercisesController, type: :controller do
 
     exercise = Course::Exercise.create!(course_lesson: @lesson)
 
-    delete :destroy, { format: :json, id: exercise.id.to_s }
+    delete :destroy, format: :json, id: exercise.id.to_s
     expect(response.status).to eq 401
     expect(Course::Exercise.where(id: exercise.id.to_s).exists?).to eq true
 
     session[:user_id] = @teacher.id.to_s
-    delete :destroy, { format: :json, id: exercise.id.to_s }
+    delete :destroy, format: :json, id: exercise.id.to_s
     expect(response.status).to eq 401
     expect(Course::Exercise.where(id: exercise.id.to_s).exists?).to eq true
+  end
+
+  it 'Admin can list filtered fields' do
+    data = {
+      'expected_result_expr' => 'test',
+      'code_before' => 'some code',
+      'code_after' => 'other code'
+    }
+    exercise = Course::Exercise.create!(data: data, course_lesson: @lesson)
+
+    3.times do
+      Course::Exercise.create!(data: data, course_lesson: @lesson)
+    end
+
+    session[:user_id] = @admin.id.to_s
+    get :show, format: :json, id: exercise.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq exercise.id.to_s
+    expect(json_response['data'].key?('expected_result_expr')).to eq true
+    expect(json_response['data'].key?('code_before')).to eq true
+    expect(json_response['data'].key?('code_after')).to eq true
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('expected_result_expr')).to eq true
+      expect(element['data'].key?('code_before')).to eq true
+      expect(element['data'].key?('code_after')).to eq true
+    end
+  end
+
+  it 'Everybody cannot list filtered fields' do
+    data = {
+      'expected_result_expr' => 'test',
+      'code_before' => 'some code',
+      'code_after' => 'other code'
+    }
+    exercise = Course::Exercise.create!(data: data, course_lesson: @lesson)
+
+    3.times do
+      Course::Exercise.create!(data: data, course_lesson: @lesson)
+    end
+
+    get :show, format: :json, id: exercise.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq exercise.id.to_s
+    expect(json_response['data'].key?('expected_result_expr')).to eq false
+    expect(json_response['data'].key?('code_before')).to eq false
+    expect(json_response['data'].key?('code_after')).to eq false
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('expected_result_expr')).to eq false
+      expect(element['data'].key?('code_before')).to eq false
+      expect(element['data'].key?('code_after')).to eq false
+    end
+
+    session[:user_id] = @user.id.to_s
+    get :show, format: :json, id: exercise.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']['$oid']).to eq exercise.id.to_s
+    expect(json_response['data'].key?('expected_result_expr')).to eq false
+    expect(json_response['data'].key?('code_before')).to eq false
+    expect(json_response['data'].key?('code_after')).to eq false
+
+    get :index, format: :json, lesson_id: @lesson.id.to_s
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+    json_response.each do |element|
+      expect(element['data'].key?('expected_result_expr')).to eq false
+      expect(element['data'].key?('code_before')).to eq false
+      expect(element['data'].key?('code_after')).to eq false
+    end
   end
 
   it 'Everybody can show single exercise' do
     exercise = Course::Exercise.create!(data: @data, course_lesson: @lesson)
 
-    get :show, { format: :json, id: exercise.id.to_s }
+    get :show, format: :json, id: exercise.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response['id']['$oid']).to eq exercise.id.to_s
@@ -141,19 +223,19 @@ describe Course::ExercisesController, type: :controller do
       Course::Exercise.create!(data: @data, course_lesson: lesson)
     end
 
-    get :index, { format: :json, lesson_id: lesson.id.to_s }
+    get :index, format: :json, lesson_id: lesson.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
 
     session[:user_id] = @user.id.to_s
-    get :index, { format: :json, lesson_id: lesson.id.to_s }
+    get :index, format: :json, lesson_id: lesson.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
 
     session[:user_id] = @teacher.id.to_s
-    get :index, { format: :json, lesson_id: lesson.id.to_s }
+    get :index, format: :json, lesson_id: lesson.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
     expect(json_response.count).to eq 3
@@ -165,19 +247,19 @@ describe Course::ExercisesController, type: :controller do
       Course::Exercise.create!(data: @data, course_lesson: lesson)
     end
 
-    get :index, { format: :json }
+    get :index, format: :json
     expect(response.status).to eq 404
 
-    get :index, { format: :json, lesson_id: 'bad_id' }
+    get :index, format: :json, lesson_id: 'bad_id'
     expect(response.status).to eq 404
   end
 
   it 'Not logged user cannot access to POST exercises' do
-    post :create, { format: :json }
+    post :create, format: :json
     expect(response.status).to eq 401
-    patch :update, { format: :json, id: 'asdf' }
+    patch :update, format: :json, id: 'asdf'
     expect(response.status).to eq 401
-    delete :destroy, { format: :json, id: 'asdf' }
+    delete :destroy, format: :json, id: 'asdf'
     expect(response.status).to eq 401
   end
 end

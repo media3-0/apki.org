@@ -38,9 +38,10 @@ class SchoolController < ApplicationController
   end
 
   private
+
   def editing_profile
-    params[:school][:student_ids].reject! { |c| c.empty? } # wyczyść puste pola
-    if @school.update_attributes(params[:school].permit(:name, :description, :student_ids => []))
+    params[:school][:student_ids].reject!(&:empty?) # wyczyść puste pola
+    if @school.update_attributes(params[:school].permit(:name, :description, student_ids: []))
       @school.user = current_user
       @school.save!
       flash[:notice] = 'Zapisano'
@@ -61,7 +62,7 @@ class SchoolController < ApplicationController
     # Edycja newsu
     @educator_news = EducatorNews.find(params[:educator_news][:id])
     unless @educator_news.user.eql?(current_user)
-      raise Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
+      fail Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
     end
     if @educator_news.update_attributes(params[:educator_news].permit(:title, :content))
       flash[:notice] = 'Zaktualizowano news'
@@ -85,7 +86,7 @@ class SchoolController < ApplicationController
     if params.include?(:id)
       @educator_news = EducatorNews.find(params[:id])
       unless @educator_news.user.eql?(current_user)
-        raise Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
+        fail Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
       end
       @news_id = params[:id]
     else

@@ -109,7 +109,9 @@ production:
       database: <%= ENV['DATABASE_PRODUCTION_NAME'] %>
 
       username: <%= ENV['DATABASE_PRODUCTION_NAME'] %>
+      <% if ENV['DATABASE_PRODUCTION_PASSWORD'].present? %>
       password: <%= ENV['DATABASE_PRODUCTION_PASSWORD'] %>
+      <% end %>
       # Provides the hosts the default session can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:

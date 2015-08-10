@@ -9,8 +9,10 @@ class MainController < ApplicationController
   def view_news
     @news = News.find(params[:id])
   end
+
   def test
   end
+
   def forms_test
   end
 end

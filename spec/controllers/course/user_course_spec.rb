@@ -1,13 +1,12 @@
 require 'rails_helper'
 
 describe Course::UserCoursesController, type: :controller do
-
   before(:all) do
     @admin = User.create!(nickname: 'test_admin', uid: 'asdf', account_type: :admin)
     @user = User.create!(nickname: 'test_student', uid: 'zxcv', account_type: :student)
     @teacher = User.create!(nickname: 'test_teacher', uid: 'zxcv', account_type: :teacher)
 
-    @data = {'test' => 'data'}
+    @data = { 'test' => 'data' }
   end
 
   before(:each) do
@@ -36,11 +35,11 @@ describe Course::UserCoursesController, type: :controller do
     # Nie zakończona lekcja
     expect(Course::CourseChecker.check_lesson lesson, user_course).to eq false
 
-    json_request = {:id => lesson.id.to_s, :quizzes => {
-        @quizzes[0].id.to_s => 3,
-        @quizzes[1].id.to_s => 0,
-        @quizzes[2].id.to_s => 1
-    }}
+    json_request = { id: lesson.id.to_s, quizzes: {
+      @quizzes[0].id.to_s => 3,
+      @quizzes[1].id.to_s => 0,
+      @quizzes[2].id.to_s => 1
+    } }
     request.env['RAW_POST_DATA'] = json_request.to_json
     post :check_quizzes, format: :json
 
@@ -72,16 +71,15 @@ describe Course::UserCoursesController, type: :controller do
   end
 
   describe 'User solving quizzes' do
-
     it 'User succesfully solve quizzes (lesson with no exercises marked as solved)' do
       session[:user_id] = @user.id.to_s
       user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
       lesson = @course.course_lessons.first
-      json_request = {:id => lesson.id.to_s, :quizzes => {
-          @quizzes[0].id.to_s => 3,
-          @quizzes[1].id.to_s => 0,
-          @quizzes[2].id.to_s => 1
-      }}
+      json_request = { id: lesson.id.to_s, quizzes: {
+        @quizzes[0].id.to_s => 3,
+        @quizzes[1].id.to_s => 0,
+        @quizzes[2].id.to_s => 1
+      } }
       request.env['RAW_POST_DATA'] = json_request.to_json
       post :check_quizzes, format: :json
       json_response = JSON.parse response.body
@@ -99,11 +97,11 @@ describe Course::UserCoursesController, type: :controller do
       session[:user_id] = @user.id.to_s
       user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
       lesson = @course.course_lessons.first
-      json_request = {:id => lesson.id.to_s, :quizzes => {
-          @quizzes[0].id.to_s => 3,
-          @quizzes[1].id.to_s => 1,
-          @quizzes[2].id.to_s => 1
-      }}
+      json_request = { id: lesson.id.to_s, quizzes: {
+        @quizzes[0].id.to_s => 3,
+        @quizzes[1].id.to_s => 1,
+        @quizzes[2].id.to_s => 1
+      } }
       request.env['RAW_POST_DATA'] = json_request.to_json
       post :check_quizzes, format: :json
       json_response = JSON.parse response.body
@@ -123,11 +121,11 @@ describe Course::UserCoursesController, type: :controller do
 
     it 'Bad lesson ID passed by data' do
       session[:user_id] = @user.id.to_s
-      json_request = {:id => 'bad_id', :quizzes => {
-          @quizzes[0].id.to_s => 3,
-          @quizzes[1].id.to_s => 1,
-          @quizzes[2].id.to_s => 1
-      }}
+      json_request = { id: 'bad_id', quizzes: {
+        @quizzes[0].id.to_s => 3,
+        @quizzes[1].id.to_s => 1,
+        @quizzes[2].id.to_s => 1
+      } }
       request.env['RAW_POST_DATA'] = json_request.to_json
       post :check_quizzes, format: :json
       expect(response.status).to eq 404
@@ -138,11 +136,11 @@ describe Course::UserCoursesController, type: :controller do
     it 'User is not participating to course' do
       session[:user_id] = @user.id.to_s
       lesson = @course.course_lessons.first
-      json_request = {:id => lesson.id.to_s, :quizzes => {
-          @quizzes[0].id.to_s => 3,
-          @quizzes[1].id.to_s => 1,
-          @quizzes[2].id.to_s => 1
-      }}
+      json_request = { id: lesson.id.to_s, quizzes: {
+        @quizzes[0].id.to_s => 3,
+        @quizzes[1].id.to_s => 1,
+        @quizzes[2].id.to_s => 1
+      } }
       request.env['RAW_POST_DATA'] = json_request.to_json
       post :check_quizzes, format: :json
       expect(response.status).to eq 404
@@ -163,7 +161,158 @@ describe Course::UserCoursesController, type: :controller do
     end
   end
 
+  it 'Is lessson finished endpoint' do
+    session[:user_id] = @user.id.to_s
+
+    user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
+    lesson = @course.course_lessons.first
+
+    user_course.lessons << lesson.id.to_s
+
+    lesson.course_exercises.each do |exercise|
+      user_course.exercises[exercise.id.to_s] = {}
+    end
+    user_course.quizzes << lesson.id.to_s
+
+    user_course.save!
+
+    post :is_lesson_finished, format: :json, id: lesson.id.to_s
+
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['id']).to eq lesson.id.to_s
+    expect(json_response['lesson_finished']).to eq true
+  end
+
+  it 'Trying to access exercise that does not exists' do
+    session[:user_id] = @user.id.to_s
+    json_request = {
+      'id' => 'bad_data',
+      'code' => 'puts 55'
+    }
+
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_exercise, format: :json
+    expect(response.status).to eq 404
+  end
+
+  # Rozwiązywanie zadań
+
+  it 'User can solve exercise with simple query' do
+    session[:user_id] = @user.id.to_s
+
+    lesson = @course.course_lessons.first
+    exercise = lesson.course_exercises.create!(data: {
+                                                 'content_of_exercise' => '',
+                                                 'code' => '',
+                                                 'code_locks' => [],
+                                                 'allow_user_input' => false,
+                                                 'default_user_input' => '',
+                                                 'expected_result_expr' => 's55',
+                                                 'code_before' => '',
+                                                 'code_after' => '',
+                                                 'lang' => 'RUBY'
+                                               })
+
+    json_request = {
+      'id' => exercise.id.to_s,
+      'code' => 'puts 55'
+    }
+
+    user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
+
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_exercise, format: :json
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['is_correct']).to eq true
+
+    json_request['code'] = 'puts 45'
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_exercise, format: :json
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['is_correct']).to eq false
+  end
+
+  it 'User can solve exercise with regexp' do
+    session[:user_id] = @user.id.to_s
+
+    lesson = @course.course_lessons.first
+    exercise = lesson.course_exercises.create!(data: {
+                                                 'content_of_exercise' => '',
+                                                 'code' => '',
+                                                 'code_locks' => [],
+                                                 'allow_user_input' => false,
+                                                 'default_user_input' => '',
+                                                 'expected_result_expr' => 'ra{2}TESTb{2}',
+                                                 'code_before' => "print 'aa'\n",
+                                                 'code_after' => "\nprint 'bb'",
+                                                 'lang' => 'RUBY'
+                                               })
+
+    json_request = {
+      'id' => exercise.id.to_s,
+      'code' => 'print "TEST"',
+      'user_input' => ''
+    }
+
+    user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
+
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_exercise, format: :json
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['is_correct']).to eq true
+
+    json_request['code'] = 'puts "test2"'
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_exercise, format: :json
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['is_correct']).to eq false
+  end
+
+  it 'User can solve exercise with dentaku' do
+    session[:user_id] = @user.id.to_s
+
+    lesson = @course.course_lessons.first
+    exercise = lesson.course_exercises.create!(data: {
+                                                 'content_of_exercise' => '',
+                                                 'code' => '',
+                                                 'code_locks' => [],
+                                                 'allow_user_input' => false,
+                                                 'default_user_input' => '',
+                                                 'expected_result_expr' => 'c(input * 2) = output',
+                                                 'code_before' => '',
+                                                 'code_after' => '',
+                                                 'lang' => 'RUBY'
+                                               })
+
+    json_request = {
+      'id' => exercise.id.to_s,
+      'code' => 'puts 2 * 55',
+      'user_input' => '55'
+    }
+
+    user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
+
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_exercise, format: :json
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['is_correct']).to eq true
+
+    json_request['code'] = 'puts 2 * 45'
+    request.env['RAW_POST_DATA'] = json_request.to_json
+    post :check_exercise, format: :json
+    expect(response).to be_success
+    json_response = JSON.parse response.body
+    expect(json_response['is_correct']).to eq false
+  end
+
   private
+
   def create_course_with_sample_data
     @course = Course::CourseDatum.new(data: @data)
     lesson = Course::Lesson.new(data: @data)
@@ -172,19 +321,15 @@ describe Course::UserCoursesController, type: :controller do
     end
 
     @quizzes = []
-    @quizzes << Course::Quiz.create!(data: {:question => 'Test question 1', :answer_idx => 3})
-    @quizzes << Course::Quiz.create!(data: {:question => 'Test question 2', :answer_idx => 0})
-    @quizzes << Course::Quiz.create!(data: {:question => 'Test question 3', :answer_idx => 1})
+    @quizzes << Course::Quiz.create!(data: { question: 'Test question 1', answer_idx: 3 })
+    @quizzes << Course::Quiz.create!(data: { question: 'Test question 2', answer_idx: 0 })
+    @quizzes << Course::Quiz.create!(data: { question: 'Test question 3', answer_idx: 1 })
     lesson.course_quizs.concat @quizzes
-    @quizzes.each do |quiz|
-      quiz.save!
-    end
+    @quizzes.each(&:save!)
 
     Course::Achievement.create!(data: @data, lesson_id: lesson.id.to_s)
     @course.course_lessons << lesson
     lesson.save!
     @course.save!
   end
-
-  # TODO : Testy dla zadań
 end

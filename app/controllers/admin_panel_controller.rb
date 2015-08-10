@@ -4,6 +4,7 @@ class AdminPanelController < ApplicationController
 
   def panel
   end
+
   def panel_list
   end
 end

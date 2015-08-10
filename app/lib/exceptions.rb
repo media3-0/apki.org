@@ -10,4 +10,10 @@ module Exceptions
       super(msg)
     end
   end
+
+  class ExpressionTypeNotRecognized <  StandardError
+    def initialize(msg = 'Nie rozpoznano typu polecenia')
+      super(msg)
+    end
+  end
 end

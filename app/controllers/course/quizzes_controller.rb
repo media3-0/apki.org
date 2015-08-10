@@ -6,10 +6,16 @@ module Course
     # GET /course/quizzes.json
     def index
       @course_quizzes = Course::Lesson.find(params[:lesson_id]).course_quizs
+      if !current_user || (current_user && !current_user.is_admin?)
+        @course_quizzes.each { |quiz| quiz.data.delete('answer_idx') }
+      end
     end
 
     # GET /course/quizzes/1.json
     def show
+      if !current_user || (current_user && !current_user.is_admin?)
+        @course_quiz.data.delete('answer_idx')
+      end
     end
 
     # POST /course/quizzes.json
@@ -48,13 +54,14 @@ module Course
     end
 
     private
+
     def set_course_quiz
       @course_quiz = Course::Quiz.find(params[:id])
     end
 
     def check_lesson_id
-      if !params.has_key?(:lesson_id) or (params.has_key?(:lesson_id) and !Course::Lesson.where(id: params[:lesson_id]).exists?)
-        raise Exceptions::NotFound
+      if !params.key?(:lesson_id) || (params.key?(:lesson_id) && !Course::Lesson.where(id: params[:lesson_id]).exists?)
+        fail Exceptions::NotFound
       end
     end
   end

@@ -356,7 +356,7 @@ pre {
     text-align: left;
     width: 206px;
     color: #555;
-    background: url(../images/logo.png) no-repeat 0 11px;
+    #background: url(../images/logo.png) no-repeat 0 11px;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
     font-weight: 300;
     font-size: 19px;
@@ -963,7 +963,7 @@ input::-webkit-input-speech-button {
     font-size: 21px;
 }
 .sidebar-logo {
-    background: #955AA4 url(../images/logo.png) no-repeat 15px 19px;
+    #background: #955AA4 url(../images/logo.png) no-repeat 15px 19px;
     padding: 15px 20px;
     display: block;
     height: 64px;
@@ -1076,7 +1076,7 @@ input::-webkit-input-speech-button {
 }
 .sb-collapsed .sidebar-logo {
     padding: 4px 0 5px;
-    background: url("../images/logo.png") no-repeat scroll 15px -46px #955AA4;
+    #background: url("../images/logo.png") no-repeat scroll 15px -46px #955AA4;
 }
 .sb-collapsed .sidebar-logo .logo a {
     content: " ";
@@ -7666,7 +7666,7 @@ ul.timeline li > .date {
     }
     .sidebar-logo {
         padding: 4px 0 5px;
-        background: url("../images/logo.png") no-repeat scroll 15px -46px #955AA4;
+        #background: url("../images/logo.png") no-repeat scroll 15px -46px #955AA4;
     }
     #head-nav.topbar .sidebar-logo {
         display: inline-block;
@@ -7870,10 +7870,10 @@ ul.timeline li > .date {
     }
     .navbar-header {
         padding: 0 10px;
-        background: #955AA4 url(../images/logo.png) no-repeat 15px 10px;
+        #background: #955AA4 url(../images/logo.png) no-repeat 15px 10px;
     }
     #head-nav.topbar .navbar-header {
-        background: #955AA4 url(../images/logo.png) no-repeat 30px 18px;
+        #background: #955AA4 url(../images/logo.png) no-repeat 30px 18px;
         padding: 8px 0;
     }
     #head-nav.topbar .sidebar-logo {
@@ -7941,7 +7941,7 @@ ul.timeline li > .date {
         padding-bottom: 0;
     }
     .sb-collapsed .cl-sidebar .sidebar-logo {
-        background: url("../images/logo.png") no-repeat scroll 15px 19px #955AA4;
+        #background: url("../images/logo.png") no-repeat scroll 15px 19px #955AA4;
     }
     #cl-wrapper.fixed-menu .menu-space,
     #cl-wrapper.fixed-menu.sb-collapsed .menu-space {
