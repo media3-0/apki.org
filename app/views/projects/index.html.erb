@@ -1,0 +1,24 @@
+<h1>Lista projektów</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tytuł</th>
+      <th>Nazwa repozytorium</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= project.title %></td>
+        <td><%= project.github %></td>
+        <td><%= link_to 'Pokaż', project %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+<%= link_to 'Moje projekty', projects_mine_path %>

@@ -16,6 +16,7 @@ class User
   has_many :news
   has_many :educator_news
   has_many :course_user_courses, class_name: 'Course::UserCourse'
+  has_many :projects
   belongs_to :school
   has_one :klasa, class_name: 'School'
 

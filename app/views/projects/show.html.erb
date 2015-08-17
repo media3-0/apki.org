@@ -1,0 +1,14 @@
+<p>
+  <strong>Title:</strong>
+  <%= @project.title %>
+</p>
+
+<p>
+  <strong>Github:</strong>
+  <%= @project.github %>
+</p>
+
+<% if current_user == @project.user %>
+  <%= link_to 'Edit', edit_project_path(@project) %> |
+<% end %>
+<%= link_to 'Back', projects_path %>
