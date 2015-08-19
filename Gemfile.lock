@@ -46,7 +46,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
-    angularjs-rails (1.4.3)
+    angularjs-rails (1.4.4)
     arel (6.0.3)
     autoprefixer-rails (5.2.1.2)
       execjs
@@ -155,7 +155,7 @@ GEM
     kramdown (1.8.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    loofah (2.0.2)
+    loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
