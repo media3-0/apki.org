@@ -99,7 +99,7 @@ GEM
     connection_pool (2.2.0)
     daemons (1.2.3)
     debug_inspector (0.0.2)
-    dentaku (1.2.6)
+    dentaku (2.0.1)
     did_you_mean (0.9.10)
       interception
     diff-lcs (1.2.5)
@@ -387,7 +387,7 @@ DEPENDENCIES
   carrierwave-mongoid
   ckeditor
   codeclimate-test-reporter
-  dentaku (~> 1.2)
+  dentaku (~> 2)
   did_you_mean
   discourse_api
   factory_girl_rails

@@ -75,7 +75,7 @@ gem 'faraday-http-cache'
 gem 'discourse_api'
 
 # silnik do tworzenia prostych skryptów (do sprawdzania zadań)
-gem 'dentaku', '~> 1.2'
+gem 'dentaku', '~> 2'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
