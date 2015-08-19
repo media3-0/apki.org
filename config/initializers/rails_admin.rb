@@ -39,5 +39,5 @@ RailsAdmin.config do |config|
     # history_show
   end
 
-  config.included_models = %w(User News School EducatorNews Article)
+  config.included_models = %w(User News School EducatorNews Article Project)
 end
