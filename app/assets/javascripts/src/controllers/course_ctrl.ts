@@ -45,12 +45,14 @@ module ApkiOrg.CourseMgr {
         exerciseIsCorrect:boolean;
         oldLessonCurrent:string;
         exerciseNum:number;
+        youtubeTheaterModeSrc:string;
 
         initCourse(courseJSON:string)
         resizeElements()
         hidePanelBarClick(which:string)
         parseArticle()
         fullSizeElement(element:{}, $event:{})
+        fullSizeClose()
         isPartVisible(part:string)
         goToPart(part:string, forceId?:string)
         checkIsLoaded(data:any, elId:string, clbOnFinish:() => any)
@@ -104,6 +106,7 @@ module ApkiOrg.CourseMgr {
 
             $scope.userGoToLesson = (lessId:string) => {
                 if (($scope.course.data.lessonsPassed.indexOf(lessId)>-1)||($scope.course.data.lessonCurrent == lessId)||($scope.oldLessonCurrent == lessId)){
+                    $scope.inited=false;
                     $scope.oldLessonCurrent == $scope.course.data.lessonCurrent;
                     $scope.course.data.lessonCurrent = lessId;
                     $scope.loadLesson();
@@ -125,7 +128,7 @@ module ApkiOrg.CourseMgr {
                 var $QuizCtrl:CheckQuizRestAPI = new CheckQuizRestAPI($resource);
                 $QuizCtrl.res.check({}, _quiz_str, (ans:any) => {
                     $.each(ans.quizzes, (i, el) => {
-                        $('.q-'+i).removeClass('has-success has-warning has-error').addClass(el?'has-success':'has-error');
+                        $('.q-'+i).removeClass('text-success text-danger').addClass(el?'text-success':'text-danger');
                         $('.q-'+i).find('.field-value').next('.help-block').remove();
                         $('.q-'+i).find('.field-value').after('<div class="help-block">'+(el?'Odpowiedź poprawna.':'Niepoprawna odpowiedź.')+'</div>');
                     });
@@ -142,7 +145,7 @@ module ApkiOrg.CourseMgr {
 
             $scope.checkExercise = (element:any, $event:any) => {
                 $scope.exerciseChecking = true;
-                $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span></div>';
+                $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><span class="spinner" style="font-size: 200%"><i class="glyphicon spinning glyphicon-refresh"></i></span></div>';
 
                 var _exerc:MCommSendExercise = new MCommSendExercise();
                 _exerc.id = $scope.getExercise().id;
@@ -197,6 +200,9 @@ module ApkiOrg.CourseMgr {
                         $('body').scrollTop(0);
                         $(window).scrollLeft(0);
                     }, 50); //Sorry, need it here :(
+                    $(window).bind('beforeunload', function(){
+                        return 'Czy na pewno chcesz opuścić stronę kursu?';
+                    });
 
                     $scope.apiCourse = new CourseRestAPI($resource);
                     $scope.apiLesson = new LessonRestAPI($resource);
@@ -230,6 +236,7 @@ module ApkiOrg.CourseMgr {
 
                 $scope.inited = true;
                 $scope.resizeElements();
+                $('[data-toggle="tooltip"]').tooltip();
             }
 
             /**
@@ -396,9 +403,8 @@ module ApkiOrg.CourseMgr {
                                 $(this).attr('alt', 'Film');
                             }
                             var iframe_id:string = get_gen_id(this);
-                            $(this).wrap('<div></div>');
-                            $(this).before('<a href="javascript:;" ng-click="fullSizeElement(this, $event)">Przejdź do trybu pełnoekranowego</a><br>');
-                            $compile($(this).parent('div'))($scope);
+                            $(this).replaceWith('<button class="btn btn-lg btn-primary" data-youtube-src="'+$(this).attr('src')+'" ng-click="fullSizeElement(this, $event)" id="'+iframe_id+'"><span class="glyphicon glyphicon-facetime-video"></span> Obejrzyj film</button>');
+                            $compile($('#'+iframe_id))($scope);
                             sub_cats.push({
                                 'title': $.trim($(this).attr('alt')),
                                 'anchor':'#'+iframe_id,
@@ -421,29 +427,13 @@ module ApkiOrg.CourseMgr {
              * @param any $event Original event with $event.currentTarget.
              */
             $scope.fullSizeElement = (element:any, $event:any) => {
-                $('.full-screen-element').removeClass('.full-screen-element');
-
-                if ($($event.currentTarget).data('full-screen') === true) {
-                    //close full-screen:
-                    $('#courseCnt').removeClass('full-screen-art-element');
-
-                    $($event.currentTarget).text('Przejdź do trybu pelnoekranowego');
-
-                    $($event.currentTarget).next().next().removeClass('full-screen-element').height($($event.currentTarget).next().next().data('oryg-height'));
-
-                    $($event.currentTarget).data('full-screen', false);
-                } else {
-                    //open full-screen:
-                    $('#courseCnt').addClass('full-screen-art-element');
-
-                    $($event.currentTarget).text('Wyjdź z trybu pelnoekranowego');
-
-                    $($event.currentTarget).next().next().addClass('full-screen-element').data('oryg-height', $($event.currentTarget).next().next().height());
-
-                    $($event.currentTarget).data('full-screen', true);
-                }
-
-                $($event.currentTarget)[0].scrollIntoView( true );
+                $scope.youtubeTheaterModeSrc = $($event.currentTarget).data('youtube-src');
+                $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="'+ $scope.youtubeTheaterModeSrc +'?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-default btn-xs" ng-click="fullSizeClose()">X Zakmknij</button>');
+                $compile($('.fullscreen_movie').find('button'))($scope);
+                $scope.currPart = 'fullscreen_movie';
+            }
+            $scope.fullSizeClose = () => {
+                $scope.currPart = $('.fullscreen_movie').data('old-curr-part');
             }
             $scope.isPartVisible = (part:string):boolean =>{
                 return $scope.currPart == part;

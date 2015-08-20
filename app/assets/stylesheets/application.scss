@@ -21,16 +21,30 @@ $icon-font-path: "/fonts/bootstrap/";
 
 $color-main: #955AA4;
 $color-sec:  #a468b3;
+$color-third:  #4f397f;
 $color-text-on-main: #ffffff;
 
 .navbar{
-  background-color: $color-main;
-  color: $color-text-on-main;
   left:0px;
   height:48px;
 
-  .navbar-brand,.nav{
-    color:$color-text-on-main;
+  background-color: white;
+  color:#955AA4;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
+
+  .nav{
+    color:#955AA4;
+  }
+  li a{
+    color:#955AA4 !important;
+  }
+  .circular{
+    border-style: none !important;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  li.active>a{
+    background-color: rgb(164, 104, 179) !important;
+    color: white !important;
   }
 }
 
@@ -66,6 +80,25 @@ $color-text-on-main: #ffffff;
 .code-editor {
   @extend .pad0a;
   background-color: white;
+
+  border-left:solid 1px #ccc;
+}
+.send-code-window,.code-ok-window {
+  border: 1px solid #e5e5e5;
+  border-left:solid 1px #ccc;
+  background-color: white;
+}
+.exercise-console{
+  background-color: white;
+  border-style: none;
+  border-radius: 0;
+
+  .console-window{
+    background-color: white;
+    border-style: none;
+    border-radius: 0;
+    border-left:solid 1px #ccc;
+  }
 }
 .readonly-highlight{
   background-color: rgb(188, 25, 8) !important;
@@ -74,7 +107,7 @@ $color-text-on-main: #ffffff;
   border: 1px black solid;
 }
 header{
-  margin-top:60px;
+  padding-top:60px;
 
   .user-profile{
     @extend .pad0b;
@@ -85,12 +118,10 @@ header{
 .circular {
   border-radius: 10px;
   background-repeat: no-repeat;
-  box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
   display: inline-block;
   background-position: center center;
   vertical-align: middle;
+  border:1px solid #ccc;
 }
 
 @mixin doMrgPad($padMrg, $border, $px){
@@ -112,11 +143,35 @@ $i: 25;
   $i: $i - 5;
 }
 
-footer{
-  @extend .mrg20t;
-  @extend .jumbotron;
+body{
+  background-color: #FBFBFB;
+}
 
+
+html,body{
+  height: 100%
+}
+
+#holder{
+  min-height: 100%;
+  position:relative;
+}
+
+#content{
+  padding-bottom: 155px;    /* height of footer */
+}
+
+footer{
+  @extend .mrg0a;
+  @extend .pad25a;
+
+  height: 100px;
+  width:100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
   text-align: center;
+  background-color: #FBFBFB;
 }
 
 .buttons{
@@ -124,6 +179,26 @@ footer{
   @extend .pad10a;
 
   text-align:right;
+  background-color: #fbfbfb;
+  padding-right: 40px;
+  margin-left: 2px;
+
+  .desc{
+    display: inline-block;
+    float: left;
+    padding-top: 15px;
+    font-size: 120%;
+  }
+}
+
+#codeUserInput{
+  @extend .pad10a;
+
+  border-bottom-style: none;
+  border-right-style: none;
+  border-top:1px solid #e7e7e7;
+  border-left:1px solid #ccc;
+  background-color: #f8f8f8;
 }
 
 form{
@@ -132,15 +207,15 @@ form{
     @extend .col-md-12;
     @extend .pad10a;
     @extend .mrg0a;
-
-    font-size: 18px;
+    background-color: white !important;
+    margin-left: 5px !important;
   }
   .field-name{
     @extend .col-md-3;
     @extend .pad10a;
 
-    font-weight: bold;
     text-align: right;
+    font-size: 13px;
 
     @media screen and (max-width: 992px) {
       text-align: left;
@@ -184,6 +259,7 @@ form{
 }
 
 #courseContent{
+  background-color: white;
   width: 100%;
   margin-top: -10px;
 
@@ -192,27 +268,30 @@ form{
     margin:0;
 
     &.first{
-      color: $color-text-on-main;
-      width:180px;
-      background-color: $color-sec;
+      color: #555;
+      background-color: #f1f1f1;
+      width:25%;
+      max-width:250px;
       margin-right:-1px;
       overflow-y: auto;
 
       & a{
-        color: $color-text-on-main;
+        color: #555;
       }
 
       ul {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-left: 10px;
+        padding: 25px 5px 0px 20px;
         list-style-type: none;
 
         li{
-          margin-bottom: 5px;
+          margin-bottom: 7px;
           overflow-x: hidden;
           padding-left: 1.4em;
           text-indent: -0.7em;
+
+          a{
+            margin-left: 5px;
+          }
         }
 
         &>ul{
@@ -227,10 +306,11 @@ form{
 
     &.firstHidePanelBar{
       width:10px;
-      background-color: $color-main;
       text-align: center;
-      color: white;
       cursor: pointer;
+      color: #555;
+      background-color: #f1f1f1;
+      border-right: 1px solid #e7e7e7 !important;
     }
   }
 
@@ -238,22 +318,29 @@ form{
     width:100%;
     height:10px;
     line-height:10px;
-    background-color: $color-main;
+    background-color: #a468b3;
+    border-top:1px solid #955AA4;
     text-align: center;
     color: white;
     cursor: pointer;
+    span.fa{
+      margin-top: -2px !important;
+    }
   }
 
   #courseLessons{
     color: $color-text-on-main;
     width:100%;
-    height:110px;
+    height:70px;
     background-color: $color-sec;
     margin-top:-1px;
     overflow-x: hidden;
     overflow-y: hidden;
 
     .oneLessonDiv{
+      position: relative;
+      z-index:2;
+
       &.title{
         @extend .text-center;
 
@@ -264,30 +351,55 @@ form{
         @extend .text-center;
 
         padding-top:12px;
-        border: 1px solid;
-        background-color: white;
+//        border: 1px solid;
+        background-color: #4f397f;
         width:50px;
         height:50px;
         margin-left: auto;
         margin-right: auto;
-        color: $color-main;
         font-size:18px;
+        cursor:pointer;
+
+        &>a{
+          color: white;
+        }
+
+        &:hover{
+          background-color: white;
+          &>a{
+            color: black;
+          }
+        }
 
         &.active{
-          background-color: $color-main;
+          background-color: white;
           &>a{
-            color: $color-text-on-main;
+            color: black;
           }
         }
 
         &.inactive{
-          background-color: #d3d3d3;
+          background-color: #955AA4;
+          cursor:not-allowed;
+          &>a{
+            color: white;
+            cursor:not-allowed;
+          }
         }
       }
     }
 
     .lessonsProgressBar{
-      margin-bottom: -15px;
+      margin-top: 34px;
+      position: fixed;
+      width: 100%;
+
+      .progress{
+        background-color: #955AA4;
+        .progress-bar{
+          background-color: #4f397f;
+        }
+      }
     }
   }
 
@@ -299,11 +411,13 @@ form{
     }
 
     .course-article{
-      padding:25px;
+      padding:40px 25px 25px 60px;
+      max-width:900px;
 
       code{
         @extend .mrg25l;
         @extend .mrg25r;
+        @extend .mrg10t;
 
         display: block;
       }
@@ -368,21 +482,6 @@ form{
   width: 19px;
 }
 
-.glyphicon.spinning {
-  animation: spin 1s infinite linear;
-  -webkit-animation: spin2 1s infinite linear;
-}
-
-@keyframes spin {
-  from { transform: scale(1) rotate(0deg);}
-  to { transform: scale(1) rotate(360deg);}
-}
-
-@-webkit-keyframes spin2 {
-  from { -webkit-transform: rotate(0deg);}
-  to { -webkit-transform: rotate(360deg);}
-}
-
 .console-window{
   @extend .jumbotron;
   @extend samp;
@@ -402,48 +501,52 @@ form{
 
 .content-visible-when-not-loading{
   @extend .animated;
-  @extend .lightSpeedIn;
+  @extend .fadeIn;
 }
 .content-visible-when-not-loading.ng-hide-add.ng-hide-add-active{
-  display: block !important;
+//  display: block !important;
 }
 .content-visible-when-not-loading.ng-hide{
-  @extend .animated;
-  @extend .lightSpeedOut;
+//  @extend .animated;
+//  @extend .fadeOut;
 }
 
-#courseLessonMenu{
-  @extend .animated;
-  @extend .slideInLeft;
-}
-#courseLessonMenu.ng-hide-add.ng-hide-add-active{
-  display: block !important;
-}
-#courseLessonMenu.ng-hide{
-  @extend .animated;
-  @extend .slideOutLeft;
-}
+//#courseLessonMenu{
+//  @extend .animated;
+//  @extend .slideInLeft;
+//}
+//#courseLessonMenu.ng-hide-add.ng-hide-add-active{
+//  display: block !important;
+//}
+//#courseLessonMenu.ng-hide{
+//  @extend .animated;
+//  @extend .slideOutLeft;
+//}
 
-#courseLessons{
-  @extend .animated;
-  @extend .slideInUp;
-}
-#courseLessons.ng-hide-add.ng-hide-add-active{
-  display: block !important;
-}
-#courseLessons.ng-hide{
-  @extend .animated;
-  @extend .slideOutDown;
-}
+//#courseLessons{
+//  @extend .animated;
+//  @extend .slideInUp;
+//}
+//#courseLessons.ng-hide-add.ng-hide-add-active{
+//  display: block !important;
+//}
+//#courseLessons.ng-hide{
+//  @extend .animated;
+//  @extend .slideOutDown;
+//}
 
 .course-tile{
-  width:230px;
-  height:300px;
+  width:250px;
+  height:350px;
   margin-left:auto;
   margin-right:auto;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04) !important;
+  text-align: center;
+  border-style:none !important;
+
 
   &>.content{
-    height: 255px;
+    height: 305px;
     text-align: center;
     width:100%;
 
@@ -461,11 +564,68 @@ form{
       top: 10px;
     }
     &>h2{
-      @extend .mrg0b;
+      @extend .mrg15b;
+      @extend .mrg15t;
     }
   }
-  &>.details{
-    padding-top:13px !important;
-    height:43px;
+  &>.btn{
+    & .fa{
+      margin-top: 3px;
+    }
   }
+}
+
+header.course-front-header{
+  .go-back-ico{
+    float:left;
+    margin-left: -60px;
+    font-size:130%;
+    color:$color-sec;
+    margin-top:12px;
+
+    &:hover{
+      color:white;
+    }
+  }
+}
+
+//input::-webkit-input-placeholder, input:-moz-placeholder, input::-moz-placeholder, input:-ms-input-placeholder {
+//  font-style: italic;
+//  color: #999;
+//}
+
+.fullscreen_movie{
+  @extend .text-center;
+
+  background-color:black;
+  height:100%;
+  position: relative;
+
+  &>iframe{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  &>button{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+}
+
+#quizForm{
+  @extend .pad25a;
+
+  max-width:900px;
+}
+
+.question-group{
+  @extend .mrg25t;
+}
+
+.question-ans{
+  @extend .mrg25l;
+
+  font-size: 13px !important;
 }

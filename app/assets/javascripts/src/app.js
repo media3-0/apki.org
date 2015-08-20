@@ -665,6 +665,7 @@ var ApkiOrg;
                 };
                 $scope.userGoToLesson = function (lessId) {
                     if (($scope.course.data.lessonsPassed.indexOf(lessId) > -1) || ($scope.course.data.lessonCurrent == lessId) || ($scope.oldLessonCurrent == lessId)) {
+                        $scope.inited = false;
                         $scope.oldLessonCurrent == $scope.course.data.lessonCurrent;
                         $scope.course.data.lessonCurrent = lessId;
                         $scope.loadLesson();
@@ -681,7 +682,7 @@ var ApkiOrg;
                     var $QuizCtrl = new CourseMgr.CheckQuizRestAPI($resource);
                     $QuizCtrl.res.check({}, _quiz_str, function (ans) {
                         $.each(ans.quizzes, function (i, el) {
-                            $('.q-' + i).removeClass('has-success has-warning has-error').addClass(el ? 'has-success' : 'has-error');
+                            $('.q-' + i).removeClass('text-success text-danger').addClass(el ? 'text-success' : 'text-danger');
                             $('.q-' + i).find('.field-value').next('.help-block').remove();
                             $('.q-' + i).find('.field-value').after('<div class="help-block">' + (el ? 'Odpowiedź poprawna.' : 'Niepoprawna odpowiedź.') + '</div>');
                         });
@@ -694,7 +695,7 @@ var ApkiOrg;
                 };
                 $scope.checkExercise = function (element, $event) {
                     $scope.exerciseChecking = true;
-                    $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><span class="spinner"><i class="glyphicon spinning glyphicon-refresh"></i></span></div>';
+                    $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><span class="spinner" style="font-size: 200%"><i class="glyphicon spinning glyphicon-refresh"></i></span></div>';
                     var _exerc = new CourseMgr.MCommSendExercise();
                     _exerc.id = $scope.getExercise().id;
                     _exerc.user_input = $('#codeUserInput').val();
@@ -736,6 +737,9 @@ var ApkiOrg;
                             $('body').scrollTop(0);
                             $(window).scrollLeft(0);
                         }, 50); //Sorry, need it here :(
+                        $(window).bind('beforeunload', function () {
+                            return 'Czy na pewno chcesz opuścić stronę kursu?';
+                        });
                         $scope.apiCourse = new CourseMgr.CourseRestAPI($resource);
                         $scope.apiLesson = new CourseMgr.LessonRestAPI($resource);
                         $scope.apiQuizzes = new CourseMgr.QuizzesRestAPI($resource);
@@ -762,6 +766,7 @@ var ApkiOrg;
                     });
                     $scope.inited = true;
                     $scope.resizeElements();
+                    $('[data-toggle="tooltip"]').tooltip();
                 };
                 /**
                  * This will create course object, init rest of app and set application as initialized.
@@ -907,9 +912,8 @@ var ApkiOrg;
                                     $(this).attr('alt', 'Film');
                                 }
                                 var iframe_id = get_gen_id(this);
-                                $(this).wrap('<div></div>');
-                                $(this).before('<a href="javascript:;" ng-click="fullSizeElement(this, $event)">Przejdź do trybu pełnoekranowego</a><br>');
-                                $compile($(this).parent('div'))($scope);
+                                $(this).replaceWith('<button class="btn btn-lg btn-primary" data-youtube-src="' + $(this).attr('src') + '" ng-click="fullSizeElement(this, $event)" id="' + iframe_id + '"><span class="glyphicon glyphicon-facetime-video"></span> Obejrzyj film</button>');
+                                $compile($('#' + iframe_id))($scope);
                                 sub_cats.push({
                                     'title': $.trim($(this).attr('alt')),
                                     'anchor': '#' + iframe_id,
@@ -930,22 +934,13 @@ var ApkiOrg;
                  * @param any $event Original event with $event.currentTarget.
                  */
                 $scope.fullSizeElement = function (element, $event) {
-                    $('.full-screen-element').removeClass('.full-screen-element');
-                    if ($($event.currentTarget).data('full-screen') === true) {
-                        //close full-screen:
-                        $('#courseCnt').removeClass('full-screen-art-element');
-                        $($event.currentTarget).text('Przejdź do trybu pelnoekranowego');
-                        $($event.currentTarget).next().next().removeClass('full-screen-element').height($($event.currentTarget).next().next().data('oryg-height'));
-                        $($event.currentTarget).data('full-screen', false);
-                    }
-                    else {
-                        //open full-screen:
-                        $('#courseCnt').addClass('full-screen-art-element');
-                        $($event.currentTarget).text('Wyjdź z trybu pelnoekranowego');
-                        $($event.currentTarget).next().next().addClass('full-screen-element').data('oryg-height', $($event.currentTarget).next().next().height());
-                        $($event.currentTarget).data('full-screen', true);
-                    }
-                    $($event.currentTarget)[0].scrollIntoView(true);
+                    $scope.youtubeTheaterModeSrc = $($event.currentTarget).data('youtube-src');
+                    $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="' + $scope.youtubeTheaterModeSrc + '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-default btn-xs" ng-click="fullSizeClose()">X Zakmknij</button>');
+                    $compile($('.fullscreen_movie').find('button'))($scope);
+                    $scope.currPart = 'fullscreen_movie';
+                };
+                $scope.fullSizeClose = function () {
+                    $scope.currPart = $('.fullscreen_movie').data('old-curr-part');
                 };
                 $scope.isPartVisible = function (part) {
                     return $scope.currPart == part;
@@ -1209,7 +1204,8 @@ var ApkiOrg;
                     'background-image': 'url(https://images.weserv.nl/?h=' + widthAndHeight + '&w=' + widthAndHeight + '&url=' + encodeURIComponent(imgSrc.substr(imgSrc.indexOf('://') + 3)) + ')',
                     'border-radius': Math.round(widthAndHeight / 2) + 'px',
                     'width': widthAndHeight + 'px',
-                    'height': widthAndHeight + 'px'
+                    'height': widthAndHeight + 'px',
+                    'border': '2px solid #e7e7e7 !important'
                 });
             };
             AppMgr.prototype.helperObjectFromJSON = function (json_str) {

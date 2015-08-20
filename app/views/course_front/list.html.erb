@@ -1,12 +1,8 @@
-<h2>Lista kursów</h2>
+<h2 class="text-center mrg20t" style="margin-bottom:40px">Lista kursów</h2>
 
     <div ng-app="coursesLstApp" ng-controller="myCtrl" ng-init="initList()">
-        <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
-            <div class="progress progress-striped active">
-                <div class="progress-bar" role="progressbar" style="width: 100%;">
-                    Wczytywanie danych...
-                </div>
-            </div>
+        <div id="courseLoading" class="text-center col-md-10 col-md-offset-1" style="margin-top:60px" ng-hide="inited">
+            <i class="fa fa-cog fa-spin color-primary" style="font-size:48px"></i>
         </div>
         <div ng-hide="!inited">
             <div class="col-md-4" ng-repeat="course in courses">
@@ -16,13 +12,24 @@
                             <i class="glyphicon glyphicon-star color-primary" ng-repeat="n in [].constructor(course.data.difficulty_level) track by $index"></i><i class="glyphicon glyphicon-star-empty color-primary" ng-repeat="n in [].constructor(3 - course.data.difficulty_level) track by $index"></i>
                         </div>
                         <img src="{{ course.data.icon_src }}" class="course-icon"><br>
-                        <h2>{{ course.data.title }}</h2><p>{{ course.data.description }}</p>
+                        <h3>{{ course.data.title }}</h3><p>{{ course.data.description }}</p>
                     </div>
-                    <a class="details" ng-click="checkCourse($event, course)" href="/course_front/index?id={{course.id}}">
-                        <span ng-if="!course.data.userInside && !course.data.userFinished">Rozpocznij kurs</span>
-                        <span ng-if="course.data.userInside && !course.data.userFinished">Kontynuuj kurs</span>
-                        <span ng-if="course.data.userInside && course.data.userFinished">Powtórz kurs</span>
+                    <a class="btn btn-primary" ng-click="checkCourse($event, course)" href="/course_front/index?id={{course.id}}">
+                        <span ng-if="!course.data.userInside && !course.data.userFinished">Rozpocznij</span>
+                        <span ng-if="course.data.userInside && !course.data.userFinished">Kontynuuj</span>
+                        <span ng-if="course.data.userInside && course.data.userFinished">Powtórz</span>
                         <span><i class="fa fa-arrow-circle-right pull-right"></i></span></a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="fd-tile detail clean tile-purple course-tile">
+                    <div class="content">
+                        <div class="level">
+                        </div>
+                        <img src="http://sr.photos3.fotosearch.com/bthumb/UNC/UNC193/u12834151.jpg" class="course-icon"><br>
+                        <h3>Już wkróce</h3><p>Niedługo pojawią się kolejne kursy...</p>
+                    </div>
                 </div>
             </div>
         </div>

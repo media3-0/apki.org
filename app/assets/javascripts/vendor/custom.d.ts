@@ -4,4 +4,5 @@ interface JQuery {
     load: any;
     button: any;
     modal: any;
+    tooltip: any;
 }

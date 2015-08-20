@@ -25,7 +25,8 @@ module ApkiOrg.App {
                 'background-image':'url(https://images.weserv.nl/?h='+widthAndHeight+'&w='+widthAndHeight+'&url='+encodeURIComponent(imgSrc.substr(imgSrc.indexOf('://')+3))+')',
                 'border-radius':Math.round(widthAndHeight/2)+'px',
                 'width':widthAndHeight+'px',
-                'height':widthAndHeight+'px'
+                'height':widthAndHeight+'px',
+                'border':'2px solid #e7e7e7 !important'
             });
         }
         helperObjectFromJSON<T>(json_str:string):T{

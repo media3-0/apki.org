@@ -1,10 +1,6 @@
 <form ng-app="aPanelListApp" ng-controller="myCtrl" ng-init="initAPanelList()">
-    <div id="courseLoading" class="text-center col-md-10 col-md-offset-1 mrg25t" ng-hide="inited">
-        <div class="progress progress-striped active">
-            <div class="progress-bar" role="progressbar" style="width: 100%;">
-                Wczytywanie danych...
-            </div>
-        </div>
+    <div id="courseLoading" class="text-center col-md-10 col-md-offset-1" style="margin-top:60px" ng-hide="inited">
+        <i class="fa fa-cog fa-spin color-primary" style="font-size:48px"></i>
     </div>
     <div ng-hide="!inited">
         <h2>Lista wszystkich kursów</h2><br>

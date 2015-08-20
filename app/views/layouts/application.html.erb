@@ -1,21 +1,22 @@
 <%= render 'layouts/headers' %>
 <body data-no-turbolink="true">
-<%= render 'layouts/main_menu' %>
-<article id="content" class="col-md-10 col-md-offset-1">
-  <% flash.each do |name, msg| -%>
-      <%-
-          # mapowanie niektórych nazw
-          name = 'success' if name == 'notice'
-          name = 'danger' if name == 'error'
-      -%>
-      <%= content_tag :div, msg, class: 'alert alert-'+name %>
-  <% end -%>
+<div id="holder">
+    <%= render 'layouts/main_menu' %>
+    <article id="content" class="col-md-10 col-md-offset-1">
+      <% flash.each do |name, msg| -%>
+          <%-
+              # mapowanie niektórych nazw
+              name = 'success' if name == 'notice'
+              name = 'danger' if name == 'error'
+          -%>
+          <%= content_tag :div, msg, class: 'alert alert-'+name %>
+      <% end -%>
 
-  <%= yield %>
-</article>
-<div class="clearfix"></div>
-<footer>
-  &copy; Apki.org by Fundacja Media 3.0
-</footer>
+      <%= yield %>
+    </article>
+    <footer>
+      &copy; Apki.org by Fundacja Media 3.0
+    </footer>
+</div>
 </body>
 </html>
