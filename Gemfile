@@ -22,7 +22,7 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-gem 'sprockets-rails', github: 'rails/sprockets-rails'
+gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 # rails_admin
 gem 'rails_admin'

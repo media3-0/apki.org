@@ -28,6 +28,7 @@ module Course
       json_response = { 'id' => id, 'output' => output, 'is_correct' => false }
       if Course::CourseChecker.check_excercise exercise, data, json_response, output
         correct_exercise id, data, output, exercise.course_lesson, user_course, json_response
+        # FIXME : Need to fix checking!
       end
       render json: json_response.to_json
     end
@@ -82,6 +83,7 @@ module Course
       if Course::CourseChecker.check_lesson lesson, user_course
         unless user_course.lessons.include? lesson.id.to_s
           user_course.lessons << lesson.id.to_s
+          user_course.save!
           grant_achievement json_reponse, user_course, lesson.id.to_s, :lesson_id, true
         end
         true

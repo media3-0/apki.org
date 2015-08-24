@@ -266,6 +266,7 @@ describe Course::CourseDataController, type: :controller do
     json_response = JSON.parse response.body
     expect(json_response['data']['lessonCurrent']).to eq lessons[1].id.to_s
     expect(json_response['data']['lessonsPassed'].count).to eq 1
+    expect(json_response['data']['lessonsPassed'][0]).to eq lessons[0].id.to_s
     expect(json_response['data']['userInside']).to eq true
     expect(json_response['data']['userFinished']).to eq false
 
@@ -287,6 +288,8 @@ describe Course::CourseDataController, type: :controller do
     json_response = JSON.parse response.body
     expect(json_response['data']['lessonCurrent']).to eq lessons[2].id.to_s
     expect(json_response['data']['lessonsPassed'].count).to eq 2
+    expect(json_response['data']['lessonsPassed'][0]).to eq lessons[0].id.to_s
+    expect(json_response['data']['lessonsPassed'][1]).to eq lessons[1].id.to_s
     expect(json_response['data']['userInside']).to eq true
     expect(json_response['data']['userFinished']).to eq false
 
@@ -308,6 +311,9 @@ describe Course::CourseDataController, type: :controller do
     json_response = JSON.parse response.body
     expect(json_response['data']['lessonCurrent']).to eq lessons[2].id.to_s
     expect(json_response['data']['lessonsPassed'].count).to eq 3
+    expect(json_response['data']['lessonsPassed'][0]).to eq lessons[0].id.to_s
+    expect(json_response['data']['lessonsPassed'][1]).to eq lessons[1].id.to_s
+    expect(json_response['data']['lessonsPassed'][2]).to eq lessons[2].id.to_s
     expect(json_response['data']['userInside']).to eq true
     expect(json_response['data']['userFinished']).to eq true
 

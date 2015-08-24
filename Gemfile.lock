@@ -1,12 +1,3 @@
-GIT
-  remote: git://github.com/rails/sprockets-rails.git
-  revision: e65e088575be4f6b994823b80a277affb0a57a5e
-  specs:
-    sprockets-rails (3.0.0.beta2)
-      actionpack (>= 4.0)
-      activesupport (>= 4.0)
-      sprockets (>= 3.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -346,6 +337,10 @@ GEM
     spring (1.3.6)
     sprockets (3.3.3)
       rack (~> 1.0)
+    sprockets-rails (2.3.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      sprockets (>= 2.8, < 4.0)
     stackprof (0.2.7)
     thin (1.6.3)
       daemons (~> 1.0, >= 1.0.9)
@@ -426,7 +421,7 @@ DEPENDENCIES
   shog
   simple_form
   spring
-  sprockets-rails!
+  sprockets-rails
   stackprof
   thin
   turbolinks
