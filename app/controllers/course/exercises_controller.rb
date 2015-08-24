@@ -5,7 +5,7 @@ module Course
 
     # GET /course/exercises.json
     def index
-      @course_exercises = Course::Lesson.find(params[:lesson_id]).course_exercises
+      @course_exercises = Course::Lesson.find(params[:lesson_id]).course_exercises.sort_by(&:created_at)
       if !current_user || (current_user && !current_user.is_admin?)
         @course_exercises.each do |exercise|
           exercise.data.delete('expected_result_expr')

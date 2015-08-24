@@ -5,7 +5,7 @@ module Course
 
     # GET /course/quizzes.json
     def index
-      @course_quizzes = Course::Lesson.find(params[:lesson_id]).course_quizs
+      @course_quizzes = Course::Lesson.find(params[:lesson_id]).course_quizs.sort_by(&:created_at)
       if !current_user || (current_user && !current_user.is_admin?)
         @course_quizzes.each { |quiz| quiz.data.delete('answer_idx') }
       end
