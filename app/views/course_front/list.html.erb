@@ -1,4 +1,151 @@
-<h2 class="text-center mrg20t" style="margin-bottom:40px">Lista kursów</h2>
+<div id="mainPage">
+    <div class="fullscreen background parallax" style="background-image:url('http://images5.alphacoders.com/430/430918.jpg');" data-img-width="1600" data-img-height="1200" data-diff="100">
+        <div class="content-a">
+            <div class="content-b">
+                <%= image_tag 'logo_main.png', alt: 'Apki.org' %><br>
+                <h1>Pierwsza w Polsce interaktywna platforma<br><br>do nauki programowania.</h1><br><br>
+                <h2>Sprawdź. Zaprogramuj swoją przyszłość.</h2>
+            </div>
+        </div>
+        <div class="content-c" style="position: relative; bottom:0; width:100%; margin-top:-120px;">
+            <div style="width:50px; height:50px; border-radius: 25px; background-color:rgba(205, 205, 205, 0.6);margin-left: auto; margin-right: auto;padding-left: 3px; padding-top: 10px; font-size: 27px;" class="text-center">
+                <a class="smooth-scroll" href="#courseListAnchor"><span class="glyphicon glyphicon-chevron-down"></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+        <script type="text/javascript">
+
+            /* fix vertical when not overflow
+             call fullscreenFix() if .fullscreen content changes */
+            function fullscreenFix(){
+                $('.fullscreen').height($(window).height() - $('header').height());
+
+                var h = $('body').height();
+                // set .fullscreen height
+                $(".content-b").each(function(i){
+                    if($(this).innerHeight() <= h){
+                        $(this).closest(".fullscreen").addClass("not-overflow");
+                    }
+                });
+            }
+
+            /* resize background images */
+            function backgroundResize(){
+                var windowH = $(window).height();
+                $(".background").each(function(i){
+                    var path = $(this);
+                    // variables
+                    var contW = path.width();
+                    var contH = path.height();
+                    var imgW = path.attr("data-img-width");
+                    var imgH = path.attr("data-img-height");
+                    var ratio = imgW / imgH;
+                    // overflowing difference
+                    var diff = parseFloat(path.attr("data-diff"));
+                    diff = diff ? diff : 0;
+                    // remaining height to have fullscreen image only on parallax
+                    var remainingH = 0;
+                    if(path.hasClass("parallax") && !$("html").hasClass("touch")){
+                        var maxH = contH > windowH ? contH : windowH;
+                        remainingH = windowH - contH;
+                    }
+                    // set img values depending on cont
+                    imgH = contH + remainingH + diff;
+                    imgW = imgH * ratio;
+                    // fix when too large
+                    if(contW > imgW){
+                        imgW = contW;
+                        imgH = imgW / ratio;
+                    }
+                    //
+                    path.data("resized-imgW", imgW);
+                    path.data("resized-imgH", imgH);
+                    path.css("background-size", imgW + "px " + imgH + "px");
+                });
+            }
+
+
+            /* set parallax background-position */
+            function parallaxPosition(e){
+                var heightWindow = $(window).height();
+                var topWindow = $(window).scrollTop();
+                var bottomWindow = topWindow + heightWindow;
+                var currentWindow = (topWindow + bottomWindow) / 2;
+                $(".parallax").each(function(i){
+                    var path = $(this);
+                    var height = path.height();
+                    var top = path.offset().top;
+                    var bottom = top + height;
+                    // only when in range
+                    if(bottomWindow > top && topWindow < bottom){
+                        var imgW = path.data("resized-imgW");
+                        var imgH = path.data("resized-imgH");
+                        // min when image touch top of window
+                        var min = 0;
+                        // max when image touch bottom of window
+                        var max = - imgH + heightWindow;
+                        // overflow changes parallax
+                        var overflowH = height < heightWindow ? imgH - height : imgH - heightWindow; // fix height on overflow
+                        top = top - overflowH;
+                        bottom = bottom + overflowH;
+                        // value with linear interpolation
+                        var value = min + (max - min) * (currentWindow - top) / (bottom - top);
+                        // set background-position
+                        var orizontalPosition = path.attr("data-oriz-pos");
+                        orizontalPosition = orizontalPosition ? orizontalPosition : "50%";
+                        $(this).css("background-position", orizontalPosition + " " + value + "px");
+                    }
+                });
+            }
+
+
+            $(function(){
+                $('header').after($('#mainPage'));
+
+                /* detect touch */
+                if("ontouchstart" in window){
+                    document.documentElement.className = document.documentElement.className + " touch";
+                }
+
+                if(!$("html").hasClass("touch")){
+                    /* background fix */
+                    $(".parallax").css("background-attachment", "fixed");
+                }
+
+                $(window).resize(fullscreenFix);
+                fullscreenFix();
+
+                $(window).resize(backgroundResize);
+                $(window).focus(backgroundResize);
+                backgroundResize();
+
+                if(!$("html").hasClass("touch")){
+                    $(window).resize(parallaxPosition);
+                    //$(window).focus(parallaxPosition);
+                    $(window).scroll(parallaxPosition);
+                    parallaxPosition();
+                }
+            });
+
+            //SMOTH SCROLL:
+            $(function() {
+                $('a.smooth-scroll').click(function() {
+                    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+                        var target = $(this.hash);
+                        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+                        if (target.length) {
+                            $('html,body').animate({
+                                scrollTop: target.offset().top
+                            }, 1000);
+                            return false;
+                        }
+                    }
+                });
+            });
+        </script>
+
+<h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px" id="courseListAnchor">Lista kursów</h2>
 
     <div ng-app="coursesLstApp" ng-controller="myCtrl" ng-init="initList()">
         <div id="courseLoading" class="text-center col-md-10 col-md-offset-1" style="margin-top:60px" ng-hide="inited">
@@ -6,7 +153,7 @@
         </div>
         <div ng-hide="!inited">
             <div class="col-md-4" ng-repeat="course in courses">
-                <div class="fd-tile detail clean tile-purple course-tile">
+                <div class="fd-tile detail clean tile-purple course-tile" ng-click="checkCourse($event, course)">
                     <div class="content">
                         <div class="level">
                             <i class="glyphicon glyphicon-star color-primary" ng-repeat="n in [].constructor(course.data.difficulty_level) track by $index"></i><i class="glyphicon glyphicon-star-empty color-primary" ng-repeat="n in [].constructor(3 - course.data.difficulty_level) track by $index"></i>
@@ -14,7 +161,7 @@
                         <img src="{{ course.data.icon_src }}" class="course-icon"><br>
                         <h3>{{ course.data.title }}</h3><p>{{ course.data.description }}</p>
                     </div>
-                    <a class="btn btn-primary" ng-click="checkCourse($event, course)" href="/course_front/index?id={{course.id}}">
+                    <a class="btn btn-tomka" href="javascript:;">
                         <span ng-if="!course.data.userInside && !course.data.userFinished">Rozpocznij</span>
                         <span ng-if="course.data.userInside && !course.data.userFinished">Kontynuuj</span>
                         <span ng-if="course.data.userInside && course.data.userFinished">Powtórz</span>

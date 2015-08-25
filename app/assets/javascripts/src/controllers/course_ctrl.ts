@@ -68,6 +68,7 @@ module ApkiOrg.CourseMgr {
         nextLesson()
         isCourseFinished()
         loadExercise(part:string, forceId:string)
+        getExercIconClass(exercId:string):string
     }
 
     export class appCourseCtrl {
@@ -82,6 +83,19 @@ module ApkiOrg.CourseMgr {
             $scope.isCourseFinished = () => {
                 var _idx = $scope.lessons.indexOf($scope.getLesson())+1;
                 return (_idx>=$scope.lessons.length);
+            }
+
+            $scope.getExercIconClass = (exercId:string):string => {
+                var dupa:string = 'glyphicon glyphicon-console';
+
+                $.each(($scope.getLesson().data.exercisesPassed || []), function(i, el){
+                    if (el == exercId){
+                        dupa = 'glyphicon glyphicon-ok';
+                        return false; //Break
+                    }
+                });
+
+                return dupa;
             }
 
             $scope.nextLesson = () => {
@@ -128,9 +142,8 @@ module ApkiOrg.CourseMgr {
                 var $QuizCtrl:CheckQuizRestAPI = new CheckQuizRestAPI($resource);
                 $QuizCtrl.res.check({}, _quiz_str, (ans:any) => {
                     $.each(ans.quizzes, (i, el) => {
-                        $('.q-'+i).removeClass('text-success text-danger').addClass(el?'text-success':'text-danger');
-                        $('.q-'+i).find('.field-value').next('.help-block').remove();
-                        $('.q-'+i).find('.field-value').after('<div class="help-block">'+(el?'Odpowiedź poprawna.':'Niepoprawna odpowiedź.')+'</div>');
+                        $('.q-'+i).removeClass('text-success text-danger').addClass(el?'text-success':'');
+                        $('.q-'+i).find('h4>.glyphicon').removeClass('glyphicon-ok glyphicon-ban-circle').addClass(el?'glyphicon-ok':'glyphicon-ban-circle');
                     });
 
                     $scope.quizzesAreCorrect = ans.is_correct;
@@ -145,7 +158,7 @@ module ApkiOrg.CourseMgr {
 
             $scope.checkExercise = (element:any, $event:any) => {
                 $scope.exerciseChecking = true;
-                $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><span class="spinner" style="font-size: 200%"><i class="glyphicon spinning glyphicon-refresh"></i></span></div>';
+                $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><i class="fa fa-cog fa-spin color-primary" style="font-size:48px"></i></div>';
 
                 var _exerc:MCommSendExercise = new MCommSendExercise();
                 _exerc.id = $scope.getExercise().id;
@@ -229,10 +242,6 @@ module ApkiOrg.CourseMgr {
                 if ($scope.getLesson().data.quizPassed){
                     $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
                 }
-
-                $.each(($scope.getLesson().data.exercisesPassed||[]), function(i, el){
-                    $('.menu-exerc-'+el+'>i').attr('class', 'glyphicon glyphicon-ok');
-                });
 
                 $scope.inited = true;
                 $scope.resizeElements();
@@ -338,15 +347,16 @@ module ApkiOrg.CourseMgr {
             $scope.resizeElements = (delay:number=0) => {
                 var _resFnc = () => {
                     $('body').css({
-                        'overflow':'hidden' //Yea, I know its very dirsty, but Man, I have 15 mins to deadline xD
+                        'overflow':'hidden' //Yea, I know its very dirty, but Man, I have 15 mins to deadline xD
                     });
                     var freeHeight = $(window).height()-$('nav.navbar').height()-($('#courseLessons').is(':visible')?$('#courseLessons').height():3/*why required ??*/)-$('#courseContent').find('.secHidePanelBar').height();
                     $('#courseContent').height(freeHeight);
                     $('#courseContent').find('.col').height($('#courseContent').height());
                     $('#courseContent').find('.col.col-line-height-100-pro').css('line-height', $('#courseContent').height()+'px');
-                    $('.code-etc-window').height($('#courseContent').height());
-                    $('.exercise-console').height(Math.floor($('.code-etc-window').height()/2-1));//$('#courseContent').height() - $('.exercise-instruction').height() - $('.exercise-console').height());
-                    $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible')?$('.user-input-window').height():0) - ($('.send-code-window').is(':visible')?$('.send-code-window').height():0) - ($('.code-ok-window').is(':visible')?$('.code-ok-window').height():0) - ($('.exercise-console').is(':visible')?$('.exercise-console').height():0));
+                    $('.exercise-instr-window').height($('#courseContent').height()-2);
+                    $('.code-etc-window').height($('#courseContent').height()-2);
+                    $('.exercise-console').height(Math.floor($('.code-etc-window').height()/2)-2);//$('#courseContent').height() - $('.exercise-instruction').height() - $('.exercise-console').height());
+                    $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible')?$('.user-input-window').height():0) - ($('.send-code-window').is(':visible')?$('.send-code-window').height():0) - ($('.code-ok-window').is(':visible')?$('.code-ok-window').height():0) - ($('.exercise-console').is(':visible')?$('.exercise-console').height():0) - 2);
                     $('.exercise-instruction').css({'height':'100%'});//$('.code-etc-window').height());
 
                     $('.oneLessonDiv').css({'width':Math.floor($('#courseContent').width()/$scope.lessons.length)+'px'});
@@ -355,7 +365,7 @@ module ApkiOrg.CourseMgr {
                         'padding-right':Math.floor($('#courseContent').width()/$scope.lessons.length/2)+'px'
                     });
 
-                    var freeWidth = $('#courseContent').width()-($('#courseContent').find('.col.first').is(':visible')?$('#courseContent').find('.col.first').width():0)-$('#courseContent').find('.firstHidePanelBar').width();
+                    var freeWidth = $('#courseContent').width()-($('#courseContent').find('.col.first').is(':visible')?$('#courseContent').find('.col.first').width():0)-$('#courseContent').find('.firstHidePanelBar').width()-1;
                     $('#courseContent').find('.col.sec').width(freeWidth);
 
                     if ($('.full-screen-element').length==1){
@@ -428,7 +438,7 @@ module ApkiOrg.CourseMgr {
              */
             $scope.fullSizeElement = (element:any, $event:any) => {
                 $scope.youtubeTheaterModeSrc = $($event.currentTarget).data('youtube-src');
-                $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="'+ $scope.youtubeTheaterModeSrc +'?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-default btn-xs" ng-click="fullSizeClose()">X Zakmknij</button>');
+                $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="'+ $scope.youtubeTheaterModeSrc +'?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-primary btn-sm" ng-click="fullSizeClose()">X Zamknij</button>');
                 $compile($('.fullscreen_movie').find('button'))($scope);
                 $scope.currPart = 'fullscreen_movie';
             }
@@ -446,6 +456,7 @@ module ApkiOrg.CourseMgr {
                     }
                     $scope.getLesson().data.exercisesPassed.push(forceId);
                 } else {
+//                    console.log($scope.getLesson().data.exercisesPassed);
                     if ($scope.getLesson().data.exercisesPassed.length == $scope.exercises.length)
                         $scope.goToPart('end');
                     else {

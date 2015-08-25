@@ -68,15 +68,20 @@ module ApkiOrg.CoursesLstMgr {
                 return _course;
             }
             $scope.checkCourse = ($event:any, course:ApkiOrg.CourseMgr.MCourse) => {
+                var go:boolean=true;
                 $.each(course.data.dependencies, function(i, el){
                     if (($scope._getCourseById(el) !== null) && (!$scope._getCourseById(el).data.userFinished)){
                         $scope.invCourse = $scope._getCourseById(el);
                         $('#oldCourseInv').attr('href', '/course_front/index?id='+course.id);
                         $('#md-default').modal();
+                        go=false;
                         $event.preventDefault();
                         return false; //Break
                     }
                 });
+                if (go){
+                    window.location.assign('/course_front/index?id='+course.id);
+                }
             }
 
         }

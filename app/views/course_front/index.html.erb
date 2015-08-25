@@ -2,7 +2,7 @@
 <body data-no-turbolink="true" ng-app="courseApp" ng-controller="myCtrl" ng-init="courseId='<%= params[:id] %>'; initCourse()">
 
 <header class="margin-bottom-xs course-front-header">
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar course-navbar navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="http://apki.org"><%= image_tag 'logo.png', alt: 'Apki.org' %></a>
@@ -10,8 +10,8 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <a href="/course_front/list" class="go-back-ico" title="Wróć do listy kursów" ng-hide="!inited"><span class="fa fa-long-arrow-left"></span></a>
-                <h3 style="float:left; margin-left:-35px" class="mrg10t">{{ course.data.title }}</h3>
+                <a href="/course_front/list" class="go-back-ico" title="Wróć do listy kursów" ng-hide="!inited"><%= image_tag 'backgarrow.png', alt: 'Apki.org', style: 'opacity:0.3' %></a>
+                <h3 style="float:left;" class="mrg10t mrg5l">{{ course.data.title }}</h3>
                 <ul class="nav navbar-nav navbar-right">
                     <%- if current_user -%>
                     <li class="dropdown">
@@ -55,7 +55,7 @@
                 <ul class="article-parsed">
                 </ul>
                 <li ng-hide="!quizzes.length" class="menu-quiz menu-to-check"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
-                <li ng-hide="!exercises.length" ng-repeat="exerc in exercises" class="menu-exerc-{{exerc.id}} menu-to-check"><i class="glyphicon glyphicon-console"></i> <a ng-if="getLesson().data.exercisesPassed.indexOf(exerc.id)>-1" href="#" ng-click="goToPart('exercise', exerc.id)">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</a><span ng-if="getLesson().data.exercisesPassed.indexOf(exerc.id)==-1" style="color:#E8E8E8">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</span></li>
+                <li ng-hide="!exercises.length" ng-repeat="exerc in exercises" class="menu-exerc-{{exerc.id}} menu-to-check"><i ng-class="getExercIconClass(exerc.id)"></i> <a ng-if="getLesson().data.exercisesPassed.indexOf(exerc.id)>-1" href="#" ng-click="goToPart('exercise', exerc.id)">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</a><span ng-if="getLesson().data.exercisesPassed.indexOf(exerc.id)==-1" style="color:#E8E8E8">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</span></li>
             </ul>
         </div>
         <div class="col col-line-height-100-pro firstHidePanelBar" ng-click="hidePanelBarClick('left')"><span class="fa fa-angle-left" ng-if="menuVisible.left"></span><span class="fa fa-angle-right" ng-if="!menuVisible.left"></span></div>
@@ -63,8 +63,8 @@
             <div class="course-article course-element" ng-hide="!isPartVisible('article')" ng-bind-html="getLesson().data.article | to_trusted">
             </div>
 
-            <div class="buttons" ng-hide="!isPartVisible('article')">
-                <div class="desc">To już wszystko w tej części lekcji</div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('quiz')">
+            <div class="buttons" ng-hide="!isPartVisible('article')" style="margin:40px 25px 25px 60px;max-width:800px;">
+                <div class="desc"></div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('quiz')">
             </div>
 
             <div class="fullscreen_movie course-element" ng-hide="!isPartVisible('fullscreen_movie')">
@@ -75,26 +75,26 @@
                     <h2>Quiz</h2>
 
                     <div class="question-group q-{{quiz.id}}" ng-repeat="(key, quiz) in quizzes" autostatusremoval>
-                        <h4>{{ quiz.data.question }}</h4>
+                        <h4><i class="glyphicon mrg10r" style="width:16px"></i> {{ quiz.data.question }}</h4>
                         <div class="question-ans" ng-repeat="(ans_idx, ans) in quiz.data.answers">
                             <input data-quiz-id="{{quiz.id}}" type="radio" id="quiz_question_{{quiz.id}}_{{ans_idx}}" name="quiz_question_{{quiz.id}}" value="{{ans_idx}}" class="mrg5r" ng-disabled="quizzesAreCorrect"> <label for="quiz_question_{{quiz.id}}_{{ans_idx}}">{{ans}}</label>
                         </div>
 
                         <div class="clearfix"></div>
                     </div>
+                    <div class="buttons" ng-hide="quizzesAreCorrect">
+                        <button ng-disabled="quizChecking" ng-class="quizChecking?'active':''" type="button" ng-click="checkQuiz(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner"><span class="spinner"><i class="fa fa-cog fa-spin color-primary"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
+                    </div>
+
+                    <div class="buttons" ng-hide="!quizzesAreCorrect || !isPartVisible('quiz')">
+                        <div class="desc">Udzieliłeś poprawnych odpowiedzi na wszystkie pytania</div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('exercise')">
+                    </div>
                 </form>
 
-                <div class="buttons" ng-hide="quizzesAreCorrect">
-                    <button ng-disabled="quizChecking" ng-class="quizChecking?'active':''" type="button" ng-click="checkQuiz(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner"><span class="spinner"><i class="fa fa-cog fa-spin color-primary"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
-                </div>
-            </div>
-
-            <div class="buttons" ng-hide="!quizzesAreCorrect || !isPartVisible('quiz')">
-                <div class="desc">Udzieliłeś poprawnych odpowiedzi na wszystkie pytania</div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('exercise')">
             </div>
 
             <div class="course-exercise course-element" ng-hide="!isPartVisible('exercise')">
-                <div class="col-md-5 mrg0a pad0a">
+                <div class="col-md-5 mrg0a pad0a exercise-instr-window">
                     <div class="exercise-instruction">
                         <div class="pad25a" ng-bind-html="getExercise().data.content_of_exercise | to_trusted">
                         </div>
@@ -105,7 +105,7 @@
                     <div class="user-input-window" ng-hide="!getExercise().data.allow_user_input">
                         <input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}" style="width:100%" placeholder="Podaj tutaj dane wejściowe">
                     </div>
-                    <div class="send-code-window buttons pad0a mrg0a" ng-hide="exerciseIsCorrect">
+                    <div class="send-code-window buttons pad0a mrg0a" style="padding: 0 !important; margin:0 !important" ng-hide="exerciseIsCorrect">
                         <button ng-disabled="quizChecking" ng-class="exerciseChecking?'disabled':''" type="button" ng-click="checkExercise(this, $event)" class="btn btn-lg btn-primary btn-save mrg5r" style="margin-top: 4px;">Sprawdź</button>
                     </div>
                     <div class="code-ok-window buttons pad0a mrg0a" ng-hide="!exerciseIsCorrect || !isPartVisible('exercise')">
@@ -138,8 +138,8 @@
                 </div>
             </div>
             <div>
-                <div class="oneLessonDiv pad10t" style="float:left" ng-repeat="less in lessons">
-                    <div class="img-circle" ng-class="getScope().course.data.lessonCurrent==less.id?'active':(getScope().course.data.lessonsPassed.indexOf(less.id)>-1?'':'inactive')" ng-click="userGoToLesson(less.id)" data-toggle="tooltip" data-placement="right" title="{{ less.data.title }}"><a href="javascript:;">{{ $index + 1 }}</a></div>
+                <div class="oneLessonDiv" style="float:left" ng-repeat="less in lessons">
+                    <div class="img-circle" ng-class="getScope().course.data.lessonCurrent==less.id?'active':(getScope().course.data.lessonsPassed.indexOf(less.id)>-1?'':'inactive')" ng-click="userGoToLesson(less.id)" data-toggle="tooltip" data-placement="top" data-container="body" title="{{ less.data.title }}"><a href="javascript:;">{{ $index + 1 }}</a></div>
                 </div>
             </div>
         </div>

@@ -648,6 +648,16 @@ var ApkiOrg;
                     var _idx = $scope.lessons.indexOf($scope.getLesson()) + 1;
                     return (_idx >= $scope.lessons.length);
                 };
+                $scope.getExercIconClass = function (exercId) {
+                    var dupa = 'glyphicon glyphicon-console';
+                    $.each(($scope.getLesson().data.exercisesPassed || []), function (i, el) {
+                        if (el == exercId) {
+                            dupa = 'glyphicon glyphicon-ok';
+                            return false; //Break
+                        }
+                    });
+                    return dupa;
+                };
                 $scope.nextLesson = function () {
                     var _idx = $scope.lessons.indexOf($scope.getLesson()) + 1;
                     if (!$scope.isCourseFinished()) {
@@ -682,9 +692,8 @@ var ApkiOrg;
                     var $QuizCtrl = new CourseMgr.CheckQuizRestAPI($resource);
                     $QuizCtrl.res.check({}, _quiz_str, function (ans) {
                         $.each(ans.quizzes, function (i, el) {
-                            $('.q-' + i).removeClass('text-success text-danger').addClass(el ? 'text-success' : 'text-danger');
-                            $('.q-' + i).find('.field-value').next('.help-block').remove();
-                            $('.q-' + i).find('.field-value').after('<div class="help-block">' + (el ? 'Odpowiedź poprawna.' : 'Niepoprawna odpowiedź.') + '</div>');
+                            $('.q-' + i).removeClass('text-success text-danger').addClass(el ? 'text-success' : '');
+                            $('.q-' + i).find('h4>.glyphicon').removeClass('glyphicon-ok glyphicon-ban-circle').addClass(el ? 'glyphicon-ok' : 'glyphicon-ban-circle');
                         });
                         $scope.quizzesAreCorrect = ans.is_correct;
                         if ($scope.quizzesAreCorrect) {
@@ -695,7 +704,7 @@ var ApkiOrg;
                 };
                 $scope.checkExercise = function (element, $event) {
                     $scope.exerciseChecking = true;
-                    $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><span class="spinner" style="font-size: 200%"><i class="glyphicon spinning glyphicon-refresh"></i></span></div>';
+                    $scope.exerciseCurrOutput = '<div class="has-spinner active text-center"><i class="fa fa-cog fa-spin color-primary" style="font-size:48px"></i></div>';
                     var _exerc = new CourseMgr.MCommSendExercise();
                     _exerc.id = $scope.getExercise().id;
                     _exerc.user_input = $('#codeUserInput').val();
@@ -761,9 +770,6 @@ var ApkiOrg;
                     if ($scope.getLesson().data.quizPassed) {
                         $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
                     }
-                    $.each(($scope.getLesson().data.exercisesPassed || []), function (i, el) {
-                        $('.menu-exerc-' + el + '>i').attr('class', 'glyphicon glyphicon-ok');
-                    });
                     $scope.inited = true;
                     $scope.resizeElements();
                     $('[data-toggle="tooltip"]').tooltip();
@@ -852,22 +858,23 @@ var ApkiOrg;
                     if (delay === void 0) { delay = 0; }
                     var _resFnc = function () {
                         $('body').css({
-                            'overflow': 'hidden' //Yea, I know its very dirsty, but Man, I have 15 mins to deadline xD
+                            'overflow': 'hidden' //Yea, I know its very dirty, but Man, I have 15 mins to deadline xD
                         });
                         var freeHeight = $(window).height() - $('nav.navbar').height() - ($('#courseLessons').is(':visible') ? $('#courseLessons').height() : 3 /*why required ??*/) - $('#courseContent').find('.secHidePanelBar').height();
                         $('#courseContent').height(freeHeight);
                         $('#courseContent').find('.col').height($('#courseContent').height());
                         $('#courseContent').find('.col.col-line-height-100-pro').css('line-height', $('#courseContent').height() + 'px');
-                        $('.code-etc-window').height($('#courseContent').height());
-                        $('.exercise-console').height(Math.floor($('.code-etc-window').height() / 2 - 1)); //$('#courseContent').height() - $('.exercise-instruction').height() - $('.exercise-console').height());
-                        $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible') ? $('.user-input-window').height() : 0) - ($('.send-code-window').is(':visible') ? $('.send-code-window').height() : 0) - ($('.code-ok-window').is(':visible') ? $('.code-ok-window').height() : 0) - ($('.exercise-console').is(':visible') ? $('.exercise-console').height() : 0));
+                        $('.exercise-instr-window').height($('#courseContent').height() - 2);
+                        $('.code-etc-window').height($('#courseContent').height() - 2);
+                        $('.exercise-console').height(Math.floor($('.code-etc-window').height() / 2) - 2); //$('#courseContent').height() - $('.exercise-instruction').height() - $('.exercise-console').height());
+                        $('#editorTest').height($('#courseContent').height() - ($('.user-input-window').is(':visible') ? $('.user-input-window').height() : 0) - ($('.send-code-window').is(':visible') ? $('.send-code-window').height() : 0) - ($('.code-ok-window').is(':visible') ? $('.code-ok-window').height() : 0) - ($('.exercise-console').is(':visible') ? $('.exercise-console').height() : 0) - 2);
                         $('.exercise-instruction').css({ 'height': '100%' }); //$('.code-etc-window').height());
                         $('.oneLessonDiv').css({ 'width': Math.floor($('#courseContent').width() / $scope.lessons.length) + 'px' });
                         $('.lessonsProgressBar').css({
                             'padding-left': Math.floor($('#courseContent').width() / $scope.lessons.length / 2) + 'px',
                             'padding-right': Math.floor($('#courseContent').width() / $scope.lessons.length / 2) + 'px'
                         });
-                        var freeWidth = $('#courseContent').width() - ($('#courseContent').find('.col.first').is(':visible') ? $('#courseContent').find('.col.first').width() : 0) - $('#courseContent').find('.firstHidePanelBar').width();
+                        var freeWidth = $('#courseContent').width() - ($('#courseContent').find('.col.first').is(':visible') ? $('#courseContent').find('.col.first').width() : 0) - $('#courseContent').find('.firstHidePanelBar').width() - 1;
                         $('#courseContent').find('.col.sec').width(freeWidth);
                         if ($('.full-screen-element').length == 1) {
                             $('.full-screen-element').height(freeHeight - $('.full-screen-element').prev().prev().height());
@@ -935,7 +942,7 @@ var ApkiOrg;
                  */
                 $scope.fullSizeElement = function (element, $event) {
                     $scope.youtubeTheaterModeSrc = $($event.currentTarget).data('youtube-src');
-                    $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="' + $scope.youtubeTheaterModeSrc + '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-default btn-xs" ng-click="fullSizeClose()">X Zakmknij</button>');
+                    $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="' + $scope.youtubeTheaterModeSrc + '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-primary btn-sm" ng-click="fullSizeClose()">X Zamknij</button>');
                     $compile($('.fullscreen_movie').find('button'))($scope);
                     $scope.currPart = 'fullscreen_movie';
                 };
@@ -953,6 +960,7 @@ var ApkiOrg;
                         $scope.getLesson().data.exercisesPassed.push(forceId);
                     }
                     else {
+                        //                    console.log($scope.getLesson().data.exercisesPassed);
                         if ($scope.getLesson().data.exercisesPassed.length == $scope.exercises.length)
                             $scope.goToPart('end');
                         else {
@@ -1167,7 +1175,7 @@ var ApkiOrg;
     var CourseMgr;
     (function (CourseMgr) {
         //Init Angular app
-        app = angular.module('courseApp', ['ngResource', 'ngFx', 'ngAnimate']);
+        app = angular.module('courseApp', ['ngResource', 'ngAnimate']);
         app.controller('myCtrl', CourseMgr.appCourseCtrl);
         app.filter('to_trusted', CourseMgr.ToTrustedFilter);
         app.filter('server_source_lang_to_ace_lang', CourseMgr.ServerSourceLangToACELangFilter);
@@ -1783,15 +1791,20 @@ var ApkiOrg;
                     return _course;
                 };
                 $scope.checkCourse = function ($event, course) {
+                    var go = true;
                     $.each(course.data.dependencies, function (i, el) {
                         if (($scope._getCourseById(el) !== null) && (!$scope._getCourseById(el).data.userFinished)) {
                             $scope.invCourse = $scope._getCourseById(el);
                             $('#oldCourseInv').attr('href', '/course_front/index?id=' + course.id);
                             $('#md-default').modal();
+                            go = false;
                             $event.preventDefault();
                             return false; //Break
                         }
                     });
+                    if (go) {
+                        window.location.assign('/course_front/index?id=' + course.id);
+                    }
                 };
             }
             appCoursesLstCtrl.$inject = [
@@ -1814,7 +1827,7 @@ var ApkiOrg;
     var CoursesLstMgr;
     (function (CoursesLstMgr) {
         //Init Angular app
-        app = angular.module('coursesLstApp', ['ngResource', 'ngFx', 'ngAnimate']);
+        app = angular.module('coursesLstApp', ['ngResource', 'ngAnimate']);
         app.controller('myCtrl', CoursesLstMgr.appCoursesLstCtrl);
         app.filter('to_trusted', ApkiOrg.CourseMgr.ToTrustedFilter);
     })(CoursesLstMgr = ApkiOrg.CoursesLstMgr || (ApkiOrg.CoursesLstMgr = {}));

@@ -27,6 +27,7 @@ $color-text-on-main: #ffffff;
 .navbar{
   left:0px;
   height:48px;
+  padding-right: 5px;
 
   background-color: white;
   color:#955AA4;
@@ -37,6 +38,9 @@ $color-text-on-main: #ffffff;
   }
   li a{
     color:#955AA4 !important;
+  }
+  li a:hover, li a:focus{
+    background-color:#e7e7e7 !important;
   }
   .circular{
     border-style: none !important;
@@ -49,9 +53,9 @@ $color-text-on-main: #ffffff;
 }
 
 .navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > .dropdown > a:hover .caret, .navbar-default .navbar-nav > .dropdown > a:focus .caret, .navbar-default .navbar-nav > .dropdown > a .caret {
-  color:$color-text-on-main;
-  border-bottom-color: $color-text-on-main;
-  border-top-color: $color-text-on-main;
+  color:#955AA4;
+  border-bottom-color: #955AA4;
+  border-top-color: #955AA4;
 }
 
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{
@@ -72,6 +76,35 @@ $color-text-on-main: #ffffff;
   padding-top:15px;
   padding-bottom:15px;
 }
+
+.navbar.course-navbar{
+
+  background-color: #955AA4;
+  color:white;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
+
+  .nav{
+    color:white;
+  }
+  li a{
+    color:white !important;
+  }
+  li a:hover, li a:focus{
+    background-color:#e7e7e7 !important;
+  }
+  .dropdown-menu li a{
+    color:$color-main !important;
+  }
+  .dropdown-menu li a:hover{
+    background-color:$color-main !important;
+    color:white !important;
+  }
+  .circular{
+    border-style: none !important;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
 
 .jumbotron{
   background-color: #d3d3d3;
@@ -113,6 +146,7 @@ header{
     @extend .pad0b;
 
     padding-top:8px !important;
+    height: 50px;
   }
 }
 .circular {
@@ -165,23 +199,25 @@ footer{
   @extend .mrg0a;
   @extend .pad25a;
 
-  height: 100px;
+  height: 150px;
   width:100%;
-  position: absolute;
   left: 0;
   bottom: 0;
   text-align: center;
   background-color: #FBFBFB;
+  color: #898989;
+  font-size: 11px;
 }
 
 .buttons{
-  @extend .jumbotron;
   @extend .pad10a;
 
   text-align:right;
-  background-color: #fbfbfb;
-  padding-right: 40px;
+  padding-right: 40px !important;
+  padding-left: 40px !important;
   margin-left: 2px;
+  border-top:2px solid #e7e7e7;
+  margin-top:40px;
 
   .desc{
     display: inline-block;
@@ -305,19 +341,21 @@ form{
     }
 
     &.firstHidePanelBar{
-      width:10px;
+      width:15px;
       text-align: center;
       cursor: pointer;
       color: #555;
       background-color: #f1f1f1;
       border-right: 1px solid #e7e7e7 !important;
+      font-size: 20px;
     }
   }
 
   .secHidePanelBar{
     width:100%;
-    height:10px;
-    line-height:10px;
+    height:15px;
+    line-height:15px;
+    font-size: 20px;
     background-color: #a468b3;
     border-top:1px solid #955AA4;
     text-align: center;
@@ -331,7 +369,7 @@ form{
   #courseLessons{
     color: $color-text-on-main;
     width:100%;
-    height:70px;
+    height:64px;
     background-color: $color-sec;
     margin-top:-1px;
     overflow-x: hidden;
@@ -390,7 +428,7 @@ form{
     }
 
     .lessonsProgressBar{
-      margin-top: 34px;
+      margin-top: 24px;
       position: fixed;
       width: 100%;
 
@@ -494,6 +532,21 @@ form{
 .exercise-instruction{
   height:100%;
   overflow-y:auto;
+
+  div.instruction{
+    @extend .pad15a;
+    @extend .mrg10t;
+    @extend .mrg10b;
+
+    background-color: #f1f1f1;
+    border: 1px solid #e7e7e7;
+    white-space: pre-wrap;
+
+    &:before{
+      @extend h2;
+      content: "Zadanie\A\A";
+    }
+  }
 }
 
 //Animations
@@ -543,7 +596,13 @@ form{
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04) !important;
   text-align: center;
   border-style:none !important;
+  transition: box-shadow 0.25s linear;
+  cursor:pointer;
 
+  &:hover{
+    box-shadow: 0 0 5px rgba(0,0,0,0.5) !important;
+    transition: box-shadow 0.25s linear;
+  }
 
   &>.content{
     height: 305px;
@@ -578,13 +637,17 @@ form{
 header.course-front-header{
   .go-back-ico{
     float:left;
-    margin-left: -60px;
+    margin-left: 145px;
     font-size:130%;
-    color:$color-sec;
+    color:$color-third;
     margin-top:12px;
 
     &:hover{
       color:white;
+
+      & > img {
+        opacity:0;
+      }
     }
   }
 }
@@ -628,4 +691,54 @@ header.course-front-header{
   @extend .mrg25l;
 
   font-size: 13px !important;
+}
+
+.course-tile:hover .btn{
+  @extend .btn:hover;
+}
+
+.btn-tomka{
+  border: 1px solid #955AA4;
+  padding-top: 5px;
+}
+
+#mainPage{
+  @extend .pad0a;
+  @extend .mrg0a;
+
+  height: 100%;
+  margin-top: -10px !important;
+
+  color:white;
+
+  .background {
+    background-repeat:no-repeat;
+    /* custom background-position */
+    background-position:50% 50%;
+    /* ie8- graceful degradation */
+    background-position:50% 50%\9 !important;
+  }
+  .fullscreen,
+  .content-a {
+    width:100%;
+    min-height:100%;
+  }
+  .content-a {
+    display:table;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  .content-b {
+    display:table-cell;
+    position:relative;
+    vertical-align:middle;
+    text-align:center;
+  }
+
+  a{
+    color:white;
+  }
+
+  a{
+    color:white;
+  }
 }

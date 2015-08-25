@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   get 'main/test'
-  root 'main#index'
+  root 'course_front#list'
   get 'news', to: 'main#news'
   get 'news/:id', to: 'main#view_news', as: 'view_news'
   get 'main/forms_test'
