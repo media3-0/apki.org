@@ -1,4 +1,7 @@
-# apki.org [![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Dependency Status](https://gemnasium.com/media3-0/apki.org.svg)](https://gemnasium.com/media3-0/apki.org) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org) [![Test Coverage](https://codeclimate.com/github/media3-0/apki.org/badges/coverage.svg)](https://codeclimate.com/github/media3-0/apki.org/coverage)
+# apki.org 
+
+[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Dependency Status](https://gemnasium.com/media3-0/apki.org.svg)](https://gemnasium.com/media3-0/apki.org) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org) [![Test Coverage](https://codeclimate.com/github/media3-0/apki.org/badges/coverage.svg)](https://codeclimate.com/github/media3-0/apki.org/coverage) [![Stories in Ready](https://badge.waffle.io/media3-0/apki.org.svg?label=ready&title=Ready)](http://waffle.io/media3-0/apki.org)
+
 Informacje o rozwoju projektu można znaleźć na naszym [devblogu](http://devblog.apki.org)
 
 ## Konfiguracja potrzebna do uruchomienia aplikacji
