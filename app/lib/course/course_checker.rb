@@ -1,9 +1,10 @@
 module Course
   class CourseChecker
-    def self.check_lesson(lesson, user_course)
-      lesson.course_exercises.each { |exercise| return false unless user_course.exercises.key? exercise.id.to_s }
-      return false unless user_course.quizzes.include? lesson.id.to_s
-      true
+    def self.validate_lesson(lesson, user_course)
+      valid_lesson = true
+      lesson.course_exercises.each { |exercise| valid_lesson = false unless user_course.exercises.key? exercise.id.to_s }
+       valid_lesson = false unless user_course.quizzes.include? lesson.id.to_s
+      valid_lesson
     end
 
     def self.check_quizes(lesson, data, json_response)
@@ -82,6 +83,63 @@ module Course
         else # Nie rozpoznano wyrażenia
           fail Exceptions::ExpressionTypeNotRecognized
       end
+    end
+
+    # Przyznawanie achiementa
+    def self.grant_achievement(json_response, user_course, id, id_type, lesson_achievement = false)
+      query = Course::Achievement.where(id_type => id)
+      json_response_key = 'achievement_granted'
+      json_response_key = 'lesson_achievement_granted' if lesson_achievement
+      if query.exists?
+        # Przyznanie achievementa
+        achievement = query.first
+        if user_course.achievements.include? achievement.id.to_s
+          json_response[json_response_key] = nil
+        else
+          user_course.achievements << achievement.id.to_s
+          user_course.save!
+          json_response[json_response_key] = achievement.to_json
+        end
+      else
+        json_response[json_response_key] = nil
+      end
+    end
+
+    def self.check_lesson(user_course, lesson, json_reponse)
+      if lesson.course_quizs.empty? && !user_course.quizzes.include?(lesson.id.to_s)
+        user_course.quizzes << lesson.id.to_s
+        user_course.save!
+      end
+      if validate_lesson lesson, user_course
+        unless user_course.lessons.include? lesson.id.to_s
+          user_course.lessons << lesson.id.to_s
+          user_course.save!
+          grant_achievement json_reponse, user_course, lesson.id.to_s, :lesson_id, true
+        end
+        true
+      else
+        false
+      end
+    end
+
+    def self.correct_exercise(id, data, output, lesson, user_course, json_response)
+      user_course.exercises[id] = {} unless user_course.exercises.key? id
+      user_course.exercises[id]['code'] = data['code']
+      user_course.exercises[id]['user_input'] = data['user_input']
+      user_course.exercises[id]['output'] = output
+
+      json_response['is_correct'] = true
+
+      grant_achievement json_response, user_course, id, :exercise_id
+      check_lesson user_course, lesson, json_response
+      user_course.save!
+    end
+
+    def self.correct_quizzes(id, lesson, user_course, json_response)
+      user_course.quizzes << id unless user_course.quizzes.include? id
+      json_response['is_correct'] = true
+      check_lesson user_course, lesson, json_response
+      user_course.save!
     end
   end
 end

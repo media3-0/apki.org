@@ -5,13 +5,22 @@ module Course
 
     # GET /course/exercises.json
     def index
-      @course_exercises = Course::Lesson.find(params[:lesson_id]).course_exercises
+      lesson = Course::Lesson.find(params[:lesson_id])
+      @course_exercises = lesson.course_exercises.sort_by(&:created_at)
       if !current_user || (current_user && !current_user.is_admin?)
         @course_exercises.each do |exercise|
           exercise.data.delete('expected_result_expr')
           exercise.data.delete('code_before')
           exercise.data.delete('code_after')
         end
+      end
+
+      query = Course::UserCourse.where(course_course_datum: lesson.course_course_datum, user: current_user)
+
+      if current_user && query.exists?
+        user_course = query.first
+        json_response = {} # mock only
+        Course::CourseChecker.check_lesson user_course, lesson, json_response
       end
     end
 

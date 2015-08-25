@@ -266,6 +266,7 @@ describe Course::CourseDataController, type: :controller do
     json_response = JSON.parse response.body
     expect(json_response['data']['lessonCurrent']).to eq lessons[1].id.to_s
     expect(json_response['data']['lessonsPassed'].count).to eq 1
+    expect(json_response['data']['lessonsPassed'][0]).to eq lessons[0].id.to_s
     expect(json_response['data']['userInside']).to eq true
     expect(json_response['data']['userFinished']).to eq false
 
@@ -287,6 +288,8 @@ describe Course::CourseDataController, type: :controller do
     json_response = JSON.parse response.body
     expect(json_response['data']['lessonCurrent']).to eq lessons[2].id.to_s
     expect(json_response['data']['lessonsPassed'].count).to eq 2
+    expect(json_response['data']['lessonsPassed'][0]).to eq lessons[0].id.to_s
+    expect(json_response['data']['lessonsPassed'][1]).to eq lessons[1].id.to_s
     expect(json_response['data']['userInside']).to eq true
     expect(json_response['data']['userFinished']).to eq false
 
@@ -306,8 +309,11 @@ describe Course::CourseDataController, type: :controller do
     get :show, format: :json, id: course.id.to_s
     expect(response).to be_success
     json_response = JSON.parse response.body
-    expect(json_response['data']['lessonCurrent']).to eq lessons[2].id.to_s
+    expect(json_response['data']['lessonCurrent']).to eq ''
     expect(json_response['data']['lessonsPassed'].count).to eq 3
+    expect(json_response['data']['lessonsPassed'][0]).to eq lessons[0].id.to_s
+    expect(json_response['data']['lessonsPassed'][1]).to eq lessons[1].id.to_s
+    expect(json_response['data']['lessonsPassed'][2]).to eq lessons[2].id.to_s
     expect(json_response['data']['userInside']).to eq true
     expect(json_response['data']['userFinished']).to eq true
 
@@ -315,7 +321,7 @@ describe Course::CourseDataController, type: :controller do
     expect(response).to be_success
     json_response = JSON.parse response.body
     json_response.each do |course_temp|
-      expect(course_temp['data']['lessonCurrent']).to eq lessons[2].id.to_s
+      expect(course_temp['data']['lessonCurrent']).to eq ''
       expect(course_temp['data']['lessonsPassed'].count).to eq 3
       expect(course_temp['data']['userInside']).to eq true
       expect(course_temp['data']['userFinished']).to eq true

@@ -33,7 +33,7 @@ describe Course::UserCoursesController, type: :controller do
     user_course.save!
 
     # Nie zakończona lekcja
-    expect(Course::CourseChecker.check_lesson lesson, user_course).to eq false
+    expect(Course::CourseChecker.validate_lesson lesson, user_course).to eq false
 
     json_request = { id: lesson.id.to_s, quizzes: {
       @quizzes[0].id.to_s => 3,
@@ -46,7 +46,7 @@ describe Course::UserCoursesController, type: :controller do
     user_course.reload
 
     # Rozwiązane quizy
-    expect(Course::CourseChecker.check_lesson lesson, user_course).to eq true
+    expect(Course::CourseChecker.validate_lesson lesson, user_course).to eq true
     achievement = Course::Achievement.where(lesson_id: lesson.id.to_s).first
     expect(user_course.achievements.include? achievement.id.to_s).to eq true
 
@@ -161,7 +161,7 @@ describe Course::UserCoursesController, type: :controller do
     end
   end
 
-  it 'Is lessson finished endpoint' do
+  it 'Is lesson finished endpoint' do
     session[:user_id] = @user.id.to_s
 
     user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
@@ -295,7 +295,7 @@ describe Course::UserCoursesController, type: :controller do
       'user_input' => '55'
     }
 
-    user_course = Course::UserCourse.create!(user: @user, course_course_datum: @course)
+    Course::UserCourse.create!(user: @user, course_course_datum: @course)
 
     request.env['RAW_POST_DATA'] = json_request.to_json
     post :check_exercise, format: :json

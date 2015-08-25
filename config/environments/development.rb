@@ -23,6 +23,7 @@ Rails.application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   # jeżeli chcesz debugować swój js to ustaw true (strasznie wydłuża render stron)
+  config.assets.cache_store = :null_store
   config.assets.debug = true
   config.assets.compress = false
 
