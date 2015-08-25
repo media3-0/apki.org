@@ -90,7 +90,7 @@ module Course
         lessons_list = Course::CourseDatum.get_lessons_by_course_id(course.id.to_s)
         lessons_count = lessons_list.count
         if passed_count == lessons_count
-          course_hash['data']['lessonCurrent'] = lessons_passed.last
+          course_hash['data']['lessonCurrent'] = '' # lessons_passed.last | pusta wartość lessonCurrent - użytkownik po ukończeniu kursu ma "wolną nawigację"
         else
           course_hash['data']['lessonCurrent'] = lessons_list[passed_count].id.to_s
         end

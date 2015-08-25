@@ -5,9 +5,18 @@ module Course
 
     # GET /course/quizzes.json
     def index
-      @course_quizzes = Course::Lesson.find(params[:lesson_id]).course_quizs.sort_by(&:created_at)
+      lesson = Course::Lesson.find(params[:lesson_id])
+      @course_quizzes = lesson.course_quizs.sort_by(&:created_at)
       if !current_user || (current_user && !current_user.is_admin?)
         @course_quizzes.each { |quiz| quiz.data.delete('answer_idx') }
+      end
+
+      query = Course::UserCourse.where(course_course_datum: lesson.course_course_datum, user: current_user)
+
+      if current_user && query.exists?
+        user_course = query.first
+        json_response = {} # mock only
+        Course::CourseChecker.check_lesson user_course, lesson, json_response
       end
     end
 

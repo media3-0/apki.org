@@ -22,13 +22,12 @@ module Course
       data = JSON.parse request.body.read
       exercise = Course::Exercise.find(data['id'])
       course = exercise.course_lesson.course_course_datum
-      user_course = Course::UserCourse.find_by(course_course_datum: course)
+      user_course = Course::UserCourse.find_by(course_course_datum: course, user: current_user)
       id = exercise.id.to_s
       output = {}
       json_response = { 'id' => id, 'output' => output, 'is_correct' => false }
       if Course::CourseChecker.check_excercise exercise, data, json_response, output
-        correct_exercise id, data, output, exercise.course_lesson, user_course, json_response
-        # FIXME : Need to fix checking!
+        Course::CourseChecker.correct_exercise id, data, output, exercise.course_lesson, user_course, json_response
       end
       render json: json_response.to_json
     end
@@ -40,7 +39,7 @@ module Course
       id = lesson.id.to_s
       json_response = { 'id' => id, 'is_correct' => false }
       if Course::CourseChecker.check_quizes lesson, data, json_response
-        correct_quizzes id, lesson, user_course, json_response
+        Course::CourseChecker.correct_quizzes id, lesson, user_course, json_response
       end
       render json: json_response.to_json
     end
@@ -49,67 +48,10 @@ module Course
       lesson = Course::Lesson.find(params[:id])
       user_course = Course::UserCourse.find_by(user: current_user, course_course_datum: lesson.course_course_datum)
       json_response = { 'id' => lesson.id.to_s, 'lesson_finished' => false }
-      if check_lesson user_course, lesson, json_response
+      if Course::CourseChecker.check_lesson user_course, lesson, json_response
         json_response['lesson_finished'] = true
       end
       render json: json_response.to_json
-    end
-
-    private
-
-    # TODO : wyrzucić do biblioteki
-
-    # Przyznawanie achiementa
-    def grant_achievement(json_response, user_course, id, id_type, lesson_achievement = false)
-      query = Course::Achievement.where(id_type => id)
-      json_response_key = 'achievement_granted'
-      json_response_key = 'lesson_achievement_granted' if lesson_achievement
-      if query.exists?
-        # Przyznanie achievementa
-        achievement = query.first
-        if user_course.achievements.include? achievement.id.to_s
-          json_response[json_response_key] = nil
-        else
-          user_course.achievements << achievement.id.to_s
-          user_course.save!
-          json_response[json_response_key] = achievement.to_json
-        end
-      else
-        json_response[json_response_key] = nil
-      end
-    end
-
-    def check_lesson(user_course, lesson, json_reponse)
-      if Course::CourseChecker.check_lesson lesson, user_course
-        unless user_course.lessons.include? lesson.id.to_s
-          user_course.lessons << lesson.id.to_s
-          user_course.save!
-          grant_achievement json_reponse, user_course, lesson.id.to_s, :lesson_id, true
-        end
-        true
-      else
-        false
-      end
-    end
-
-    def correct_exercise(id, data, output, lesson, user_course, json_response)
-      user_course.exercises[id] = {} unless user_course.exercises.key? id
-      user_course.exercises[id]['code'] = data['code']
-      user_course.exercises[id]['user_input'] = data['user_input']
-      user_course.exercises[id]['output'] = output
-
-      json_response['is_correct'] = true
-
-      grant_achievement json_response, user_course, id, :exercise_id
-      check_lesson user_course, lesson, json_response
-      user_course.save!
-    end
-
-    def correct_quizzes(id, lesson, user_course, json_response)
-      user_course.quizzes << id unless user_course.quizzes.include? id
-      json_response['is_correct'] = true
-      check_lesson user_course, lesson, json_response
-      user_course.save!
     end
   end
 end

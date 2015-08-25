@@ -33,7 +33,7 @@ describe Course::UserCoursesController, type: :controller do
     user_course.save!
 
     # Nie zakończona lekcja
-    expect(Course::CourseChecker.check_lesson lesson, user_course).to eq false
+    expect(Course::CourseChecker.validate_lesson lesson, user_course).to eq false
 
     json_request = { id: lesson.id.to_s, quizzes: {
       @quizzes[0].id.to_s => 3,
@@ -46,7 +46,7 @@ describe Course::UserCoursesController, type: :controller do
     user_course.reload
 
     # Rozwiązane quizy
-    expect(Course::CourseChecker.check_lesson lesson, user_course).to eq true
+    expect(Course::CourseChecker.validate_lesson lesson, user_course).to eq true
     achievement = Course::Achievement.where(lesson_id: lesson.id.to_s).first
     expect(user_course.achievements.include? achievement.id.to_s).to eq true
 
