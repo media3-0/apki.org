@@ -30,7 +30,7 @@ module Course
           fail Exceptions::AccessDenied.new('Ten kurs nie został jeszcze opublikowany')
         end
       end
-      render json: object_to_json(@course_course_datum)
+      render json: object_to_json(@course_course_datum, true)
     end
 
     # POST /course/course_data.json
@@ -72,7 +72,7 @@ module Course
       @course_course_datum = Course::CourseDatum.find(params[:id])
     end
 
-    def object_to_json(course)
+    def object_to_json(course, single = false)
       course_hash = course.attributes
       course_hash['id'] = course_hash['_id']
       course_hash['parent_id'] = course.parent_id
@@ -82,6 +82,9 @@ module Course
       user_finished = false
 
       query = Course::UserCourse.where(course_course_datum: course, user: current_user)
+      if !query.exists? && single
+        Course::UserCourse.create!(course_course_datum: course, user: current_user)
+      end
       if current_user && query.exists?
         user_inside = true
         lessons_passed = query.first.lessons
