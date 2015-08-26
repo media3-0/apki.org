@@ -722,6 +722,7 @@ header.course-front-header{
   .content-a {
     width:100%;
     min-height:100%;
+    height: 100%;
   }
   .content-a {
     display:table;
@@ -741,4 +742,8 @@ header.course-front-header{
   a{
     color:white;
   }
+}
+
+.btn{
+  white-space: initial;
 }

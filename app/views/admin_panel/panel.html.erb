@@ -343,9 +343,9 @@
                 </div>
                 <div class="field-value">
                     <b>Przed (ukryte, nieedytowalne):</b><br>
-                    <textarea class="form-control" ng-model="exerc.data.code_before" rows="15"></textarea><br><br>
+                    <textarea class="form-control" ng-model="exerc.data.code_before" rows="15" ng-trim="false"></textarea><br><br>
                     <b>Domyślny kod użytkownika (widoczny, edytowalny):</b><br>
-                    <textarea class="form-control" ng-model="exerc.data.code" rows="15"></textarea><br><br>
+                    <textarea class="form-control" ng-model="exerc.data.code" rows="15" ng-trim="false"></textarea><br><br>
                     <b>Blokady kodu (miejsca w domyślnym kodzie użytkownika których nie da się edytować):</b><br>
                     <input type="button" class="btn btn-secondary" ng-click="getScope().addCodeLock(exerc)"
                            value="Dodaj nową blokadę"><br>
@@ -366,7 +366,7 @@
                     </div>
                     <br><br>
                     <b>Po (ukryte, nieedytowalne):</b><br>
-                    <textarea class="form-control" ng-model="exerc.data.code_after" rows="15"></textarea><br><br>
+                    <textarea class="form-control" ng-model="exerc.data.code_after" rows="15" ng-trim="false"></textarea><br><br>
                 </div>
             </div>
             <div class="clearfix"></div>
