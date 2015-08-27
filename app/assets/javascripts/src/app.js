@@ -648,15 +648,28 @@ var ApkiOrg;
                     var _idx = $scope.lessons.indexOf($scope.getLesson()) + 1;
                     return (_idx >= $scope.lessons.length);
                 };
-                $scope.getExercIconClass = function (exercId) {
-                    var dupa = 'glyphicon glyphicon-console';
-                    $.each(($scope.getLesson().data.exercisesPassed || []), function (i, el) {
-                        if (el == exercId) {
-                            dupa = 'glyphicon glyphicon-ok';
+                $scope.isExercEnabled = function (exercId) {
+                    var _ret = $scope.getLesson().data.exercisesPassed.indexOf(exercId) > -1;
+                    if (_ret)
+                        return _ret;
+                    var _currIdx = $scope.getLesson().data.exercisesPassed.length, _exercIdx = 0;
+                    $.each($scope.exercises, function (i, el) {
+                        if (el.id == exercId) {
+                            _exercIdx = i;
                             return false; //Break
                         }
                     });
-                    return dupa;
+                    return _exercIdx <= _currIdx;
+                };
+                $scope.getExercIconClass = function (exercId) {
+                    var icoClass = 'glyphicon glyphicon-console';
+                    $.each(($scope.getLesson().data.exercisesPassed || []), function (i, el) {
+                        if (el == exercId) {
+                            icoClass = 'glyphicon glyphicon-ok';
+                            return false; //Break
+                        }
+                    });
+                    return icoClass;
                 };
                 $scope.nextLesson = function () {
                     var _idx = $scope.lessons.indexOf($scope.getLesson()) + 1;
@@ -666,7 +679,7 @@ var ApkiOrg;
                     }
                 };
                 $scope.countLessonProgress = function () {
-                    var _perc = 1 + ((100 / ($scope.lessons.length - 1)) * ($scope.course.data.lessonsPassed.length));
+                    var _perc = 1 + ((100 / ($scope.lessons.length - 1)) * ($scope.course.data.lessonsPassed.length - 1));
                     _perc = Math.round(_perc);
                     return { 'width': _perc + '%' };
                 };
@@ -716,6 +729,7 @@ var ApkiOrg;
                         $scope.exerciseIsCorrect = ans.is_correct;
                         if ($scope.exerciseIsCorrect) {
                             $('.menu-exerc-' + _exerc.id + '>i').attr('class', 'glyphicon glyphicon-ok');
+                            $scope.getLesson().data.exercisesPassed.push(_exerc.id);
                         }
                         $scope.exerciseChecking = false;
                     }, function () {
@@ -830,18 +844,13 @@ var ApkiOrg;
                     var _less = $scope.getLesson();
                     if (_less === null)
                         return null;
-                    var _exerc = null;
                     $.each($scope.exercises, function (i, el) {
-                        if (_less.data.exercisesPassed.indexOf(el.id) == _less.data.exercisesPassed.length - 1) {
-                            _exerc = el;
-                            return false; //Break
-                        }
                         if (_less.data.exercisesPassed.length == 0) {
-                            _exerc = el;
+                            $scope.currExerc = el;
                             return false; //Break
                         }
                     });
-                    return _exerc;
+                    return $scope.currExerc;
                 };
                 /**
                  * Hides or shows one of the menus.
@@ -954,18 +963,24 @@ var ApkiOrg;
                 };
                 $scope.loadExercise = function (part, forceId) {
                     if (forceId != '') {
-                        if ($scope.getLesson().data.exercisesPassed.indexOf(forceId) > -1) {
-                            $scope.getLesson().data.exercisesPassed.splice($scope.getLesson().data.exercisesPassed.indexOf(forceId), 1);
-                        }
-                        $scope.getLesson().data.exercisesPassed.push(forceId);
+                        //                    if ($scope.getLesson().data.exercisesPassed.indexOf(forceId)>-1){
+                        //                        $scope.getLesson().data.exercisesPassed.splice($scope.getLesson().data.exercisesPassed.indexOf(forceId), 1);
+                        //                    }
+                        //$scope.getLesson().data.exercisesPassed.push(forceId);
+                        $.each($scope.exercises, function (i, el) {
+                            if (el.id == forceId) {
+                                $scope.currExerc = el;
+                                return false; //Break
+                            }
+                        });
                     }
                     else {
-                        //                    console.log($scope.getLesson().data.exercisesPassed);
-                        if ($scope.getLesson().data.exercisesPassed.length == $scope.exercises.length)
-                            $scope.goToPart('end');
-                        else {
-                            $scope.getLesson().data.exercisesPassed.push($scope.exercises[$scope.getLesson().data.exercisesPassed.length].id);
-                        }
+                        $.each($scope.exercises, function (i, el) {
+                            if ($scope.getLesson().data.exercisesPassed.indexOf(el.id) == -1) {
+                                $scope.currExerc = el;
+                                return false; //Break
+                            }
+                        });
                     }
                     $scope.exerciseCurrOutput = 'Tutaj pojawi się wynik Twojego programu lub ewentualne błędy.<br>Kliknij "Sprawdź" aby wykonać kod.';
                     $scope.exerciseIsCorrect = false;
