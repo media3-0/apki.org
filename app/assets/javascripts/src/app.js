@@ -1429,6 +1429,7 @@ var ApkiOrg;
                 $scope.standardSaveObject = function (object, resource, id) {
                     $scope.inited = false;
                     var _data_str = ApkiOrg.App.app.helperObjectToJSON(object.data);
+                    console.log(_data_str);
                     object = resource.update({ 'id': id }, _data_str, function (data) {
                         $scope.inited = true;
                     });
@@ -1443,6 +1444,7 @@ var ApkiOrg;
                     $scope.standardSaveObject(quiz, $scope.apiQuizzes.res, quiz.id);
                 };
                 $scope.saveExercise = function (exerc) {
+                    console.log(exerc);
                     $scope.standardSaveObject(exerc, $scope.apiExercises.res, exerc.id);
                 };
                 $scope.parseInt = function (num) {

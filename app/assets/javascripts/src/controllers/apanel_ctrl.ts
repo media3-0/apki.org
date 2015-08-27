@@ -233,6 +233,8 @@ module ApkiOrg.APanelMgr {
                 $scope.inited = false;
                 var _data_str:string = ApkiOrg.App.app.helperObjectToJSON(object.data);
 
+                console.log(_data_str);
+
                 object = resource.update({'id':id}, _data_str, (data) => {
                     $scope.inited = true;
                 });
@@ -251,6 +253,7 @@ module ApkiOrg.APanelMgr {
             }
 
             $scope.saveExercise = (exerc:ApkiOrg.CourseMgr.MExercise) => {
+                console.log(exerc);
                 $scope.standardSaveObject(exerc, $scope.apiExercises.res, exerc.id);
             }
 
