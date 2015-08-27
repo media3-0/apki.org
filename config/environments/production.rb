@@ -55,9 +55,10 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  config.cache_store = :readthis_store, 'redis://localhost:6378/0', {
+  config.cache_store = :readthis_store, {
     expires_in: 60.minutes,
-    namespace: 'cache'
+    namespace: 'cache',
+    redis: {url: 'redis://localhost:6378/0'}
   }
   config.session_store :redis_session_store, {
                                              key: 'session_key',
