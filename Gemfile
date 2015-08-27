@@ -140,7 +140,6 @@ end
 
 gem 'codeclimate-test-reporter', group: :test, require: false
 gem 'newrelic_rpm', group: [:production]
-gem 'rbkit', group: :development, require: false unless Gem.win_platform?
 
 # deploy
 group :development do
