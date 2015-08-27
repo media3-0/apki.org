@@ -83,9 +83,6 @@ gem 'dentaku', '~> 2'
 # wydajniejszy serwer lokalny
 gem 'thin'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 # AngularJS
 gem 'angularjs-rails'
 
@@ -144,3 +141,9 @@ end
 gem 'codeclimate-test-reporter', group: :test, require: false
 gem 'newrelic_rpm', group: [:production]
 gem 'rbkit', group: :development, require: false unless Gem.win_platform?
+
+# deploy
+group :development do
+  gem 'mina', require: false
+  gem 'mina-multistage', require: false
+end
