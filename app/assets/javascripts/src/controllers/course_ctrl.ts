@@ -255,9 +255,11 @@ module ApkiOrg.CourseMgr {
 
                 $scope.goToPart('article');
 
-                if ($scope.getLesson().data.quizPassed){
-                    $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
-                }
+                $timeout(() => {
+                    if ($scope.getLesson().data.quizPassed){
+                        $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
+                    }
+                }, 1);
 
                 $scope.inited = true;
                 $scope.resizeElements();

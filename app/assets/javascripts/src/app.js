@@ -781,9 +781,11 @@ var ApkiOrg;
                         return;
                     $scope.parseArticle();
                     $scope.goToPart('article');
-                    if ($scope.getLesson().data.quizPassed) {
-                        $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
-                    }
+                    $timeout(function () {
+                        if ($scope.getLesson().data.quizPassed) {
+                            $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
+                        }
+                    }, 1);
                     $scope.inited = true;
                     $scope.resizeElements();
                     $('[data-toggle="tooltip"]').tooltip();
