@@ -109,7 +109,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
-    faraday-http-cache (1.2.0)
+    faraday-http-cache (1.2.2)
       faraday (~> 0.8)
     faraday_middleware (0.10.0)
       faraday (>= 0.7.4, < 0.10)
