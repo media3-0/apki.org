@@ -480,10 +480,6 @@ module ApkiOrg.CourseMgr {
                             return false; //Break
                         }
                     });
-                    if ($scope.currExerc === null){
-                        $scope.goToPart('end');
-                        return;
-                    }
                 }
 
                 $scope.exerciseCurrOutput = 'Tutaj pojawi się wynik Twojego programu lub ewentualne błędy.<br>Kliknij "Sprawdź" aby wykonać kod.';
@@ -491,6 +487,10 @@ module ApkiOrg.CourseMgr {
                 $scope.exerciseIsCorrect = false;
 
                 $scope.inited=true;
+
+                if ($scope.currExerc === null){
+                    $scope.goToPart('end');
+                }
 
                 $scope.$apply();
             }
