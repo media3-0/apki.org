@@ -781,11 +781,12 @@ var ApkiOrg;
                         return;
                     $scope.parseArticle();
                     $scope.goToPart('article');
-                    $timeout(function () {
-                        if ($scope.getLesson().data.quizPassed) {
-                            $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
-                        }
-                    }, 1);
+                    if ($scope.getLesson().data.quizPassed) {
+                        $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
+                    }
+                    else {
+                        $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-check');
+                    }
                     $scope.inited = true;
                     $scope.resizeElements();
                     $('[data-toggle="tooltip"]').tooltip();
@@ -989,7 +990,7 @@ var ApkiOrg;
                     $scope.exerciseIsCorrect = false;
                     $scope.inited = true;
                     if ($scope.currExerc === null) {
-                        $scope.goToPart('end');
+                        $scope.goToPart('quiz');
                     }
                     $scope.$apply();
                 };
@@ -1000,7 +1001,7 @@ var ApkiOrg;
                     possibleParts['end'] = true; //always enabled
                     possibleParts['quiz'] = (!!$scope.quizzes.length);
                     possibleParts['exercise'] = (!!$scope.exercises.length);
-                    var path = ['article', 'quiz', 'exercise', 'end'];
+                    var path = ['article', 'exercise', 'quiz', 'end'];
                     while (!possibleParts[part])
                         part = path[path.indexOf(part) + 1];
                     if (part == 'exercise') {

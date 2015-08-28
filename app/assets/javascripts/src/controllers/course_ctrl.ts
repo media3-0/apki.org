@@ -255,11 +255,11 @@ module ApkiOrg.CourseMgr {
 
                 $scope.goToPart('article');
 
-                $timeout(() => {
-                    if ($scope.getLesson().data.quizPassed){
-                        $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
-                    }
-                }, 1);
+                if ($scope.getLesson().data.quizPassed){
+                    $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-ok');
+                } else {
+                    $('.menu-quiz>i').attr('class', 'glyphicon glyphicon-check');
+                }
 
                 $scope.inited = true;
                 $scope.resizeElements();
@@ -491,7 +491,7 @@ module ApkiOrg.CourseMgr {
                 $scope.inited=true;
 
                 if ($scope.currExerc === null){
-                    $scope.goToPart('end');
+                    $scope.goToPart('quiz');
                 }
 
                 $scope.$apply();
@@ -502,7 +502,7 @@ module ApkiOrg.CourseMgr {
                 possibleParts['end'] = true; //always enabled
                 possibleParts['quiz'] = (!!$scope.quizzes.length);
                 possibleParts['exercise'] = (!!$scope.exercises.length);
-                var path:string[] = ['article', 'quiz', 'exercise', 'end'];
+                var path:string[] = ['article', 'exercise', 'quiz', 'end'];
                 while (!possibleParts[part])
                     part = path[path.indexOf(part)+1];
 

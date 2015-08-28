@@ -54,8 +54,8 @@
                 <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#" ng-click="goToPart('article')">{{ getLesson().data.title }}</a></li>
                 <ul class="article-parsed">
                 </ul>
-                <li ng-hide="!quizzes.length" class="menu-quiz menu-to-check"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
                 <li ng-hide="!exercises.length" ng-repeat="exerc in exercises" class="menu-exerc-{{exerc.id}} menu-to-check"><i ng-class="getExercIconClass(exerc.id)"></i> <a ng-if="isExercEnabled(exerc.id)" href="#" ng-click="goToPart('exercise', exerc.id)">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</a><span ng-if="!isExercEnabled(exerc.id)" style="color:#E8E8E8">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</span></li>
+                <li ng-hide="!quizzes.length" class="menu-quiz menu-to-check"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
             </ul>
         </div>
         <div class="col col-line-height-100-pro firstHidePanelBar" ng-click="hidePanelBarClick('left')"><span class="fa fa-angle-left" ng-if="menuVisible.left"></span><span class="fa fa-angle-right" ng-if="!menuVisible.left"></span></div>
@@ -64,7 +64,7 @@
             </div>
 
             <div class="buttons" ng-hide="!isPartVisible('article')" style="margin:40px 25px 25px 60px;max-width:800px;">
-                <div class="desc"></div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('quiz')">
+                <div class="desc"></div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('exercise')">
             </div>
 
             <div class="fullscreen_movie course-element" ng-hide="!isPartVisible('fullscreen_movie')">
@@ -77,17 +77,19 @@
                     <div class="question-group q-{{quiz.id}}" ng-repeat="(key, quiz) in quizzes" autostatusremoval>
                         <h4><i class="glyphicon mrg10r" style="width:16px"></i> {{ quiz.data.question }}</h4>
                         <div class="question-ans" ng-repeat="(ans_idx, ans) in quiz.data.answers">
-                            <input data-quiz-id="{{quiz.id}}" type="radio" id="quiz_question_{{quiz.id}}_{{ans_idx}}" name="quiz_question_{{quiz.id}}" value="{{ans_idx}}" class="mrg5r" ng-disabled="quizzesAreCorrect"> <label for="quiz_question_{{quiz.id}}_{{ans_idx}}">{{ans}}</label>
+                            <input data-quiz-id="{{quiz.id}}" type="radio" id="quiz_question_{{quiz.id}}_{{ans_idx}}" name="quiz_question_{{quiz.id}}" value="{{ans_idx}}" class="mrg5r"> <label for="quiz_question_{{quiz.id}}_{{ans_idx}}">{{ans}}</label>
                         </div>
 
                         <div class="clearfix"></div>
                     </div>
-                    <div class="buttons" ng-hide="quizzesAreCorrect">
-                        <button ng-disabled="quizChecking" ng-class="quizChecking?'active':''" type="button" ng-click="checkQuiz(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner"><span class="spinner"><i class="fa fa-cog fa-spin color-primary"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
+                    <div class="buttons" ng-hide="quizzesAreCorrect || getLesson().data.quizPassed">
+                        <button ng-disabled="quizChecking" ng-class="quizChecking?'active':''" type="button" ng-click="checkQuiz(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner">
+                            <div class="desc">Udziel poprawnie wszystkich odpowiedzi</div>
+                            <span class="spinner"><i class="fa fa-cog fa-spin color-primary"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
                     </div>
 
-                    <div class="buttons" ng-hide="!quizzesAreCorrect || !isPartVisible('quiz')">
-                        <div class="desc">Udzieliłeś poprawnych odpowiedzi na wszystkie pytania</div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('exercise')">
+                    <div class="buttons" ng-hide="(!quizzesAreCorrect && getLesson().data.quizPassed) || !isPartVisible('quiz')">
+                        <div class="desc">Udzieliłeś poprawnych odpowiedzi na wszystkie pytania</div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('end')">
                     </div>
                 </form>
 
@@ -106,7 +108,7 @@
                         <input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}" style="width:100%" placeholder="Podaj tutaj dane wejściowe">
                     </div>
                     <div class="send-code-window buttons pad0a mrg0a" style="padding: 0 !important; margin:0 !important" ng-hide="exerciseIsCorrect">
-                        <button ng-disabled="quizChecking" ng-class="exerciseChecking?'disabled':''" type="button" ng-click="checkExercise(this, $event)" class="btn btn-lg btn-primary btn-save mrg5r" style="margin-top: 4px;">Sprawdź</button>
+                        <button ng-disabled="exerciseChecking" ng-class="exerciseChecking?'disabled':''" type="button" ng-click="checkExercise(this, $event)" class="btn btn-lg btn-primary btn-save mrg5r" style="margin-top: 4px;">Sprawdź</button>
                     </div>
                     <div class="code-ok-window buttons pad0a mrg0a" ng-hide="!exerciseIsCorrect || !isPartVisible('exercise')">
                         <div class="desc mrg20l" style="padding-top: 18px;">Gratulacje, Twój kod jest poprawny</div><input type="submit" class="btn btn-lg btn-primary btn-save mrg20r" style="margin-top: 4px;" value="Dalej" ng-click="goToPart('exercise')">

@@ -1,7 +1,7 @@
 <div id="mainPage">
     <div class="fullscreen background parallax" style="background-image:url('http://images5.alphacoders.com/430/430918.jpg');" data-img-width="1600" data-img-height="1200" data-diff="100">
         <div class="content-a">
-            <div class="content-b">
+            <div class="content-b player" data-property="{videoURL:'http://www.youtube.com/watch?v=6ZORzPbXqBo',containment:'.content-b',autoPlay:true, mute:true, startAt:0, opacity:1, showControls:false}">
                 <%= image_tag 'logo_main.png', alt: 'Apki.org' %><br>
                 <h1>Pierwsza w Polsce interaktywna platforma<br><br>do nauki programowania.</h1><br><br>
                 <h2>Sprawdź. Zaprogramuj swoją przyszłość.</h2>
@@ -126,6 +126,8 @@
                     $(window).scroll(parallaxPosition);
                     parallaxPosition();
                 }
+
+                $(".player").YTPlayer();
             });
 
             //SMOTH SCROLL:
@@ -174,7 +176,7 @@
                     <div class="content">
                         <div class="level">
                         </div>
-                        <img src="http://sr.photos3.fotosearch.com/bthumb/UNC/UNC193/u12834151.jpg" class="course-icon"><br>
+                        <%= image_tag 'a_holder.png', alt: 'Apki.org', class: 'course-icon' %><br>
                         <h3>Już wkróce</h3><p>Niedługo pojawią się kolejne kursy...</p>
                     </div>
                 </div>

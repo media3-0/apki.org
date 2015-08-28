@@ -12,3 +12,4 @@
 //= require vendor/bootstrap-select/i18n/defaults-pl_PL.min
 //= require vendor/gsap/TweenMax
 //= require vendor/ngfx/ngFx
+//= require vendor/jquery.mb.YTPlayer
