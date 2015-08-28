@@ -473,12 +473,17 @@ module ApkiOrg.CourseMgr {
                         }
                     });
                 } else {
+                    $scope.currExerc=null;
                     $.each($scope.exercises, function(i, el:MExercise){
                         if ($scope.getLesson().data.exercisesPassed.indexOf(el.id) == -1){
                             $scope.currExerc = el;
                             return false; //Break
                         }
                     });
+                    if ($scope.currExerc === null){
+                        $scope.goToPart('end');
+                        return;
+                    }
                 }
 
                 $scope.exerciseCurrOutput = 'Tutaj pojawi się wynik Twojego programu lub ewentualne błędy.<br>Kliknij "Sprawdź" aby wykonać kod.';
