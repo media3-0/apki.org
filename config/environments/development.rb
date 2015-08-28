@@ -43,5 +43,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Nasze ustawienia
-  config.x.compile_api_host = 'http://localhost:4000'
+  config.x.compile_api_host = 'http://testcompile.apki.org/'
 end
