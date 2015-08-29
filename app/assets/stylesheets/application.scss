@@ -610,12 +610,8 @@ form{
     width:100%;
 
     .course-icon{
-      @extend .img-circle;
-
       width:125px;
       height:125px;
-
-      border: 1px solid #e5e5e5;
     }
     .level{
       position: absolute;
