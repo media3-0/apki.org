@@ -83,12 +83,12 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="buttons" ng-hide="quizzesAreCorrect || getLesson().data.quizPassed">
+                        <div class="desc">Udziel poprawnie wszystkich odpowiedzi</div>
                         <button ng-disabled="quizChecking" ng-class="quizChecking?'active':''" type="button" ng-click="checkQuiz(this, $event)" class="btn btn-lg btn-primary btn-save has-spinner">
-                            <div class="desc">Udziel poprawnie wszystkich odpowiedzi</div>
                             <span class="spinner"><i class="fa fa-cog fa-spin color-primary"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
                     </div>
 
-                    <div class="buttons" ng-hide="(!quizzesAreCorrect && getLesson().data.quizPassed) || !isPartVisible('quiz')">
+                    <div class="buttons" ng-hide="(!quizzesAreCorrect && !getLesson().data.quizPassed) || !isPartVisible('quiz')">
                         <div class="desc">Udzieliłeś poprawnych odpowiedzi na wszystkie pytania</div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" ng-click="goToPart('end')">
                     </div>
                 </form>
