@@ -17,8 +17,8 @@
                     <li <%- if current_page?(root_path) -%>class="active"<%- end -%>>
                     <a href="<%= root_path -%>">Strona główna<%- if current_page?(root_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
                     </li>
-                    <li <%- if current_page?(projects_path) -%>class="active"<%- end -%>>
-                    <a href="#">Nauka<%- if current_page?(projects_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
+                    <li <%- if current_page?('/static/dydaktyka') -%>class="active"<%- end -%>>
+                    <a href="#">Nauka<%- if current_page?('/static/dydaktyka') -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
                     </li>
                     <li <%- if current_page?(projects_path) -%>class="active"<%- end -%>>
                     <a href="<%= projects_path -%>">Projekty<%- if current_page?(projects_path) -%> <span class="sr-only">(aktywny)</span><%- end -%></a>
