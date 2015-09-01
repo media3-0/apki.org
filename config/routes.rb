@@ -41,6 +41,8 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
 
+   get 'static/test'
+
   unless Rails.env.production?
     get 'test_login/:user_id', to: 'sessions#test_login', as: :test_login
     get 'test_login', to: 'sessions#test_login'
