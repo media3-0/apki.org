@@ -1,42 +1,57 @@
 <%= render 'layouts/headers' %>
 <body data-no-turbolink="true">
 <div id="holder">
-    <%= render 'layouts/main_menu' %>
-    <article id="content" class="col-md-10 col-md-offset-1">
-      <% flash.each do |name, msg| -%>
-          <%-
-              # mapowanie niektórych nazw
-              name = 'success' if name == 'notice'
-              name = 'danger' if name == 'error'
-          -%>
-          <%= content_tag :div, msg, class: 'alert alert-'+name %>
-      <% end -%>
+  <%= render 'layouts/main_menu' %>
+  <article id="content" class="col-md-10 col-md-offset-1">
+    <% flash.each do |name, msg| -%>
+      <%-
+          # mapowanie niektórych nazw
+          name = 'success' if name == 'notice'
+          name = 'danger' if name == 'error'
+      -%>
+      <%= content_tag :div, msg, class: 'alert alert-'+name %>
+    <% end -%>
 
-      <%= yield %>
-    </article>
-    <footer>
-        <div class="col-md-10 col-md-offset-1" style="border-top:2px solid #e7e7e7"> </div>
-        <div class="clearfix"></div>
+    <%= yield %>
+  </article>
+  <footer>
+    <div class="col-md-10 col-md-offset-1" style="border-top:2px solid #e7e7e7"></div>
+    <div class="clearfix"></div>
 
-        <div class="col-md-12 mrg25t mrg25b">
-        <%= image_tag 'logoc.png', alt: 'Apki.org' %>
-        </div>
+    <div class="col-md-12 mrg25t mrg25b">
+      <%= image_tag 'logoc.png', alt: 'Apki.org' %>
+    </div>
 
-        <div class="col-md-offset-2 col-md-9">
+    <div class="col-md-offset-2 col-md-9">
 
-            <div class="col-md-2"> </div>
-        <div class="col-md-2 text-left">Aktualności<br>Regulamin serwisu<br>Polityka prywatności</div>
-        <div class="col-md-3 text-left">Reklama<br>Współpraca<br>Forum</div>
-        <div class="col-md-2 text-left">Informacje o wydawcy<br>Poznaj nas<br>Kontakt<br>Pomoc techniczna</div>
-            <div class="col-md-3"> </div>
+      <div class="col-md-2"></div>
+      <div class="col-md-2 text-left"><%= link_to 'O projekcie', '/static/about' -%>
+        <br><%= link_to 'Partnerzy', '/static/partners' -%>
+        <br>Współpraca
+        <br><%= link_to 'Kontakt', '/static/contact' -%>
+        <br><%= link_to 'Poznaj nas', 'http://media30.pl/o-fundacji/' -%>
+      </div>
+      <div class="col-md-3 text-left"><%= link_to 'Aktualności', news_path -%>
+        <br><%= link_to 'Forum', 'http://forum.apki.org/' -%>
+        <br><%= link_to 'Facebook', 'https://www.facebook.com/apki.org' -%>
+        <br>Regulamin serwisu
+        <br>Polityka prywatności
+      </div>
+      <div class="col-md-2 text-left">
+        <br><%= link_to 'Dev blog', 'http://devblog.apki.org/' -%>
+        <br><%= link_to 'Pomoc techniczna', 'https://github.com/media3-0/apki.org/issues' -%>
+        <br><%= link_to 'GitHub projektu', 'https://github.com/media3-0/apki.org' -%>
+        <br><%= link_to 'Status usług', '/static/status' -%>
+      </div>
+      <div class="col-md-3"></div>
 
-        </div>
-        <div class="col-md-2"> </div>
+    </div>
+    <div class="col-md-2"></div>
 
-        <div class="clearfix"></div>
+    <div class="clearfix"></div>
 
-        &copy; Akademia 3.0. 2015 Wszelkie prawa zastrzeżone
-    </footer>
+    &copy; Akademia 3.0. 2015 Wszelkie prawa zastrzeżone
+  </footer>
 </div>
 </body>
 </html>

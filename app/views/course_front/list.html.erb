@@ -126,7 +126,7 @@
                     parallaxPosition();
                 }
 
-                <% if (params[:movie]).present? %>$(".player").YTPlayer();<% end %>
+                <% unless (params[:movie]).present? %>$(".player").YTPlayer();<% end %>
             });
 
             //SMOTH SCROLL:
