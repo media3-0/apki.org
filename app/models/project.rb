@@ -7,6 +7,7 @@ class Project
 
   field :title, type: String
   field :github, type: String
+  field :icon, type: String, default: ''
 
   belongs_to :user
 end

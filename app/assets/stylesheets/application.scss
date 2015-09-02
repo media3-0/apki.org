@@ -628,6 +628,13 @@ form{
       margin-top: 3px;
     }
   }
+
+  &.project-tile{
+    height:300px;
+    &>.content{
+      height:255px;
+    }
+  }
 }
 
 header.course-front-header{
