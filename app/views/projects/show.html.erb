@@ -44,8 +44,8 @@
                 <li ng-repeat="commit in project.commits">
                     <div class="cbp_tmicon"><img style="width:40px;height:40px" class="circular" src="{{ commit.author.avatar_url }}"></div>
                     <div class="cbp_tmlabel">
-                        <h2>{{ commit.author.login }}<br><small>@: {{ commit.commit.author.date }}</small></h2>
-                        <p>{{ commit.commit.message }}</p>
+                        <h2>{{ commit.author.login }}<br><small>@ {{ commit.commit.author.date }}</small></h2>
+                        <p style="white-space: pre-wrap">{{ commit.commit.message }}</p>
                     </div>
                 </li>
             </ul>

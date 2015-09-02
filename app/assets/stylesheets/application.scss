@@ -802,11 +802,6 @@ header.course-front-header{
     }
   }
 
-  .cbp_tmtimeline .cbp_tmlabel small{
-    color:white;
-    font-size:40%;
-  }
-
   .cbp_tmtimeline > li .cbp_tmicon{
     left:5%;
   }
@@ -816,4 +811,8 @@ header.course-front-header{
   .cbp_tmtimeline:before{
     left:5%;
   }
+}
+.cbp_tmtimeline .cbp_tmlabel small{
+  color:white;
+  font-size:40%;
 }
