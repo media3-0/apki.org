@@ -66,7 +66,7 @@ class ProjectsController < ApplicationController
 
     repo['info'] = info.to_attrs
     begin
-    repo['readme'] = Octokit.readme @project.github, :accept => 'application/vnd.github.html'
+    repo['readme'] = Octokit.readme(@project.github, :accept => 'application/vnd.github.html').force_encoding('utf-8')
     rescue Octokit::NotFound
       repo['readme'] = ''
     end

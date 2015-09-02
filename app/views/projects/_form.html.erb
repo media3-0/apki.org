@@ -3,6 +3,7 @@
 
   <div class="form-inputs">
     <%= f.input :title, label: 'Nazwa projektu:' %>
+    <%= f.input :icon, label: 'Url ikony:' %>
     <%= f.input :github, :collection => @repositories, :label_method => :name, :value_method => :full_name, :label => 'Nazwa repozytorium', :include_blank => false %>
   </div>
 
