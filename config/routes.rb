@@ -14,6 +14,9 @@ Rails.application.routes.draw do
       match '/user_courses/:action', :via => 'post'
     end
   end
+  controller :static do
+    match 'static/:action', :via => 'get'
+  end
   get 'school/profile/:id', to: 'school#profile', as: 'school_profile_view'
   get 'school/edit_profile'
   post 'school/edit_profile'
@@ -40,8 +43,6 @@ Rails.application.routes.draw do
   get 'course_front/list'
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
-
-   get 'static/test'
 
   unless Rails.env.production?
     get 'test_login/:user_id', to: 'sessions#test_login', as: :test_login
