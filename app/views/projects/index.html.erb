@@ -23,3 +23,11 @@
 
 <!-- This button is here and at the top of this page/file. Margin-top/bottom is only changed. -->
 <div class="text-center" style="margin-top:30px"><a class="btn btn-primary" href="<%= projects_mine_path %>">Przejdź do moich projektów</a></div>
+
+<script type="text/javascript">
+    $(function(){
+        $('.project-tile').click(function(){
+            location.assign($(this).find('a').attr('href'));
+        });
+    });
+</script>

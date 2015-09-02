@@ -1,27 +1,33 @@
-<h1>Moje projekty</h1>
+<h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Lista moich projektów</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Tytuł</th>
-      <th>Nazwa repozytorium</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<!-- This button is here and at the bottom of this page/file. Margin-top/bottom is only changed. -->
+<div class="text-center" style="margin-bottom:30px"><a class="btn btn-primary" href="<%= new_project_path %>">Dodaj nowy projekt</a></div>
 
-  <tbody>
-    <% @projects.each do |project| %>
-      <tr>
-        <td><%= project.title %></td>
-        <td><%= project.github %></td>
-        <td><%= link_to 'Pokaż', project %></td>
-        <td><%= link_to 'Edytuj', edit_project_path(project) %></td>
-        <td><%= link_to 'Usuń', project, method: :delete, data: { confirm: 'Jesteś pewien?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="clearfix"></div>
 
-<br>
+<% @projects.each do |project| %>
+<div class="col-md-4" ng-repeat="course in courses">
+    <div class="fd-tile detail clean tile-purple course-tile project-tile" ng-click="checkCourse($event, course)">
+        <div class="content">
+            <img src="<% if project.icon.empty? %><%= asset_path('a_holder.png') %><% else %><%= project.icon %><% end %>" class="course-icon"><br>
+            <h3><%= project.title %></h3><p><small><%= project.github %></small></p>
+        </div>
+        <a class="btn btn-tomka" href="<%= project_path(project) %>">
+            <span>Zobacz</span>
+            <span><i class="fa fa-arrow-circle-right pull-right"></i></span></a>
+    </div>
+</div>
+<% end %>
 
-<%= link_to 'Nowy projekt', new_project_path %>
+<div class="clearfix"></div>
+
+<!-- This button is here and at the top of this page/file. Margin-top/bottom is only changed. -->
+<div class="text-center" style="margin-top:30px"><a class="btn btn-primary" href="<%= new_project_path %>">Dodaj nowy projekt</a></div>
+
+<script type="text/javascript">
+    $(function(){
+        $('.project-tile').click(function(){
+            location.assign($(this).find('a').attr('href'));
+        });
+    });
+</script>
