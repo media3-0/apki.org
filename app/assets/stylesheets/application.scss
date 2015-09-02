@@ -759,3 +759,61 @@ header.course-front-header{
     margin-top:50px;
   }
 }
+
+.projectEditBtn{
+  position: absolute;
+  top: 60px;
+  right: 140px;
+}
+.projectBackBtn{
+  position: absolute;
+  top: 60px;
+  right: 20px;
+}
+
+#projectDetails{
+  .projectUrlBtn{
+    width:105px;
+    height: 35px;
+    padding-top: 7px;
+  }
+
+  .projInfo{
+    @extend .pad15a;
+
+    background-color: white;
+    border: 1px solid #e7e7e7;
+
+    .desc{
+      @extend .mrg5b;
+
+      font-weight: bold;
+    }
+    .descVal{
+      @extend .mrg5b;
+    }
+  }
+
+  .auhorsGrid{
+    img{
+      width:40px;
+      height:40px;
+      cursor:pointer;
+    }
+  }
+
+  .cbp_tmtimeline .cbp_tmlabel small{
+    color:white;
+    font-size:40%;
+  }
+
+  .cbp_tmtimeline > li .cbp_tmicon{
+    left:5%;
+  }
+  .cbp_tmtimeline > li .cbp_tmlabel{
+    margin-left:12%;
+  }
+  .cbp_tmtimeline:before{
+    left:5%;
+  }
+}

@@ -1856,6 +1856,119 @@ var ApkiOrg;
         app.filter('to_trusted', ApkiOrg.CourseMgr.ToTrustedFilter);
     })(CoursesLstMgr = ApkiOrg.CoursesLstMgr || (ApkiOrg.CoursesLstMgr = {}));
 })(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="base_rest_api.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var CourseMgr;
+    (function (CourseMgr) {
+        var ProjectRestAPI = (function (_super) {
+            __extends(ProjectRestAPI, _super);
+            function ProjectRestAPI($resource) {
+                _super.call(this);
+                this.$resource = $resource;
+                this.res = $resource('/projects/repo/:id.json', {}, {
+                    //Definition of RESTful API:
+                    'show': {
+                        'method': 'POST'
+                    }
+                });
+            }
+            return ProjectRestAPI;
+        })(CourseMgr.BaseRestAPI);
+        CourseMgr.ProjectRestAPI = ProjectRestAPI;
+    })(CourseMgr = ApkiOrg.CourseMgr || (ApkiOrg.CourseMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="../../vendor/angularjs/angular.d.ts"/>
+/// <reference path="../resources/github_project_rest_api.ts"/>
+/// <reference path="../../vendor/custom.d.ts"/>
+/// <reference path="../main.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var ProjectDetailsMgr;
+    (function (ProjectDetailsMgr) {
+        var appProjectDetailsCtrl = (function () {
+            function appProjectDetailsCtrl($scope, $timeout, $compile, $resource) {
+                this.$scope = $scope;
+                this.$timeout = $timeout;
+                this.$compile = $compile;
+                this.$resource = $resource;
+                $scope.initInfo = function (projectId) {
+                    $scope.inited = false;
+                    $scope.project = null;
+                    $scope.apiProject = new ApkiOrg.CourseMgr.ProjectRestAPI($resource);
+                    $scope.project = $scope.apiProject.res.show({ 'id': projectId }, '', function (data) {
+                        $scope.links = $scope.linksList();
+                        $scope.inited = true;
+                    });
+                };
+                $scope.urlBtnRun = function (url) {
+                    if (url == $scope.project.info.clone_url) {
+                        prompt('Link do skopiowania repozytorium:', url);
+                        return false;
+                    }
+                };
+                $scope.linksList = function () {
+                    var _lst = new Array();
+                    _lst.push({
+                        url: $scope.project.info.html_url,
+                        html: 'Strona',
+                        onclick: ''
+                    });
+                    _lst.push({
+                        url: $scope.project.info.clone_url,
+                        html: 'Klonuj',
+                        onclick: ''
+                    });
+                    _lst.push({
+                        url: $scope.project.info.html_url + '/graphs/contributors',
+                        html: 'Wykresy',
+                        onclick: ''
+                    });
+                    _lst.push({
+                        url: $scope.project.info.html_url + '/pulse',
+                        html: 'Aktywność',
+                        onclick: ''
+                    });
+                    _lst.push({
+                        url: $scope.project.info.html_url + '/issues',
+                        html: 'Błędy',
+                        onclick: ''
+                    });
+                    _lst.push({
+                        url: $scope.project.info.html_url + '/wiki',
+                        html: 'Wiki',
+                        onclick: ''
+                    });
+                    return _lst;
+                };
+            }
+            appProjectDetailsCtrl.$inject = [
+                '$scope',
+                '$timeout',
+                '$compile',
+                '$resource'
+            ];
+            return appProjectDetailsCtrl;
+        })();
+        ProjectDetailsMgr.appProjectDetailsCtrl = appProjectDetailsCtrl;
+    })(ProjectDetailsMgr = ApkiOrg.ProjectDetailsMgr || (ApkiOrg.ProjectDetailsMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
+//(c) Jakub Krol 2015
+/// <reference path="../vendor/custom.d.ts"/>
+/// <reference path="controllers/project_details_ctrl.ts"/>
+/// <reference path="filters/to_trusted_filter.ts"/>
+var ApkiOrg;
+(function (ApkiOrg) {
+    var ProjectDetailsMgr;
+    (function (ProjectDetailsMgr) {
+        //Init Angular app
+        app = angular.module('projectDetailsApp', ['ngResource', 'ngAnimate']);
+        app.controller('myCtrl', ProjectDetailsMgr.appProjectDetailsCtrl);
+        app.filter('to_trusted', ApkiOrg.CourseMgr.ToTrustedFilter);
+    })(ProjectDetailsMgr = ApkiOrg.ProjectDetailsMgr || (ApkiOrg.ProjectDetailsMgr = {}));
+})(ApkiOrg || (ApkiOrg = {}));
 /// <reference path="../vendor/jquery/jquery.d.ts"/>
 /// <reference path="../vendor/angularjs/angular.d.ts"/>
 /// <reference path="../vendor/angularjs/angular-route.d.ts"/>
