@@ -7,6 +7,7 @@ module Editor {
         private div:JQuery;
         private ace:any;
         private _disabled_ranges:any[] = Array();
+        public langs:string[] = ['C', 'CPP', 'CPP11', 'CLOJURE', 'CSHARP', 'JAVA', 'JAVASCRIPT', 'HASKELL', 'PERL', 'PHP', 'PYTHON', 'RUBY'];
         constructor(divId, langId, initCode: string) {
             ace.config.set("basePath", "/ace");
 

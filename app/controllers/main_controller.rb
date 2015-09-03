@@ -15,4 +15,7 @@ class MainController < ApplicationController
 
   def forms_test
   end
+
+  def free_editor
+  end
 end

@@ -13,3 +13,4 @@
 //= require vendor/gsap/TweenMax
 //= require vendor/ngfx/ngFx
 //= require vendor/jquery.mb.YTPlayer
+//= require vendor/prism

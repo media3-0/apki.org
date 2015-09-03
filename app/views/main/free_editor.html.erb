@@ -1,0 +1,57 @@
+<h2 class="text-center mrg20t" style="margin-bottom:50px;">Edytor kodu</h2>
+
+<p>Oto edytor kodu w którym możesz do woli testować swój kod w językach które wspieramy. <strong>Uwaga: żadne zmiany nie są zapisywane!</strong> Jeżeli przeładujesz stronę, zmienisz język lub przejdziesz gdzie indziej - cały kod zostanie usunięty.</p><br><br>
+
+<div class="col-md-12 pad0a">
+Język:<br>
+    <select id="langSelector" style="width:100%;" class="mrg25b">
+
+    </select>
+</div>
+<div class="col-md-6 code-editor" id="editorTest" style="height:300px">
+
+</div>
+<div class="col-md-6 jumbotron mrg0a pad10a" id="editorResult" style="height:300px; white-space: pre-wrap">
+    Tutaj pojawi się wynik.
+</div>
+
+        <div class="clearfix"></div>
+
+<div class="col-md-6 pad0a mrg0a" style="height:30px">
+<input type="text" id="userInput" style="width:100%;height:30px" placeholder="Dane wejściowe...">
+</div>
+<div class="col-md-6 pad0a mrg0a" style="height:30px">
+    <button id="sendCode" class="btn btn-primary mrg0a" style="width:100%;height:30px">Skompiluj</button>
+</div>
+<div class="clearfix"></div>
+
+        <script type="text/javascript">
+            //Sooo much laaame, so much passe, soo much non angular way xD
+            //But boss told me to change colors and pixels, so I have no time for functionality xD
+            $(function(){
+                ApkiOrg.App.app.initEditor('ruby', 'puts "Hello, World!"');
+                $.each(ApkiOrg.App.app.getEditor().langs, function(i, el){
+                    $('#langSelector').append('<option value="'+el.toLowerCase()+'"'+(el=='RUBY'?'selected':'')+'>'+el+'</option>');
+                });
+                $('#langSelector').on('change', function(){
+                    ApkiOrg.App.app.initEditor($('#langSelector').val(), '');
+                    $('#editorResult').html('Tutaj pojawi się wynik.');
+                });
+                $('#sendCode').on('click', function(){
+                    $('#editorResult').html('Proszę czekać...');
+                    $.ajax({
+                        url:'/main/compile.json',
+                        type:'POST',
+                        dataType:'json',
+                        data:{
+                            'lang':$('#langSelector').val().toUpperCase(),
+                            'code':ApkiOrg.App.app.getEditor().getCode(),
+                            'user_input':$('#userInput').val()
+                        },
+                        success:function(ans){
+                            $('#editorResult').html(ans.output_html);
+                        }
+                    });
+                });
+            });
+        </script>

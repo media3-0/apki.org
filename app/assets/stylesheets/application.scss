@@ -451,14 +451,6 @@ form{
     .course-article{
       padding:40px 25px 25px 60px;
       max-width:900px;
-
-      code{
-        @extend .mrg25l;
-        @extend .mrg25r;
-        @extend .mrg10t;
-
-        display: block;
-      }
     }
 
     &.full-screen-art-element{
@@ -810,9 +802,35 @@ header.course-front-header{
   }
   .cbp_tmtimeline:before{
     left:5%;
+    bottom:60px;
+  }
+  a.btn.btn-default{
+    color: $color-main !important;
   }
 }
 .cbp_tmtimeline .cbp_tmlabel small{
   color:white;
   font-size:40%;
+}
+
+.cbp_tmlabel a {
+  color:white;
+}
+.cbp_tmlabel a:hover {
+  color:#e7e7e7;
+}
+
+.betaInfo{
+  position: absolute;
+  left: 114px;
+  top: 3px;
+}
+
+code{
+  @extend .mrg25l;
+  @extend .mrg25r;
+  @extend .mrg10t;
+  @extend .pad5a;
+
+  display: block;
 }

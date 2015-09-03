@@ -38,14 +38,22 @@
         <div class="auhorsGrid text-left mrg20a mrg25b">
             <img ng-repeat="author in project.contributors" title="{{ author.login }}" alt="{{ author.login }}" data-url="{{ author.html_url }}" src="{{ author.avatar_url }}" onclick="location.assign($(this).data('url'));" />
         </div>
-        <h2>Commity</h2>
+        <h2>Ostatnie commity</h2>
         <div class="mrg20a">
             <ul class="cbp_tmtimeline">
-                <li ng-repeat="commit in project.commits">
+                <li ng-repeat="commit in project.commits | limitTo:5">
                     <div class="cbp_tmicon"><img style="width:40px;height:40px" class="circular" src="{{ commit.author.avatar_url }}"></div>
                     <div class="cbp_tmlabel">
                         <h2>{{ commit.author.login }}<br><small>@ {{ commit.commit.author.date }}</small></h2>
                         <p style="white-space: pre-wrap">{{ commit.commit.message }}</p>
+                    </div>
+                </li>
+                <li ng-if="project.commits.length>5">
+                    <div class="cbp_tmicon"></div>
+                    <div class="cbp_tmlabel">
+                        <div class="text-center">
+                        <a href="{{ project.info.html_url + '/commits/master' }}" target="_blank" class="btn btn-lg btn-default">Wyświetl wszystkie commity</a>
+                       </div>
                     </div>
                 </li>
             </ul>

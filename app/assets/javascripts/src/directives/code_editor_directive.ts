@@ -27,6 +27,7 @@ module ApkiOrg.CourseMgr {
                                 ApkiOrg.App.app.getEditor().disableRange(el.rowStart, el.colStart, el.rowEnd, el.colEnd);
                             });
                         }
+                        $('#editorTest>textarea').focus();
                     }, 0, true, element);
                 };
 

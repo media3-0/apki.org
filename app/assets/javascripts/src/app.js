@@ -552,6 +552,7 @@ var Editor;
     var EditorManager = (function () {
         function EditorManager(divId, langId, initCode) {
             this._disabled_ranges = Array();
+            this.langs = ['C', 'CPP', 'CPP11', 'CLOJURE', 'CSHARP', 'JAVA', 'JAVASCRIPT', 'HASKELL', 'PERL', 'PHP', 'PYTHON', 'RUBY'];
             ace.config.set("basePath", "/ace");
             this.div = $('#' + divId);
             this.div.text(initCode);
@@ -945,6 +946,7 @@ var ApkiOrg;
                             $('#courseLessonMenu').find('ul.article-parsed').append('<li class="fx-fade-down"><i class="glyphicon ' + this.ico + '"></i> <a href="' + this.anchor + '" ng-click="goToPart(\'article\')">' + this.title + '</a></li>');
                         });
                         $compile($('#courseLessonMenu').find('ul.article-parsed'))($scope);
+                        Prism.highlightAll();
                     }, 1, false);
                 };
                 /**
@@ -992,6 +994,9 @@ var ApkiOrg;
                     if ($scope.currExerc === null) {
                         $scope.goToPart('quiz');
                     }
+                    $timeout(function () {
+                        Prism.highlightAll();
+                    }, 500);
                     $scope.$apply();
                 };
                 $scope.goToPart = function (part, forceId) {
@@ -1133,6 +1138,7 @@ var ApkiOrg;
                                     ApkiOrg.App.app.getEditor().disableRange(el.rowStart, el.colStart, el.rowEnd, el.colEnd);
                                 });
                             }
+                            $('#editorTest>textarea').focus();
                         }, 0, true, element);
                     };
                     attrs.$observe('exercId', function () {

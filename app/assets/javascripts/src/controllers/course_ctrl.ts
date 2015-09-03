@@ -19,6 +19,7 @@
 /// <reference path="../main.ts"/>
 
 declare var app:any;
+declare var Prism:any;
 
 module ApkiOrg.CourseMgr {
     /**
@@ -441,6 +442,8 @@ module ApkiOrg.CourseMgr {
                         $('#courseLessonMenu').find('ul.article-parsed').append('<li class="fx-fade-down"><i class="glyphicon '+this.ico+'"></i> <a href="'+this.anchor+'" ng-click="goToPart(\'article\')">'+this.title+'</a></li>');
                     });
                     $compile($('#courseLessonMenu').find('ul.article-parsed'))($scope);
+
+                    Prism.highlightAll();
                 }, 1, false);
             }
 
@@ -493,6 +496,10 @@ module ApkiOrg.CourseMgr {
                 if ($scope.currExerc === null){
                     $scope.goToPart('quiz');
                 }
+
+                $timeout(function(){
+                    Prism.highlightAll();
+                }, 500);
 
                 $scope.$apply();
             }
