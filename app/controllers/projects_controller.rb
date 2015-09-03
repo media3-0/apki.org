@@ -21,6 +21,10 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     @repositories = Octokit.repositories current_user.uid.to_i
+    organizations = Octokit.organizations current_user.uid.to_i
+    organizations.each do |org|
+      @repositories.concat Octokit.organization_repositories org.id
+    end
     @project = Project.new
     @project.user = current_user
   end
@@ -28,11 +32,19 @@ class ProjectsController < ApplicationController
   # GET /projects/1/edit
   def edit
     @repositories = Octokit.repositories current_user.uid.to_i
+    organizations = Octokit.organizations current_user.uid.to_i
+    organizations.each do |org|
+      @repositories.concat Octokit.organization_repositories org.id
+    end
   end
 
   # POST /projects
   def create
     @repositories = Octokit.repositories current_user.uid.to_i
+    organizations = Octokit.organizations current_user.uid.to_i
+    organizations.each do |org|
+      @repositories.concat Octokit.organization_repositories org.id
+    end
     @project = Project.new(project_params)
     @project.user = current_user
     if @project.save
