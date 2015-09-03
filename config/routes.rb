@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   get 'projects/mine'
+  post 'main/compile'
   post 'projects/repo/:id', to: 'projects#repo'
   resources :projects
   namespace :course do
