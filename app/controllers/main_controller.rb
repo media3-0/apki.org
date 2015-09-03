@@ -1,4 +1,6 @@
 class MainController < ApplicationController
+  before_action :is_logged_in, only: [:compile]
+
   def index
   end
 
@@ -17,6 +19,7 @@ class MainController < ApplicationController
   end
 
   def compile
+    sleep rand(0.5...3.0)
     conn = Faraday.new(url: Rails.configuration.x.compile_api_host) do |faraday|
       faraday.request :url_encoded
       faraday.response :logger
