@@ -18,9 +18,9 @@ class MainController < ApplicationController
   def forms_test
   end
 
-<<<<<<< HEAD
   def free_editor
-=======
+  end
+
   def compile
     sleep rand(0.5...3.0)
     conn = Faraday.new(url: Rails.configuration.x.compile_api_host) do |faraday|
@@ -36,6 +36,5 @@ class MainController < ApplicationController
     end
 
     render json: JSON.parse(response.body.to_s)
->>>>>>> 860590da78e73985b1539853493e1bf825cd42b8
   end
 end
