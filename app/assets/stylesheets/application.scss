@@ -76,6 +76,11 @@ $color-text-on-main: #ffffff;
   @extend .pad10t;
 }
 
+.navbar-brand img{
+  z-index: 2;
+  position: relative;
+}
+
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus{
   background-color: $color-sec;
   color: $color-text-on-main;
