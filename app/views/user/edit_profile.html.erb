@@ -3,6 +3,7 @@
     url: url_for(action: 'edit_profile', controller: 'user'),
     method: :post do |f| %>
     <%= f.input :profile_description, label: 'Opis profilu:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
+    <%= f.association :school, collection: @schools, label_method: :name, value_method: :id, label: 'Szkoły', input_html: { class: 'selectpicker', 'data-width' => '100%'} -%>
 
     <div class="buttons">
         <%= f.button :submit, value: 'Aktualizuj', class: 'btn-primary btn-save' %>

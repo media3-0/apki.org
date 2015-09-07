@@ -1,0 +1,6 @@
+<h3>Moje newsy:</h3>
+<ul>
+  <%- @news.each do |news| -%>
+    <li><%= link_to news.title, view_news_path(news) -%></li>
+  <%- end -%>
+</ul>

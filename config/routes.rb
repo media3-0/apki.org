@@ -23,8 +23,8 @@ Rails.application.routes.draw do
   post 'school/edit_profile'
   get 'school/educator_news'
   post 'school/educator_news'
-  get 'school/all_news'
-  get 'school/news/:id', to: 'school#view_news', as: 'school_view_news'
+  get 'school/educator_news_list'
+  post 'school/accept_application'
 
   get 'user/profile/:id', to: 'user#profile', as: 'profile_view'
   get 'user/edit_profile'
