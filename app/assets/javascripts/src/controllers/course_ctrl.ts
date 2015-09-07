@@ -216,8 +216,6 @@ module ApkiOrg.CourseMgr {
                 var _f = () => {
                     $scope.inited = false;
 
-                    $scope.quizzesAreCorrect=false;
-
                     $scope.toBeInited = {
                         'course':false,
                         'lessons':false
@@ -251,6 +249,8 @@ module ApkiOrg.CourseMgr {
              */
             $scope.buildCourse = () => {
                 if ($scope.inited) return;
+
+                $scope.quizzesAreCorrect=false;
 
                 $scope.parseArticle();
 

@@ -89,7 +89,7 @@
                             <span class="spinner"><i class="fa fa-cog fa-spin color-primary"></i></span><span class="not-spinner">Sprawdź odpowiedzi</span></button>
                     </div>
 
-                    <div class="buttons" ng-if="(quizzesAreCorrect || getLesson().data.quizPassed) && isPartVisible('quiz')">
+                    <div class="buttons" ng-if="(quizzesAreCorrect || getLesson().data.quizPassed) && (isPartVisible('quiz'))">
                         <div class="desc">Udzieliłeś poprawnych odpowiedzi na wszystkie pytania</div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej (alt+n)" accesskey="n" ng-click="goToPart('end')">
                     </div>
                 </form>

@@ -750,7 +750,6 @@ var ApkiOrg;
                 $scope.initCourse = function () {
                     var _f = function () {
                         $scope.inited = false;
-                        $scope.quizzesAreCorrect = false;
                         $scope.toBeInited = {
                             'course': false,
                             'lessons': false
@@ -780,6 +779,7 @@ var ApkiOrg;
                 $scope.buildCourse = function () {
                     if ($scope.inited)
                         return;
+                    $scope.quizzesAreCorrect = false;
                     $scope.parseArticle();
                     $scope.goToPart('article');
                     if ($scope.getLesson().data.quizPassed) {
