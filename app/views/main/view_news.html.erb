@@ -19,10 +19,18 @@
   <hr>
 
   <!-- Post Content -->
-  <%= raw @news.content -%>
+  <%- if @news.educator_news -%>
+    <%= raw parse_markdown(@news.content)-%>
+  <%- else -%>
+    <%= raw @news.content -%>
+  <%- end -%>
   <hr>
 
   <%- if current_user and current_user.is_admin? -%>
       <%= link_to 'Edytuj newsa', rails_admin.edit_path(model_name: 'News', id: @news.id.to_s) -%>
+  <%- end -%>
+
+  <%- if current_user and current_user.account_type == :teacher -%>
+    <%= link_to 'Edytuj newsa', school_educator_news_path + '?id=' + @news.id.to_s -%>
   <%- end -%>
 </div>

@@ -8,10 +8,11 @@ class UserController < ApplicationController
 
   def edit_profile
     @user = current_user
+    @schools = School.all
 
     if params.include?(:user)
       # zatwierdzony formularz POST
-      if @user.update_attributes(params[:user].permit(:profile_description))
+      if @user.update_attributes(params[:user].permit(:profile_description, :school_id))
         flash[:notice] = 'Zapisano'
       else
         flash[:error] = 'Błąd podczas zapisu'

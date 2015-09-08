@@ -25,7 +25,6 @@ feature 'Zarządzanie klasami', type: :feature do
     within 'form.simple_form' do
       fill_in 'school_name', with: 'test'
       fill_in 'wmd-input-description', with: 'test opis'
-      select('student1', :from => 'school_student_ids')
     end
     click_button 'Aktualizuj'
     expect(current_path).to eq(school_edit_profile_path)

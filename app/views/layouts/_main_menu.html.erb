@@ -46,6 +46,7 @@
                             <%- if current_user.account_type == :teacher -%>
                             <li role="separator" class="divider"></li>
                             <li><%= link_to 'Profil szkoły', school_edit_profile_path -%></li>
+                            <li><%= link_to 'Lista moich newsów', school_educator_news_list_path -%></li>
                             <li><%= link_to 'Nowy news', school_educator_news_path -%></li>
                             <%- end -%>
                             <li role="separator" class="divider"></li>

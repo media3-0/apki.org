@@ -7,8 +7,12 @@
         <time class="cbp_tmtime" datetime=""><span><%= single.created_at.strftime('%F') -%></span> <span><%= single.created_at.strftime('%T') -%></span></time>
         <div class="cbp_tmicon cbp_tmicon-text"></div>
         <div class="cbp_tmlabel">
-            <h2><%= single.title %><br><small>Autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a></small></h2>
-            <%= raw single.content -%>
+            <h2><%= link_to single.title, view_news_path(single) -%><br><small>Autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a></small></h2>
+            <%- if single.educator_news -%>
+              <%= raw parse_markdown(single.content)-%>
+            <%- else -%>
+              <%= raw single.content -%>
+            <%- end -%>
         </div>
     </li>
     <%- end -%>

@@ -3,14 +3,11 @@
 <%= raw parse_markdown(@school.description) if @school.description-%>
 
 <h4>Nauczyciel:</h4>
-<%- teacher = @school.users.where(account_type: :teacher).first -%>
-<%= link_to teacher.nickname, profile_view_path(teacher) -%>
+<%= link_to @school.user.nickname, profile_view_path(@school.user) -%>
 
 <h4>Lista uczniów:</h4>
 <ul>
-  <%- @school.users.each do |user| -%>
-      <%- if user.account_type == :student -%>
-        <li><%= link_to user.nickname, profile_view_path(user) -%></li>
-      <%- end -%>
+  <%- @school.students.where(school_accepted: true).each do |user| -%>
+    <li><%= link_to user.nickname, profile_view_path(user) -%></li>
   <%- end -%>
 </ul>

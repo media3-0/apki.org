@@ -1,5 +1,5 @@
 <h3>News</h3>
-<%= simple_form_for @educator_news,
+<%= simple_form_for @news,
                     url: url_for(action: 'educator_news', controller: 'school'),
                     method: :post do |f| %>
     <%- if @news_id -%>

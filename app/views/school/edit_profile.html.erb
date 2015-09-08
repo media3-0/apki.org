@@ -4,6 +4,27 @@
                     method: :post do |f| %>
     <%= f.input :name, label: 'Nazwa szkoły:' %>
     <%= f.input :description, label: 'Opis profilu:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
-    <%= f.association :students, collection: @users, label_method: :nickname, value_method: :id, label: 'Uczniowie', input_html: { class: 'selectpicker', 'data-width' => '100%'} -%>
     <%= f.button :submit, value: 'Aktualizuj' %>
 <% end %>
+
+<h4>Lista uczniów</h4>
+<ul>
+  <%- @students.each do |student| -%>
+  <li><%= link_to student.nickname, profile_view_path(student) -%></li>
+  <%- end -%>
+</ul>
+<h4>Lista podań</h4>
+<ul>
+  <%- @applications.each do |student| -%>
+    <li><%= link_to student.nickname, profile_view_path(student) -%>
+      <%= simple_form_for student, url: (url_for(action: 'accept_application', controller: 'school') + '?accepted=true'), method: :post do |f| -%>
+        <%= f.input :id, as: :hidden -%>
+        <%= f.button :submit, value: 'Akceptuj' -%>
+      <%- end -%>
+      <%= simple_form_for student, url: url_for(action: 'accept_application', controller: 'school'), method: :post do |f| -%>
+        <%= f.input :id, as: :hidden -%>
+        <%= f.button :submit, value: 'Odrzuć' -%>
+      <%- end -%>
+    </li>
+  <%- end -%>
+</ul>
