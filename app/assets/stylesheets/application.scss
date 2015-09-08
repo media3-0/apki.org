@@ -756,7 +756,17 @@ header.course-front-header{
 }
 
 #staticContent{
-  max-width:900px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  margin-top: -200px;
+  border: 2px solid #e7e7e7;
+  padding: 15px;
+  padding-top: 200px;
+  border-bottom: none;
+  padding-bottom: 155px;
+  margin-bottom: -155px;
 
   h1{
     margin-bottom:50px;
