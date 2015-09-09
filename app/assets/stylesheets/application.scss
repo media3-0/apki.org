@@ -360,15 +360,14 @@ form{
       color: #555;
       background-color: #f1f1f1;
       border-right: 1px solid #e7e7e7 !important;
-      font-size: 20px;
+      font-size: 40px;
     }
   }
 
   .secHidePanelBar{
     width:100%;
     height:15px;
-    line-height:15px;
-    font-size: 20px;
+    font-size: 40px;
     background-color: #a468b3;
     border-top:1px solid #955AA4;
     text-align: center;
@@ -376,6 +375,8 @@ form{
     cursor: pointer;
     span.fa{
       margin-top: -2px !important;
+      position: relative;
+      top: -24px;
     }
   }
 
@@ -540,7 +541,7 @@ form{
 
   div.instruction{
     @extend .pad15a;
-    @extend .mrg10t;
+    @extend .mrg25t;
     @extend .mrg10b;
 
     background-color: #f1f1f1;
@@ -549,7 +550,7 @@ form{
 
     &:before{
       @extend h2;
-      content: "Zadanie\A\A";
+      content: "Zadanie\A";
     }
   }
 }
