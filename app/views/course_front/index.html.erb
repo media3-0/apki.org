@@ -6,13 +6,13 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <span class="betaInfo">BETA</span>
+                <a href="/course_front/list" class="go-back-ico" title="Wróć do listy kursów" ng-hide="!inited"><%= image_tag 'backgarrow.png', alt: 'Apki.org', style: 'opacity:0.3' %></a>
                 <a class="navbar-brand" href="http://apki.org" style="z-index: 2; position: relative;"><%= image_tag 'logo.png', alt: 'Apki.org' %></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <a href="/course_front/list" class="go-back-ico" title="Wróć do listy kursów" ng-hide="!inited"><%= image_tag 'backgarrow.png', alt: 'Apki.org', style: 'opacity:0.3' %></a>
-                <h3 style="float:left;" class="mrg10t mrg5l">{{ course.data.title }}</h3>
+                <h3 style="float:left; margin-left: 125px;" class="mrg10t">{{ course.data.title }}</h3>
                 <ul class="nav navbar-nav navbar-right">
                     <%- if current_user -%>
                     <li class="dropdown">

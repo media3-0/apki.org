@@ -4,7 +4,7 @@
 <ul class="cbp_tmtimeline mrg20b">
     <%- @news.each do |single| -%>
     <li>
-        <time class="cbp_tmtime" datetime=""><span><%= single.created_at.strftime('%F') -%></span> <span><%= single.created_at.strftime('%T') -%></span></time>
+        <time class="cbp_tmtime" datetime=""><span><%= single.created_at.strftime('%F') -%></span></time>
         <div class="cbp_tmicon cbp_tmicon-text"></div>
         <div class="cbp_tmlabel">
             <h2><%= link_to single.title, view_news_path(single) -%><br><small>Autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a></small></h2>
