@@ -868,3 +868,21 @@ code{
   width: auto;
   margin: 15px;
 }
+
+.news-timeline{
+  &.cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel {
+    background: white;
+  }
+
+  &.cbp_tmtimeline > li .cbp_tmlabel {
+    color:black;
+  }
+
+  .cbp_tmlabel a {
+    color: black;
+  }
+
+  &.cbp_tmtimeline .cbp_tmlabel small {
+    color: black;
+  }
+}

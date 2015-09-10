@@ -1,13 +1,13 @@
 <h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Aktualności</h2>
 
 
-<ul class="cbp_tmtimeline mrg20b">
+<ul class="cbp_tmtimeline mrg20b news-timeline">
     <%- @news.each do |single| -%>
     <li>
-        <time class="cbp_tmtime" datetime=""><span><%= single.created_at.strftime('%F') -%></span></time>
-        <div class="cbp_tmicon cbp_tmicon-text"></div>
+        <time class="cbp_tmtime" datetime=""><span><a href="<%= url_for profile_view_path(single.user) -%>">Autor: <%= single.user.nickname -%></a></span><span><small><%= single.created_at.strftime('%F') -%></small></span></time>
+        <div class="cbp_tmicon"><img style="width:40px;height:40px" class="circular" src="<%= single.user.image %>"></div>
         <div class="cbp_tmlabel">
-            <h2><%= link_to single.title, view_news_path(single) -%><br><small>Autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a></small></h2>
+            <h2><%= link_to single.title, view_news_path(single) -%></h2>
             <%- if single.educator_news -%>
               <%= raw parse_markdown(single.content)-%>
             <%- else -%>
