@@ -4,10 +4,19 @@
 <ul class="cbp_tmtimeline mrg20b news-timeline">
     <%- @news.each do |single| -%>
     <li>
-        <time class="cbp_tmtime" datetime=""><span><a href="<%= url_for profile_view_path(single.user) -%>">Autor: <%= single.user.nickname -%></a></span><span><small><%= single.created_at.strftime('%F') -%></small></span></time>
-        <div class="cbp_tmicon"><img style="width:40px;height:40px" class="circular" src="<%= single.user.image %>"></div>
+        <time class="cbp_tmtime" datetime=""><span><small><%= single.created_at.strftime('%F') -%></small></span></time>
+
+
+        <div class="cbp_tmicon"></div>
         <div class="cbp_tmlabel">
             <h2><%= link_to single.title, view_news_path(single) -%></h2>
+            <img class="postImg" data-wtf="na co to tutaj..." style="background-image: url('http://valenciacollege.edu/asdegrees/information-technology/images/it-computer-programming-analysis.png'); background-position: center center; height: 200px; width:100%; margin-left:-30px;">
+
+            <div class="mrg25a mrg0l">
+            <img class="mrg10r" style="width:40px;height:40px; border: 2px solid #955AA4; border-radius: 20px" src="<%= single.user.image %>"> <a href="<%= url_for profile_view_path(single.user) -%>">Autor: <%= single.user.nickname -%></a>
+            </div>
+            <div class="postImg mrg10b" style="border-bottom: 2px solid #955AA4;  margin-left:-30px;"> </div>
+
             <%- if single.educator_news -%>
               <%= raw parse_markdown(single.content)-%>
             <%- else -%>
@@ -18,3 +27,14 @@
     <%- end -%>
 </ul>
 <%= paginate @news -%>
+
+        <script type="text/javascript">
+            function resizePostImgs(){
+                $('.postImg').width($('.cbp_tmlabel').width()+28.8+28.8+2);
+            }
+
+            $(function(){
+               $(window).on('resize', resizePostImgs);
+                resizePostImgs();
+            });
+        </script>
