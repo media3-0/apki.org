@@ -10,7 +10,7 @@
         <div class="cbp_tmicon"></div>
         <div class="cbp_tmlabel">
             <h2><%= link_to single.title, view_news_path(single) -%></h2>
-            <img class="postImg" data-wtf="na co to tutaj..." style="background-image: url('http://valenciacollege.edu/asdegrees/information-technology/images/it-computer-programming-analysis.png'); background-position: center center; height: 200px; width:100%; margin-left:-30px;">
+            <img class="postImg" style="background-image: url('<%= single.image -%>'); background-position: center center; height: 200px; width:100%; margin-left:-30px;">
 
             <div class="mrg25a mrg0l">
             <img class="mrg10r" style="width:40px;height:40px; border: 2px solid #955AA4; border-radius: 20px" src="<%= single.user.image %>"> <a href="<%= url_for profile_view_path(single.user) -%>">Autor: <%= single.user.nickname -%></a>
