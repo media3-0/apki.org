@@ -14,6 +14,12 @@
 
   <script type="text/javascript">
       jQuery(function () {
+          $.cookiesDirective({
+              position : 'bottom',
+              message: 'Ta strona korzysta z ciasteczek i innych technologii zbierające dane statystyczne. Przeczytaj naszą <a href="/static/privacy" target="_blank">politykę prywatności</a>.',
+              explicitConsent:false,
+              duration:0
+          });
       });
   </script>
 </head>

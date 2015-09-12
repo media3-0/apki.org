@@ -14,3 +14,4 @@
 //= require vendor/ngfx/ngFx
 //= require vendor/jquery.mb.YTPlayer
 //= require vendor/prism
+//= require vendor/jquery.cookiesdirective

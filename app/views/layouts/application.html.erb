@@ -26,27 +26,44 @@
 
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div class="col-md-4 text-center">
-                <%= link_to 'O projekcie', '/static/about' -%>
-                <br><%= link_to 'Partnerzy', '/static/partners' -%>
-                <br><%= link_to 'Ludzie projektu', '/static/people' -%>
-                <br><%= link_to 'Kontakt', '/static/contact' -%>
-                <br><%= link_to 'Fundacja Media 3.0', 'http://media30.pl/o-fundacji/', target:'_blank' -%>
-                <br><%= link_to 'O idei', '/static/idea' -%>
-            </div>
-            <div class="col-md-4 text-center">
-                <%= link_to 'Aktualności', news_path -%>
-                <br><%= link_to 'Mentorzy', '/static/mentors' -%>
-                <br><%= link_to 'Forum', 'http://forum.apki.org/', target:'_blank' -%>
-                <br><%= link_to 'Facebook', 'https://www.facebook.com/apki.org', target:'_blank' -%>
-                <br>Regulamin serwisu
+            <div class="col-md-3 text-center">
+                <div style="font-weight: bold; text-transform: uppercase" class="mrg5b">Serwis</div>
+
+                <%= link_to 'O serwisie', '/static/about' -%>
+                <br><%= link_to 'GitHub', 'https://github.com/media3-0/apki.org', target:'_blank' -%>
+                <br><%= link_to 'Dev blog', 'http://devblog.apki.org/', target:'_blank' -%>
+                <br><%= link_to 'Status usług', 'https://apkiorg.statuscast.com/', target:'_blank' -%>
+                <br>Regulamin
                 <br>Polityka prywatności
             </div>
-            <div class="col-md-4 text-center">
-                <br><%= link_to 'Dev blog', 'http://devblog.apki.org/', target:'_blank' -%>
+            <div class="col-md-3 text-center">
+                <div style="font-weight: bold; text-transform: uppercase" class="mrg5b">O nas</div>
+
+                <%= link_to 'O projekcie', '/static/about' -%>
+                <br><%= link_to 'Zespół', '/static/people' -%>
+                <br><%= link_to 'Idea', '/static/idea' -%>
+                <br><%= link_to 'Partnerzy', '/static/partners' -%>
+                <br><%= link_to 'Fundacja Media 3.0', 'http://media30.pl/o-fundacji/', target:'_blank' -%>
+                <br><%= link_to 'Kontakt', '/static/contact' -%>
+
+            </div>
+            <div class="col-md-3 text-center">
+                <div style="font-weight: bold; text-transform: uppercase" class="mrg5b">Pomoc</div>
+
+                <%= link_to 'Mentorzy', '/static/mentors' -%>
+                <br><%= link_to 'Forum', 'http://forum.apki.org/', target:'_blank' -%>
                 <br><%= link_to 'Pomoc techniczna', 'https://github.com/media3-0/apki.org/issues', target:'_blank' -%>
-                <br><%= link_to 'GitHub projektu', 'https://github.com/media3-0/apki.org', target:'_blank' -%>
-                <br><%= link_to 'Status usług', 'https://apkiorg.statuscast.com/', target:'_blank' -%>
+                <br><%= link_to 'Zgłoś uwagi', 'https://github.com/media3-0/apki.org/issues/new', target:'_blank' -%>
+                <br><%= link_to 'FAQ', '#' -%>
+
+            </div>
+            <div class="col-md-3 text-center">
+                <div style="font-weight: bold; text-transform: uppercase" class="mrg5b">Media</div>
+
+                <%= link_to 'Facebook', 'https://www.facebook.com/apki.org', target:'_blank' -%>
+                <br><%= link_to 'Twitter', '#', target:'_blank' -%>
+                <br><%= link_to 'YouTube', '#', target:'_blank' -%>
+
             </div>
         </div>
       <div class="col-md-3"></div>
@@ -61,26 +78,33 @@
         <p>Projekt dofinansowany ze środków Ministerstwa Administracji i Cyfryzacji<br><a href="https://mac.gov.pl/" target="_blank">
           <img src="/images/macblue.png"/>
         </a></p>
-        <p>
-          <a href="https://www.hackerearth.com/" target="_blank">
-            <img src="/images/hackerearth-Kopiowanie-3.png"/>
-          </a>
-          <a href="http://codeweek.eu/" target="_blank">
-            <img src="/images/CodeWeek 2015 PL.png" />
-          </a>
-          <a href="http://programistamag.pl/" target="_blank">
-            <img src="/images/Logo_Programista405px.jpg"/>
-          </a>
-          <a href="http://www.cogito.com.pl/" target="_blank">
-            <img src="/images/cogito-Kopiowanie.gif"/>
-          </a>
-          <a href="http://www.superbelfrzy.edu.pl/" target="_blank">
-            <img src="/images/superbelfrzy-Kopiowanie.jpg"/>
-          </a>
-          <a href="http://www.komputerswiat.pl/" target="_blank">
-            <img src="/images/ks_logo.png" />
-          </a>
-        </p>
+
+          <div class="text-left col-md-12">
+          <div style="font-weight: bold; text-transform: uppercase" class="">Partnerzy</div>
+            <p>
+              <a href="https://www.hackerearth.com/" target="_blank">
+                <img src="/images/hackerearth-Kopiowanie-3.png"/>
+              </a>
+              <a href="http://codeweek.eu/" target="_blank">
+                <img src="/images/CodeWeek 2015 PL.png" />
+              </a>
+            </p>
+          <div style="font-weight: bold; text-transform: uppercase" class="">Partonat</div>
+            <p>
+              <a href="http://programistamag.pl/" target="_blank">
+                <img src="/images/Logo_Programista405px.jpg"/>
+              </a>
+              <a href="http://www.cogito.com.pl/" target="_blank">
+                <img src="/images/cogito-Kopiowanie.gif"/>
+              </a>
+              <a href="http://www.superbelfrzy.edu.pl/" target="_blank">
+                <img src="/images/superbelfrzy-Kopiowanie.jpg"/>
+              </a>
+              <a href="http://www.komputerswiat.pl/" target="_blank">
+                <img src="/images/ks_logo.png" />
+              </a>
+            </p>
+          </div>
       </div>
   </footer>
 </div>

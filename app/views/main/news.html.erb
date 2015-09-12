@@ -4,7 +4,7 @@
 <ul class="cbp_tmtimeline mrg20b news-timeline">
     <%- @news.each do |single| -%>
     <li>
-        <time class="cbp_tmtime" datetime=""><span><small><%= single.created_at.strftime('%F') -%></small></span></time>
+        <time class="cbp_tmtime" datetime=""><span style="margin-top: -9px;"><small style="font-size: 50%"><%= single.created_at.strftime('%F') -%></small></span></time>
 
 
         <div class="cbp_tmicon"></div>
