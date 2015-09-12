@@ -5,11 +5,12 @@ class News
   # paginacja
   paginates_per 10
 
-  validates_presence_of :title, :content, :user
+  validates_presence_of :title, :content, :user, :image
   validates_length_of :title, maximum: 250, message: 'Długość tytułu musi być mniejsza niż 250'
 
   field :title, type: String
   field :content, type: String
+  field :image, type: String
   field :educator_news, type: Boolean, default: false
 
   belongs_to :user
@@ -17,6 +18,7 @@ class News
   rails_admin do
     edit do
       field :title
+      field :image
       field :content, :ck_editor
       field :user do
         visible false

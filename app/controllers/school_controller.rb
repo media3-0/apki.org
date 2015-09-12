@@ -77,7 +77,7 @@ class SchoolController < ApplicationController
     unless @news.user.eql?(current_user)
       fail Exceptions::AccessDenied.new('Ten news nie należy do Ciebie')
     end
-    if @news.update_attributes(params[:news].permit(:title, :content))
+    if @news.update_attributes(params[:news].permit(:title, :content, :image))
       flash[:notice] = 'Zaktualizowano news'
       redirect_to view_news_path(@news)
     end
@@ -87,7 +87,7 @@ class SchoolController < ApplicationController
   def new_news
     # Nowy news
     params[:news][:user_id] = current_user.id.to_s
-    @news = News.new(params[:news].permit(:title, :content, :user_id))
+    @news = News.new(params[:news].permit(:title, :content, :image, :user_id))
     @news.educator_news = true
     if @news.save
       flash[:notice] = 'Stworzono nowy news'
