@@ -28,7 +28,7 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'rails_admin'
 
 # MongoDB
-gem 'mongoid', '~> 4' # TODO : Śledzić rozwój. Wersja 5 (obecnie w becie) jest na oficjalnym sterowniku MongoDB
+gem 'mongoid', '~> 5'
 
 #Slugi 
 gem 'mongoid-slug'

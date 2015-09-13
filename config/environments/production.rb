@@ -94,4 +94,6 @@ Rails.application.configure do
 
   # Nasze ustawienia
   config.x.compile_api_host = 'http://compile.apki.org'
+
+  Mongo::Logger.logger.level = ::Logger::FATAL
 end
