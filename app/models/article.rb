@@ -1,7 +1,7 @@
 class Article
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::Slug
+  #include Mongoid::Slug
 
  # paginacja
   paginates_per 3
@@ -12,7 +12,7 @@ class Article
   field :title, type: String
   field :content, type: String
 
-  slug :title
+  #slug :title
 
   belongs_to :user
   belongs_to :article_category
