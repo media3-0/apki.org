@@ -30,6 +30,8 @@ gem 'rails_admin'
 # MongoDB
 gem 'mongoid', '~> 4' # TODO : Śledzić rozwój. Wersja 5 (obecnie w becie) jest na oficjalnym sterowniku MongoDB
 
+#Slugi 
+gem 'mongoid-slug'
 # kompilator typescript
 # gem 'typescript-rails'
 # gem 'typescript-src', github: 'bdrazhzhov/typescript-src-ruby'
