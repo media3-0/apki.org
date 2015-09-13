@@ -173,6 +173,9 @@ GEM
     mongoid-grid_fs (2.2.0)
       mime-types (>= 1.0, < 3.0)
       mongoid (>= 3.0, <= 6.0)
+    mongoid-slug (4.0.0)
+      mongoid (>= 3.0)
+      stringex (~> 2.0)
     moped (2.0.7)
       bson (~> 3.0)
       connection_pool (~> 2.0)
@@ -347,6 +350,7 @@ GEM
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
     stackprof (0.2.7)
+    stringex (2.5.2)
     thin (1.6.3)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0)
@@ -407,6 +411,7 @@ DEPENDENCIES
   mina-multistage
   mini_magick
   mongoid (~> 4)
+  mongoid-slug
   newrelic_rpm
   octokit (~> 4)
   omniauth-github

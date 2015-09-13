@@ -13,7 +13,7 @@
   <hr>
 
   <!-- Date/Time -->
-  <p><span class="glyphicon glyphicon-time"></span> Opublikowane <%= @article.created_at.strftime('%F %T') -%> | Kategoria: <%= link_to @article.article_category.name, article_categories_path( @article.article_category.name) %></p>
+  <p><span class="glyphicon glyphicon-time"></span> Opublikowane <%= @article.created_at.strftime('%F %T') -%> | Kategoria: <%= link_to @article.article_category.name, article_categories_path( @article.article_category) %></p>
 
 
   <hr>
