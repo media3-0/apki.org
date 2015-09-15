@@ -19,7 +19,7 @@
     <!-- Date/Time -->
     <p style="float:left; margin-left:20px"><span class="glyphicon glyphicon-time"></span> Opublikowane <%= @article.created_at.strftime('%F %T') -%></p>
     <p style="float: right; margin-right:20px">
-        <span class="glyphicon glyphicon-user"></span> <a href="<%= url_for profile_view_path(@news.user) -%>">Autor: <%= @article.user.nickname -%></a>
+        <span class="glyphicon glyphicon-user"></span> <a href="<%= url_for profile_view_path(@article.user) -%>">Autor: <%= @article.user.nickname -%></a>
     </p>
 
     <div class="clearfix"></div>
