@@ -1,38 +1,22 @@
-<center><h1>Artykuły</h1> </center>
-<hr>
-        
-<%- @article.each do |single| -%>
-      <div class="col-lg-8">
-
-        <!-- Blog Post -->
-
-        <!-- Title -->
-        <h1><%= link_to single.title, view_article_path(single) -%></h1>
- 
-
-        <!-- Author -->
-        <p class="lead">
-          autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a>
-        </p>
-         
+<h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Artykuły</h2>
 
 
+<ul class="cbp_tmtimeline mrg20b news-timeline">
+    <%- @article.each do |single| -%>
+    <li>
+        <time class="cbp_tmtime" datetime=""><span style="margin-top: -9px;"><small style="font-size: 50%"><%= single.created_at.strftime('%F') -%></small></span></time>
 
 
-        <hr>
-
-        <!-- Date/Time -->
-        <p><span class="glyphicon glyphicon-time"></span> Opublikowane <%= single.created_at.strftime('%F %T') -%></p>
-       
-
-        <hr>
-        <!-- Post Content -->
-        <%= raw single.content -%>
-        <hr>
-      </div>
-
-
-<%- end -%>
-
-
+        <div class="cbp_tmicon"></div>
+        <div class="cbp_tmlabel">
+            <h2><%= link_to single.title, view_article_path(single) -%></h2>
+            <div class="mrg25a mrg0l">
+                <img class="mrg10r" style="width:40px;height:40px; border: 2px solid #955AA4; border-radius: 20px" src="<%= single.user.image %>"> <a href="<%= url_for profile_view_path(single.user) -%>">Autor: <%= single.user.nickname -%></a>
+            </div>
+            <div class="postImg mrg10b" style="border-bottom: 2px solid #955AA4;  margin-left:-30px;"> </div>
+            <%= raw single.content -%>
+        </div>
+    </li>
+    <%- end -%>
+</ul>
 <%= paginate @article -%>

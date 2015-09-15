@@ -459,6 +459,7 @@ module ApkiOrg.CourseMgr {
                 $scope.currPart = 'fullscreen_movie';
             }
             $scope.fullSizeClose = () => {
+                $('.fullscreen_movie').html('');
                 $scope.currPart = $('.fullscreen_movie').data('old-curr-part');
             }
             $scope.isPartVisible = (part:string):boolean =>{

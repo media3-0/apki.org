@@ -961,6 +961,7 @@ var ApkiOrg;
                     $scope.currPart = 'fullscreen_movie';
                 };
                 $scope.fullSizeClose = function () {
+                    $('.fullscreen_movie').html('');
                     $scope.currPart = $('.fullscreen_movie').data('old-curr-part');
                 };
                 $scope.isPartVisible = function (part) {

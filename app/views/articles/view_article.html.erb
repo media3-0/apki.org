@@ -1,28 +1,27 @@
-<div class="col-lg-8">
+<div id="staticContent">
 
-  <!-- Blog Post -->
+    <!-- Blog Post -->
 
-  <!-- Title -->
-  <h1><%= @article.title -%></h1>
+    <!-- Title -->
+    <h1 class="text-center"><%= @article.title -%></h1>
 
-  <!-- Author -->
-  <p class="lead">
-    autor: <a href="<%= url_for profile_view_path(@article.user) -%>"><%= @article.user.nickname -%></a>
-  </p>
-   
-  <hr>
+    <hr>
 
-  <!-- Date/Time -->
-  <p><span class="glyphicon glyphicon-time"></span> Opublikowane <%= @article.created_at.strftime('%F %T') -%> | Kategoria: <%= link_to @article.article_category.name, article_categories_path( @article.article_category) %></p>
+    <!-- Post Content -->
+    <%= raw @article.content -%>
+
+    <%- if current_user and current_user.is_admin? -%>
+    <%= link_to 'Edytuj artykuł', rails_admin.edit_path(model_name: 'Article', id: @article.id.to_s) -%>
+    <%- end -%>
 
 
-  <hr>
+    <hr>
+    <!-- Date/Time -->
+    <p style="float:left; margin-left:20px"><span class="glyphicon glyphicon-time"></span> Opublikowane <%= @article.created_at.strftime('%F %T') -%></p>
+    <p style="float: right; margin-right:20px">
+        <span class="glyphicon glyphicon-user"></span> <a href="<%= url_for profile_view_path(@news.user) -%>">Autor: <%= @article.user.nickname -%></a>
+    </p>
 
-  <!-- Post Content -->
-  <%= raw @article.content -%>
-  <hr>
-
-  <%- if current_user and current_user.is_admin? -%>
-      <%= link_to 'Edytuj artykuł', rails_admin.edit_path(model_name: 'Article', id: @article.id.to_s) -%>
-  <%- end -%>
+    <div class="clearfix"></div>
+    <hr style="margin-top: 12px;">
 </div>
