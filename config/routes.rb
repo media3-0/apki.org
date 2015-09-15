@@ -43,6 +43,10 @@ Rails.application.routes.draw do
   get 'main/free_editor'
   get 'course_front/index'
   get 'course_front/list'
+
+  get 'articles', to: 'articles#article'
+  get 'articles/:id', to: 'articles#view_article', as: 'view_article'
+  get 'articles/category/:id', to: 'article_categories#index', as: 'article_categories'
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
 
