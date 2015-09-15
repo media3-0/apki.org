@@ -48,6 +48,7 @@ module ApkiOrg.CourseMgr {
         exerciseNum:number;
         youtubeTheaterModeSrc:string;
         currExerc:MExercise;
+        ytVideo:string;
 
         initCourse(courseJSON:string)
         resizeElements()
@@ -399,6 +400,7 @@ module ApkiOrg.CourseMgr {
              */
             $scope.parseArticle = () => {
                 $timeout(() => {
+                    $scope.ytVideo = '';
 
                     var get_gen_id = (element:any):string => {
                         if ($.inArray($(element).attr('id'), [undefined, null, ''])>-1){
@@ -426,14 +428,16 @@ module ApkiOrg.CourseMgr {
                             if ($.inArray($(this).attr('alt'), [undefined, null, ''])>-1){
                                 $(this).attr('alt', 'Film');
                             }
-                            var iframe_id:string = get_gen_id(this);
-                            $(this).replaceWith('<button class="btn btn-lg btn-primary" data-youtube-src="'+$(this).attr('src')+'" ng-click="fullSizeElement(this, $event)" id="'+iframe_id+'"><span class="glyphicon glyphicon-facetime-video"></span> Obejrzyj film</button>');
-                            $compile($('#'+iframe_id))($scope);
-                            sub_cats.push({
-                                'title': $.trim($(this).attr('alt')),
-                                'anchor':'#'+iframe_id,
-                                'ico':'glyphicon-facetime-video'
-                            });
+//                            var iframe_id:string = get_gen_id(this);
+                            $scope.ytVideo = $(this).attr('src');
+                            $(this).replaceWith('&nbsp;');
+//                            $(this).replaceWith('<button class="btn btn-lg btn-primary" data-youtube-src="'+$(this).attr('src')+'" ng-click="fullSizeElement(this, $event)" id="'+iframe_id+'"><span class="glyphicon glyphicon-facetime-video"></span> Obejrzyj film</button>');
+//                            $compile($('#'+iframe_id))($scope);
+//                            sub_cats.push({
+//                                'title': $.trim($(this).attr('alt')),
+//                                'anchor':'#'+iframe_id,
+//                                'ico':'glyphicon-facetime-video'
+//                            });
                         }
                     });
 
@@ -453,14 +457,16 @@ module ApkiOrg.CourseMgr {
              * @param any $event Original event with $event.currentTarget.
              */
             $scope.fullSizeElement = (element:any, $event:any) => {
-                $scope.youtubeTheaterModeSrc = $($event.currentTarget).data('youtube-src');
+                $scope.youtubeTheaterModeSrc =  ((element===false)&&($event===false))?$scope.ytVideo:$($event.currentTarget).data('youtube-src');
                 $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="'+ $scope.youtubeTheaterModeSrc +'?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-primary btn-sm" ng-click="fullSizeClose()">X Zamknij</button>');
                 $compile($('.fullscreen_movie').find('button'))($scope);
                 $scope.currPart = 'fullscreen_movie';
             }
             $scope.fullSizeClose = () => {
                 $('.fullscreen_movie').html('');
-                $scope.currPart = $('.fullscreen_movie').data('old-curr-part');
+//                $scope.currPart = $('.fullscreen_movie').data('old-curr-part');
+
+                $scope.goToPart('exercise');
             }
             $scope.isPartVisible = (part:string):boolean =>{
                 return $scope.currPart == part;

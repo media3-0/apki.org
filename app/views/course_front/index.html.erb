@@ -65,7 +65,8 @@
             </div>
 
             <div class="buttons" ng-if="isPartVisible('article')" style="margin:40px 25px 25px 60px;max-width:800px;">
-                <div class="desc"></div><input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" accesskey="n" ng-click="goToPart('exercise')">
+                <input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" accesskey="n" ng-click="goToPart('exercise')" ng-if="ytVideo==''">
+                <input type="submit" class="btn btn-lg btn-primary btn-save" value="Dalej" accesskey="n" ng-click="fullSizeElement(false, false)" ng-if="ytVideo!=''">
             </div>
 
             <div class="fullscreen_movie course-element" ng-hide="!isPartVisible('fullscreen_movie')">
