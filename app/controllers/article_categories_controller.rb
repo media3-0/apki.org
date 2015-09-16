@@ -1,7 +1,11 @@
 class ArticleCategoriesController < ApplicationController
   def index
     @category = ArticleCategory.find(params[:id])
-    @articles = @category.articles
+    @articles = @category.articles.order_by(created_at: 'desc').page params[:page]
+  end
+
+  def list
+    @categories = ArticleCategory.all
   end
 end
 

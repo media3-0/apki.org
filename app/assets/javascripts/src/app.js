@@ -952,7 +952,7 @@ var ApkiOrg;
                  */
                 $scope.fullSizeElement = function (element, $event) {
                     $scope.youtubeTheaterModeSrc = ((element === false) && ($event === false)) ? $scope.ytVideo : $($event.currentTarget).data('youtube-src');
-                    $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="' + $scope.youtubeTheaterModeSrc + '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe><button class="btn btn-primary btn-sm" ng-click="fullSizeClose()">X Zamknij</button>');
+                    $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="' + $scope.youtubeTheaterModeSrc + '" frameborder="0" allowfullscreen></iframe><button class="btn btn-primary btn-sm" ng-click="fullSizeClose()">X Zamknij</button>');
                     $compile($('.fullscreen_movie').find('button'))($scope);
                     $scope.currPart = 'fullscreen_movie';
                 };

@@ -684,7 +684,14 @@ header.course-front-header{
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    margin-left: -280px;
+    margin-top: -157px;
+
+    &:fullscreen{
+      position:relative;
+      top:0;
+      left:0;
+    }
   }
   &>button{
     position: absolute;
@@ -868,8 +875,10 @@ code{
 }
 
 .partners img{
-  height: 50px;
+  height: auto;
+  max-height: 50px;
   width: auto;
+  max-width:150px;
   margin: 15px;
 }
 
@@ -920,4 +929,21 @@ ul.nav.navbar-nav{
       }
     }
   }
+}
+
+.tooltip-inner{
+  background-color: #e7e7e7;
+  color:black;
+}
+
+.tooltip.top .tooltip-arrow{
+  border-top-color: #e7e7e7;
+}
+
+.alert{
+  position: fixed;
+  top: 75px;
+  left: 100px;
+  right: 100px;
+  z-index:99999; //max.
 }
