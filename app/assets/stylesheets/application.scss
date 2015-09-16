@@ -875,8 +875,10 @@ code{
 }
 
 .partners img{
-  height: 50px;
+  height: auto;
+  max-height: 50px;
   width: auto;
+  max-width:150px;
   margin: 15px;
 }
 
@@ -927,4 +929,13 @@ ul.nav.navbar-nav{
       }
     }
   }
+}
+
+.tooltip-inner{
+  background-color: #e7e7e7;
+  color:black;
+}
+
+.tooltip.top .tooltip-arrow{
+  border-top-color: #e7e7e7;
 }
