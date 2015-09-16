@@ -1,7 +1,13 @@
-<center><h1>Lista kategorii</h1> </center>
+<h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Kategorie artykułów</h2>
 
-<%- @categories.each do |single| -%>
-  <h1><%= link_to single.name, articles_categories_path(single) -%></h1>
-  <hr>
-<%- end -%>
-
+<div class="table-responsive">
+    <table class="no-border hover list">
+        <tbody class="no-border-y">
+        <%- @categories.each do |single| -%>
+        <tr class="items">
+            <td><%= link_to single.name, articles_categories_path(single) -%></td>
+        </tr>
+        <%- end -%>
+        </tbody>
+    </table>
+</div>

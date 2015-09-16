@@ -1,9 +1,17 @@
-<center><h1><%= @category.name %></h1> </center>
-  
+<h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px"><%= @category.name %>
+    <br><br><a href="/articles/categories" class="btn btn-primary">Powrót do listy kategorii artykułów</a></h2>
 
-<%- @articles.each do |single| -%>
-  <h1><%= link_to single.title, view_article_path(single) -%></h1>
-  <hr>
-<%- end -%>
+<ul class="cbp_tmtimeline mrg20b news-timeline">
+    <%- @articles.each do |single| -%>
+    <li>
+        <time class="cbp_tmtime" datetime=""><span style="margin-top: -9px;"><small style="font-size: 50%"><%= single.created_at.strftime('%F') -%></small></span></time>
+
+
+        <div class="cbp_tmicon"></div>
+        <div class="cbp_tmlabel">
+            <h2><%= link_to single.title, view_article_path(single) -%></h2>
+        </div>
+    </li>
+    <%- end -%>
+</ul>
 <%= paginate @articles -%>
-

@@ -939,3 +939,11 @@ ul.nav.navbar-nav{
 .tooltip.top .tooltip-arrow{
   border-top-color: #e7e7e7;
 }
+
+.alert{
+  position: fixed;
+  top: 75px;
+  left: 100px;
+  right: 100px;
+  z-index:99999; //max.
+}
