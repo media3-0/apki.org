@@ -29,7 +29,7 @@ feature 'Zarządzanie klasami', type: :feature do
     click_button 'Aktualizuj'
     expect(current_path).to eq(school_edit_profile_path)
     expect(page).to have_css '.alert-success'
-    expect(page.find('.alert-success').text).to eq 'Zapisano'
+    expect(page.find('.alert-success').find('span').text).to eq 'Zapisano'
 
     # Select z jakiegoś powodu nie chce działać (nie zaznacza opcji)
     # @teacher.reload
@@ -52,7 +52,7 @@ feature 'Zarządzanie klasami', type: :feature do
     click_button 'Aktualizuj'
     expect(current_path).to eq(school_edit_profile_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
 
     within 'form.simple_form' do
       fill_in 'school_name', with: 'test'
@@ -61,7 +61,7 @@ feature 'Zarządzanie klasami', type: :feature do
     click_button 'Aktualizuj'
     expect(current_path).to eq(school_edit_profile_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
 
     logout
   end
@@ -71,12 +71,12 @@ feature 'Zarządzanie klasami', type: :feature do
     visit school_edit_profile_path
     expect(current_path).not_to eq(school_edit_profile_path)
     expect(page).to have_css('.alert-danger')
-    expect(page.find('.alert-danger').text).to eq 'Musisz być edukatorem aby mieć tu dostęp'
+    expect(page.find('.alert-danger').find('span').text).to eq 'Musisz być edukatorem aby mieć tu dostęp'
     logout
 
     visit school_edit_profile_path
     expect(current_path).not_to eq(school_edit_profile_path)
     expect(page).to have_css('.alert-danger')
-    expect(page.find('.alert-danger').text).to eq 'Musisz być zalogowany aby mieć tu dostęp'
+    expect(page.find('.alert-danger').find('span').text).to eq 'Musisz być zalogowany aby mieć tu dostęp'
   end
 end
