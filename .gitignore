@@ -40,5 +40,6 @@ bower.json
 /public/uploads
 
 /config/local_env.yml
+/config/newrelic.yml
 
 /public/ace

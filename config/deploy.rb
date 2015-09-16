@@ -7,7 +7,7 @@ require 'mina/rvm'
 # For system-wide RVM install.
 #   set :rvm_path, '/usr/local/rvm/bin/rvm'
 
-set :shared_paths, %w(config/local_env.yml log public/uploads)
+set :shared_paths, %w(config/local_env.yml config/newrelic.yml log public/uploads)
 
 set :current_path, 'public_ruby'
 
@@ -29,6 +29,9 @@ task setup: :environment do
 
   queue! %[touch "#{deploy_to}/#{shared_path}/config/local_env.yml"]
   queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/local_env.yml'."]
+
+  queue! %[touch "#{deploy_to}/#{shared_path}/config/newrelic.yml"]
+  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/newrelic.yml'."]
 
   queue %[
     repo_host=`echo $repo | sed -e 's/.*@//g' -e 's/:.*//g'` &&
