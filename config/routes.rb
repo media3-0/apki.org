@@ -45,8 +45,9 @@ Rails.application.routes.draw do
   get 'course_front/list'
 
   get 'articles', to: 'articles#article'
+  get 'articles/categories', to: 'article_categories#list', as: 'articles_categories_list'
+  get 'articles/category/:id', to: 'article_categories#index', as: 'articles_categories'
   get 'articles/:id', to: 'articles#view_article', as: 'view_article'
-  get 'articles/category/:id', to: 'article_categories#index', as: 'article_categories'
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
 

@@ -1,0 +1,7 @@
+<center><h1>Lista kategorii</h1> </center>
+
+<%- @categories.each do |single| -%>
+  <h1><%= link_to single.name, articles_categories_path(single) -%></h1>
+  <hr>
+<%- end -%>
+

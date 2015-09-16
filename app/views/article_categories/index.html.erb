@@ -2,34 +2,8 @@
   
 
 <%- @articles.each do |single| -%>
-
- <h1><%= link_to single.title, view_article_path(single) -%></h1>
- 
-
-        <!-- Author -->
-        <p class="lead">
-          autor: <a href="<%= url_for profile_view_path(single.user) -%>"><%= single.user.nickname -%></a>
-        </p>
-         
-
-
-
-
-        <hr>
-
-        <!-- Date/Time -->
-        <p><span class="glyphicon glyphicon-time"></span> Opublikowane <%= single.created_at.strftime('%F %T') -%></p>
-       
-
-        <hr>
-        <!-- Post Content -->
-        <%= raw single.content -%>
-        <hr>
-      </div>
-
-
+  <h1><%= link_to single.title, view_article_path(single) -%></h1>
+  <hr>
 <%- end -%>
-
-
- 
+<%= paginate @articles -%>
 
