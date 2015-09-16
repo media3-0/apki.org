@@ -684,7 +684,14 @@ header.course-front-header{
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    margin-left: -280px;
+    margin-top: -157px;
+
+    &:fullscreen{
+      position:relative;
+      top:0;
+      left:0;
+    }
   }
   &>button{
     position: absolute;

@@ -55,6 +55,7 @@
                 <li><i class="glyphicon glyphicon-align-justify"></i> <a href="#" ng-click="goToPart('article')">{{ getLesson().data.title }}</a></li>
                 <ul class="article-parsed">
                 </ul>
+                <li ng-hide="ytVideo==''"><i class="glyphicon glyphicon-facetime-video"></i> <a href="#" ng-click="fullSizeElement(false, false)">Wideo</a></li>
                 <li ng-hide="!exercises.length" ng-repeat="exerc in exercises" class="menu-exerc-{{exerc.id}} menu-to-check"><i ng-class="getExercIconClass(exerc.id)"></i> <a ng-if="isExercEnabled(exerc.id)" href="#" ng-click="goToPart('exercise', exerc.id)">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</a><span ng-if="!isExercEnabled(exerc.id)" style="color:#E8E8E8">{{ exerc.data.title?exerc.data.title:'Zadanie' }}</span></li>
                 <li ng-hide="!quizzes.length" class="menu-quiz menu-to-check"><i class="glyphicon glyphicon-check"></i> <a href="#" ng-click="goToPart('quiz')">Quiz</a></li>
             </ul>
