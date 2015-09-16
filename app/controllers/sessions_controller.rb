@@ -7,12 +7,12 @@ class SessionsController < ApplicationController
       user = User.create_with_omniauth(auth)
     end
     session[:user_id] = user.id.to_s
-    redirect_to root_url
+    redirect_to root_url, notice: 'Zalogowano!'
   end
 
   def destroy
     session[:user_id] = nil
-    redirect_to root_url
+    redirect_to root_url, notice: 'Wylogowano!'
   end
 
   # Logowanie tylko do testów
@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
         session[:user_id] = user.id.to_s
       end
       respond_to do |format|
-        format.html { redirect_to root_url }
+        format.html { redirect_to root_url, notice: 'Zalogowano!' }
         format.json { render json: { 'notice' => 'Zalogowano!' } }
       end
     end
