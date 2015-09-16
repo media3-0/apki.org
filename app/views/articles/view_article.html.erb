@@ -4,7 +4,7 @@
 
     <!-- Title -->
     <h1 class="text-center"><%= @article.title -%></h1>
-    Kategoria: <%= link_to @article.category.name, articles_categories_path(@article.category) -%>
+    Kategoria: <%= link_to @article.article_category.name, articles_categories_path(@article.article_category) -%>
 
     <hr>
 
