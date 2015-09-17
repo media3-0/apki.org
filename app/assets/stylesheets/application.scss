@@ -941,9 +941,13 @@ ul.nav.navbar-nav{
 }
 
 .alert{
-  position: fixed;
-  top: 75px;
-  left: 100px;
-  right: 100px;
-  z-index:99999; //max.
+//  position: fixed;
+//  top: 75px;
+//  left: 100px;
+//  right: 100px;
+//  z-index:99999; //max.
+}
+
+.alert-success{
+  background-color: $color-main;
 }

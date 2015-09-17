@@ -3,20 +3,21 @@
 <div id="holder">
   <%= render 'layouts/main_menu' %>
 
-
-    <% flash.each do |name, msg| -%>
-    <%-
-    # mapowanie niektórych nazw
-    name = 'success' if name == 'notice'
-    name = 'danger' if name == 'error'
-    -%>
-    <div class="alert alert-<%= name %>">
-        <span style="margin-top: 10px; display: inline-block;"><%= msg %></span>
-        <a href="javascript:;" onclick="$(this).parent().fadeOut(function(){$(this).remove();});" style="float:right;" class="btn btn-primary">Zamknij</a>
-    </div>
-    <% end -%>
-
   <article id="content" class="col-md-10 col-md-offset-1">
+      <% flash.each do |name, msg| -%>
+      <%-
+      # mapowanie niektórych nazw
+      name = 'success' if name == 'notice'
+      name = 'danger' if name == 'error'
+      -%>
+      <div class="alert alert-<%= name %> col-md-10 col-md-offset-1 text-center">
+          <!--<span style="margin-top: 10px; display: inline-block;">-->
+              <%= msg %>
+          <!--</span>-->
+          <!--<a href="javascript:;" onclick="$(this).parent().fadeOut(function(){$(this).remove();});" style="float:right;" class="btn btn-primary">Zamknij</a>-->
+      </div>
+      <div class="clearfix"></div>
+      <% end -%>
 
     <%= yield %>
   </article>
@@ -26,13 +27,16 @@
 
 
   <footer>
-    <div class="col-md-10 col-md-offset-1" style="border-top:2px solid #e7e7e7"></div>
+    <div class="col-md-10 col-md-offset-1 mrg25b" style="border-top:2px solid #e7e7e7"></div>
     <div class="clearfix"></div>
 
+<<<<<<< HEAD
+=======
     <div class="col-md-12 mrg25t mrg25b">
       <a href="http://media30.pl/" target="_blank"><%= image_tag 'logo_fundacja.png', alt: 'Fundacja Media 3.0' %></a>
     </div>
 
+>>>>>>> 2bf18b3ddefd47b273a5d880596c3bbfd057779b
     <div class="partners">
       <div class="text-center col-md-12">
           <p>
@@ -69,8 +73,12 @@
     </div>
 
 
-      <div class="col-md-10 col-md-offset-1" style="border-top:2px solid #e7e7e7"></div>
+      <div class="col-md-10 col-md-offset-1 mrg15t mrg25b" style="border-top:2px solid #e7e7e7"></div>
       <div class="clearfix"></div>
+
+      <div class="col-md-12 mrg25b">
+          <%= image_tag 'logo_fundacja.png', alt: 'Fundacja Media 3.0' %>
+      </div>
 
     <div class="col-md-12">
 
@@ -123,7 +131,7 @@
 
     <div class="clearfix"></div>
 
-    <p class="mrg25t mrg25b"><a href="https://github.com/media3-0/apki.org/"><img src="https://badge.fury.io/gh/media3-0%2Fapki.org.svg" alt="GitHub version" height="18"></a> &copy; Akademia 3.0 - Projekt na licencji <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA 3.0</a></p>
+    <p class="mrg25t mrg25b"><a href="https://github.com/media3-0/apki.org/releases/latest"><img src="https://badge.fury.io/gh/media3-0%2Fapki.org.svg" alt="GitHub version" height="18"></a> &copy; Akademia 3.0 - Projekt na licencji <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA 3.0</a></p>
         <p>Projekt dofinansowany ze środków Ministerstwa Administracji i Cyfryzacji<br><a href="https://mac.gov.pl/" target="_blank">
           <img src="/images/macblue.png" style="height:40px; width:auto"/>
         </a></p>
