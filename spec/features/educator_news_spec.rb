@@ -26,7 +26,7 @@ feature 'Zarządzanie newsami edukatorów' do
     end
     click_button 'Zatwierdź'
     expect(page).to have_css '.alert-success'
-    expect(page.find('.alert-success').find('span').text).to eq 'Stworzono nowy news'
+    expect(page.find('.alert-success').text).to eq 'Stworzono nowy news'
     news = News.all.first
     expect(current_path).to eq(view_news_path(news))
     expect(news.title).to eq 'test'
@@ -45,7 +45,7 @@ feature 'Zarządzanie newsami edukatorów' do
     end
     click_button 'Zatwierdź'
     expect(page).to have_css '.alert-success'
-    expect(page.find('.alert-success').find('span').text).to eq 'Zaktualizowano news'
+    expect(page.find('.alert-success').text).to eq 'Zaktualizowano news'
     news.reload
     expect(current_path).to eq(view_news_path(news))
     expect(news.title).to eq 'test2'
@@ -59,7 +59,7 @@ feature 'Zarządzanie newsami edukatorów' do
     visit school_educator_news_path + '?id=' + news.id.to_s
     expect(current_path).not_to eq(view_news_path(news))
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Ten news nie należy do Ciebie'
+    expect(page.find('.alert-danger').text).to eq 'Ten news nie należy do Ciebie'
     logout
   end
 
@@ -74,7 +74,7 @@ feature 'Zarządzanie newsami edukatorów' do
     click_button 'Zatwierdź'
     expect(current_path).to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
@@ -84,7 +84,7 @@ feature 'Zarządzanie newsami edukatorów' do
     click_button 'Zatwierdź'
     expect(current_path).to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
@@ -94,7 +94,7 @@ feature 'Zarządzanie newsami edukatorów' do
     click_button 'Zatwierdź'
     expect(current_path).to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
     logout
   end
 
@@ -110,7 +110,7 @@ feature 'Zarządzanie newsami edukatorów' do
     click_button 'Zatwierdź'
     expect(current_path).to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
@@ -120,7 +120,7 @@ feature 'Zarządzanie newsami edukatorów' do
     click_button 'Zatwierdź'
     expect(current_path).to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
@@ -130,7 +130,7 @@ feature 'Zarządzanie newsami edukatorów' do
     click_button 'Zatwierdź'
     expect(current_path).to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Błąd podczas zapisu'
+    expect(page.find('.alert-danger').text).to eq 'Błąd podczas zapisu'
     logout
   end
 
@@ -138,13 +138,13 @@ feature 'Zarządzanie newsami edukatorów' do
     visit school_educator_news_path
     expect(current_path).not_to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Musisz być zalogowany aby mieć tu dostęp'
+    expect(page.find('.alert-danger').text).to eq 'Musisz być zalogowany aby mieć tu dostęp'
 
     login @student
     visit school_educator_news_path
     expect(current_path).not_to eq(school_educator_news_path)
     expect(page).to have_css '.alert-danger'
-    expect(page.find('.alert-danger').find('span').text).to eq 'Musisz być edukatorem aby mieć tu dostęp'
+    expect(page.find('.alert-danger').text).to eq 'Musisz być edukatorem aby mieć tu dostęp'
     logout
   end
 end
