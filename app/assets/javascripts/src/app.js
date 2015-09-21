@@ -707,7 +707,7 @@ var ApkiOrg;
                     $QuizCtrl.res.check({}, _quiz_str, function (ans) {
                         $.each(ans.quizzes, function (i, el) {
                             $('.q-' + i).removeClass('text-success text-danger').addClass(el ? 'text-success' : '');
-                            $('.q-' + i).find('h4>.glyphicon').removeClass('glyphicon-ok glyphicon-ban-circle').addClass(el ? 'glyphicon-ok' : 'glyphicon-ban-circle');
+                            $('.q-' + i).find('h4>.glyphicon').removeClass('glyphicon-ok glyphicon-ban-circle').addClass(el ? 'glyphicon-ok' : 'glyphicon-ban-circle').html('<span class="wcaghidden">' + (el ? 'Odpowiedź poprawna.' : 'Odpowiedź błędna.') + '</span>');
                         });
                         $scope.quizzesAreCorrect = ans.is_correct;
                         if ($scope.quizzesAreCorrect) {
@@ -930,8 +930,9 @@ var ApkiOrg;
                             }
                             if ($(this).is('iframe')) {
                                 if ($.inArray($(this).attr('alt'), [undefined, null, '']) > -1) {
-                                    $(this).attr('alt', 'Film');
+                                    $(this).attr('alt', 'Wideo');
                                 }
+                                $scope.ytTitle = $(this).attr('alt');
                                 //                            var iframe_id:string = get_gen_id(this);
                                 $scope.ytVideo = $(this).attr('src');
                                 $(this).replaceWith('&nbsp;');
@@ -952,7 +953,7 @@ var ApkiOrg;
                  */
                 $scope.fullSizeElement = function (element, $event) {
                     $scope.youtubeTheaterModeSrc = ((element === false) && ($event === false)) ? $scope.ytVideo : $($event.currentTarget).data('youtube-src');
-                    $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="' + $scope.youtubeTheaterModeSrc + '" frameborder="0" allowfullscreen></iframe><button class="btn btn-primary btn-sm" ng-click="fullSizeClose()">X Zamknij</button>');
+                    $('.fullscreen_movie').data('old-curr-part', $scope.currPart).html('<iframe width="560" height="315" src="' + $scope.youtubeTheaterModeSrc + '" alt="' + $scope.ytTitle + '" frameborder="0" allowfullscreen></iframe><button class="btn btn-primary btn-sm" ng-click="fullSizeClose()">X Zamknij</button>');
                     $compile($('.fullscreen_movie').find('button'))($scope);
                     $scope.currPart = 'fullscreen_movie';
                 };

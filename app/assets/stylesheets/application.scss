@@ -951,3 +951,11 @@ ul.nav.navbar-nav{
 .alert-success{
   background-color: $color-main;
 }
+
+.wcaghidden{
+  position:absolute;
+  width:1px;
+  height:1px;
+  left:-9999px;
+  top:-9999px;
+}
