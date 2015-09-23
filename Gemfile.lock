@@ -39,7 +39,7 @@ GEM
     addressable (2.3.8)
     angularjs-rails (1.4.4)
     arel (6.0.3)
-    autoprefixer-rails (6.0.2)
+    autoprefixer-rails (6.0.3)
       execjs
       json
     better_errors (2.1.1)
@@ -182,7 +182,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nested_form (0.3.2)
-    newrelic_rpm (3.13.0.299)
+    newrelic_rpm (3.13.1.300)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     nokogiri (1.6.6.2-x64-mingw32)
@@ -230,6 +230,8 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
+    rack-accept (0.4.5)
+      rack (>= 0.4)
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
       rack (~> 1.4)
@@ -348,15 +350,18 @@ GEM
       sprockets (>= 2.8, < 4.0)
     stackprof (0.2.7)
     stringex (2.5.2)
-    thin (1.6.3)
+    thin (1.6.4)
       daemons (~> 1.0, >= 1.0.9)
-      eventmachine (~> 1.0)
+      eventmachine (~> 1.0, >= 1.0.4)
       rack (~> 1.0)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
     turbolinks (2.5.3)
       coffee-rails
+    turnout (2.1.0)
+      rack (~> 1.3)
+      rack-accept (~> 0.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     tzinfo-data (1.2015.6)
@@ -433,6 +438,7 @@ DEPENDENCIES
   stackprof
   thin
   turbolinks
+  turnout
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console (~> 2.0)

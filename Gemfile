@@ -104,6 +104,9 @@ gem 'shog'
 # Lepsza inteaktywna konsola
 gem 'pry-rails'
 
+# Tryb maintenance w prosty sposób
+gem 'turnout'
+
 group :production do
   # Cachowanie w redisie
   unless Gem.win_platform?

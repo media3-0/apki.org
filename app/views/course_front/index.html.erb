@@ -106,9 +106,9 @@
                     </div>
                 </div>
                 <div class="col-md-7 pad0a code-etc-window">
-                    <div class="code-editor" id="editorTest" codeeditor source-lang="{{ getExercise().data.lang | server_source_lang_to_ace_lang }}" ng-if="getExercise()!==null" exerc-id="{{ getExercise().id }}"></div>
+                    <label class="wcaghidden" for="editorTest">Uwaga! Niżej znajduje się edytor kodu, który nie wspera zasad WCAG. Nie można z niego nawigować tabem oraz może zmieniać jego treść. Zaleca się korzystanie z tekstowego edytora i wklejanie kodu tutaj aby nie korzystać z funkcjonlaności edytora, któa w niektórych przypadkach może zmniejszać dostępność.</label><div class="code-editor" id="editorTest" codeeditor source-lang="{{ getExercise().data.lang | server_source_lang_to_ace_lang }}" ng-if="getExercise()!==null" exerc-id="{{ getExercise().id }}"></div>
                     <div class="user-input-window" ng-hide="!getExercise().data.allow_user_input">
-                        <input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}" style="width:100%" placeholder="Podaj tutaj dane wejściowe">
+                        <label class="wcaghidden" for="codeUserInput">Dane wejściowe</label><input type="text" id="codeUserInput" value="{{ getExercise().data.default_user_input }}" style="width:100%" placeholder="Podaj tutaj dane wejściowe">
                     </div>
                     <div class="send-code-window buttons pad0a mrg0a" style="padding: 0 !important; margin:0 !important" ng-if="!exerciseIsCorrect">
                         <button ng-disabled="exerciseChecking" ng-class="exerciseChecking?'disabled':''" type="button" ng-click="checkExercise(this, $event)" accesskey="r" class="btn btn-lg btn-primary btn-save mrg5r" style="margin-top: 4px;">Sprawdź</button>
@@ -130,22 +130,7 @@
                 <div ng-if="isCourseFinished()">
                     <h2>Gratulacje, ukończyłeś kurs <i>{{ course.data.title }}</i>! To już wszystko co przygotowaliśmy dla Ciebie w tym kursie.</h2>
                     <a href="javascript:$('#md-quest-form').modal();" class="btn btn-lg btn-primary mrg25a">Oceń ten kurs</a><br><br>
-                    <a href="/courses_list" class="btn btn-lg btn-primary mrg25a">Sprawdź nasze inne kursy</a>
-
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="md-quest-form" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <iframe src="https://docs.google.com/forms/d/1fOO9h_8cQoYFhG15FJswtlDMYzlsvO5Ok53iDFyyxQw/viewform" style="border: 0; width:100%; height:350px"></iframe>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div>
+                    <a href="/#courseListAnchor" class="btn btn-lg btn-primary mrg25a">Sprawdź nasze inne kursy</a>
 
                 </div>
             </div>
@@ -166,6 +151,22 @@
             </div>
         </div>
     </div>
-</div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="md-quest-form" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="https://docs.google.com/forms/d/1fOO9h_8cQoYFhG15FJswtlDMYzlsvO5Ok53iDFyyxQw/viewform" style="border: 0; width:100%; height:350px"></iframe>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
 </body>
 </html>
