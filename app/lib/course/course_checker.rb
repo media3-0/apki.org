@@ -32,7 +32,9 @@ module Course
 
       code = ''
       code << exercise.data['code_before']
+      code << "\n"
       code << data['code']
+      code << "\n"
       code << exercise.data['code_after']
 
       response = conn.post do |req|
