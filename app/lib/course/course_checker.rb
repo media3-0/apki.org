@@ -30,8 +30,6 @@ module Course
       code << "\n"
       code << exercise.data['code_after']
 
-      Rails.logger.debug 'Send to compile'
-
       response = conn.post do |req|
         req.url '/compile'
         req.headers['Content-Type'] = 'application/json'
@@ -40,8 +38,6 @@ module Course
 
       output.merge! JSON.parse(response.body.to_s)
       json_response['output'] = output
-
-      Rails.logger.debug 'Send to check'
 
       check_compiled_code data['code'], exercise.data['expected_result_expr'], output['output'], data['user_input']
     end
