@@ -17,18 +17,11 @@ module Course
     end
 
     def self.check_excercise(exercise, data, json_response, output)
-      # if Rails.env.test?
-      #   conn = Faraday.new(url: Rails.configuration.x.compile_api_host) do |faraday|
-      #     faraday.request :url_encoded
-      #     faraday.adapter Faraday.default_adapter
-      #   end
-      # else
-        conn = Faraday.new(url: Rails.configuration.x.compile_api_host) do |faraday|
-          faraday.request :url_encoded
-          faraday.response :logger
-          faraday.adapter Faraday.default_adapter
-        end
-      # end
+      conn = Faraday.new(url: Rails.configuration.x.compile_api_host) do |faraday|
+        faraday.request :url_encoded
+        faraday.response :logger
+        faraday.adapter Faraday.default_adapter
+      end
 
       code = ''
       code << exercise.data['code_before']

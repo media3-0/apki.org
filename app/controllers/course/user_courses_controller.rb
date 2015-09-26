@@ -26,7 +26,9 @@ module Course
       id = exercise.id.to_s
       output = {}
       json_response = { 'id' => id, 'output' => output, 'is_correct' => false }
+      Rails.logger.debug 'Send to compile'
       if Course::CourseChecker.check_excercise exercise, data, json_response, output
+        Rails.logger.debug 'Send to check'
         Course::CourseChecker.correct_exercise id, data, output, exercise.course_lesson, user_course, json_response
       end
       render json: json_response.to_json
