@@ -14,7 +14,7 @@ module Course
       data = Course::CourseDatum.all
       data = data.reject do |cd|
         !cd.data.key?('finished') || cd.data['finished'] == false
-      end unless user.present? && user.is_admin?
+      end unless user.present? && (user.is_admin? || user.is_course_tester?)
       data
     end
 
