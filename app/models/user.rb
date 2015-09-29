@@ -13,6 +13,7 @@ class User
   field :profile_description
   field :provider, type: String
   field :school_accepted, type: Boolean, default: false
+  field :course_tester, type: Boolean, default: false
 
   has_many :news
   has_many :course_user_courses, class_name: 'Course::UserCourse'
@@ -51,6 +52,10 @@ class User
     account_type == :admin
   end
 
+  def is_course_tester?
+    course_tester
+  end
+
   def account_type_enum
     %w(student teacher moderator admin)
   end
@@ -65,6 +70,7 @@ class User
       field :profile_description, :text
       field :school
       field :school_accepted
+      field :course_tester
     end
     object_label_method do
       :nickname
