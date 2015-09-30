@@ -1,6 +1,7 @@
 class News
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Slug
 
   # paginacja
   paginates_per 10
@@ -12,6 +13,8 @@ class News
   field :content, type: String
   field :image, type: String
   field :educator_news, type: Boolean, default: false
+
+  slug :title
 
   belongs_to :user
 

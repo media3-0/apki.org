@@ -32,7 +32,7 @@ class MainController < ApplicationController
     response = conn.post do |req|
       req.url '/compile'
       req.headers['Content-Type'] = 'application/json'
-      req.body = { lang: params[:lang], code: params[:code], user_input: params[:input] }.to_json
+      req.body = { lang: params[:lang], code: params[:code], user_input: params[:user_input] }.to_json
     end
 
     render json: JSON.parse(response.body.to_s)

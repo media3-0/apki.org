@@ -25,7 +25,7 @@ module Course
 
     # GET /course/course_data/1.json
     def show
-      unless current_user.present? && current_user.is_admin?
+      unless current_user.present? && (current_user.is_admin? || current_user.is_course_tester?)
         if !@course_course_datum.data.key?('finished') || @course_course_datum.data['finished'] == false
           fail Exceptions::AccessDenied.new('Ten kurs nie został jeszcze opublikowany')
         end
