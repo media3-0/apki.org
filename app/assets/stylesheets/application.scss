@@ -149,10 +149,10 @@ $color-text-on-main: #ffffff;
   }
 }
 .readonly-highlight{
-  background-color: rgb(188, 25, 8) !important;
   position: absolute;
   z-index: 99999;
-  border: 1px black solid;
+  background-color: rgba(200, 200, 200, 0.9) !important;
+  border-left: 2px dotted red;
 }
 header{
   padding-top:60px;
