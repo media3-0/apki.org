@@ -1809,6 +1809,9 @@ var ApkiOrg;
                         $scope.inited = true;
                     });
                 };
+                $scope.getCourseIconHtml = function (course) {
+                    return '<img src="' + course.data.icon_src + '" class="course-icon">';
+                };
                 $scope._getCourseById = function (id) {
                     var _course = null;
                     $.each($scope.courses, function (i, el) {

@@ -156,14 +156,14 @@
         <div id="courseLoading" class="text-center col-md-10 col-md-offset-1" style="margin-top:60px" ng-hide="inited">
             <i class="fa fa-cog fa-spin color-primary" style="font-size:48px"></i>
         </div>
-        <div ng-hide="!inited">
+        <div ng-hide="!inited" ng-if="inited">
             <div class="col-md-4" ng-repeat="course in courses">
                 <div class="fd-tile detail clean tile-purple course-tile" ng-click="checkCourse($event, course)">
                     <div class="content">
                         <div class="level">
                             <i class="glyphicon glyphicon-star color-primary" ng-repeat="n in [].constructor(course.data.difficulty_level) track by $index"></i><i class="glyphicon glyphicon-star-empty color-primary" ng-repeat="n in [].constructor(3 - course.data.difficulty_level) track by $index"></i>
                         </div>
-                        <img src="{{ course.data.icon_src }}" class="course-icon"><br>
+                        <span ng-bind-html="getCourseIconHtml(course) | to_trusted"></span><br>
                         <h3>{{ course.data.title }}</h3><p>{{ course.data.description }}</p>
                     </div>
                     <a class="btn btn-tomka" href="javascript:;">

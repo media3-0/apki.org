@@ -34,6 +34,7 @@ module ApkiOrg.CoursesLstMgr {
         initList()
         checkCourse($event:any, course:ApkiOrg.CourseMgr.MCourse)
         _getCourseById(id:string) : ApkiOrg.CourseMgr.MCourse
+        getCourseIconHtml(course:ApkiOrg.CourseMgr.MCourse)
     }
 
     export class appCoursesLstCtrl {
@@ -55,6 +56,10 @@ module ApkiOrg.CoursesLstMgr {
                 $scope.courses = $scope.apiCourse.res.list({}, '', (data) => {
                     $scope.inited=true;
                 });
+            }
+
+            $scope.getCourseIconHtml = (course:ApkiOrg.CourseMgr.MCourse) => {
+                return '<img src="' + course.data.icon_src + '" class="course-icon">';
             }
 
             $scope._getCourseById = (id:string) : ApkiOrg.CourseMgr.MCourse => {
