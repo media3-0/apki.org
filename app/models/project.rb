@@ -8,6 +8,7 @@ class Project
   field :title, type: String
   field :github, type: String
   field :icon, type: String, default: ''
+  field :contest, type: Boolean, default: false
 
   belongs_to :user
 end
