@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
     @repositories = Octokit.repositories current_user.uid.to_i
     organizations = Octokit.organizations current_user.uid.to_i
     organizations.each do |org|
-      @repositories.concat Octokit.organization_repositories org.id
+      @repositories.concat(Octokit.organization_repositories(org.id))
     end
     @project = Project.new
     @project.user = current_user
@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
     @repositories = Octokit.repositories current_user.uid.to_i
     organizations = Octokit.organizations current_user.uid.to_i
     organizations.each do |org|
-      @repositories.concat Octokit.organization_repositories org.id
+      @repositories.concat(Octokit.organization_repositories(org.id))
     end
   end
 
@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
     @repositories = Octokit.repositories current_user.uid.to_i
     organizations = Octokit.organizations current_user.uid.to_i
     organizations.each do |org|
-      @repositories.concat Octokit.organization_repositories org.id
+      @repositories.concat(Octokit.organization_repositories(org.id))
     end
     @project = Project.new(project_params)
     @project.user = current_user
