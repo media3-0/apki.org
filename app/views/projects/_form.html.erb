@@ -5,6 +5,9 @@
     <%= f.input :title, label: 'Nazwa projektu:' %>
     <%= f.input :icon, label: 'Url ikony:' %>
     <%= f.input :github, :collection => @repositories, :label_method => :full_name, :value_method => :full_name, :label => 'Nazwa repozytorium', :include_blank => false %>
+    <%- if current_user.is_teacher? -%>
+      <%= f.input :contest, as: :boolean, label: 'Projekt Konkursowy:' %>
+    <%- end -%>
   </div>
 
   <div class="buttons">

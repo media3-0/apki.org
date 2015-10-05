@@ -56,6 +56,10 @@ class User
     course_tester
   end
 
+  def is_teacher?
+    account_type == :teacher
+  end
+
   def account_type_enum
     %w(student teacher moderator admin)
   end
