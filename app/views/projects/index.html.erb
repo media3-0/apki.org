@@ -11,6 +11,11 @@
   <div class="col-md-4" ng-repeat="course in courses">
     <div class="fd-tile detail clean tile-purple course-tile project-tile" ng-click="checkCourse($event, course)">
       <div class="content">
+
+          <%- project.contest -%>
+              <div style="position: absolute; right: 10px; top: 10px; font-size: 10px; color: green;" id="konkurs">KONKURS</div>
+          <%- end -%>
+
         <img src="
           <% if project.icon.empty? %><%= asset_path('a_holder.png') %>
           <% else %><%= project.icon %>
