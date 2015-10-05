@@ -13,7 +13,7 @@
             <img class="postImg" style="background-image: url('<%= single.image -%>'); background-position: center center; height: 200px; width:100%; margin-left:-30px;">
 
             <div class="mrg25a mrg0l">
-            <img class="mrg10r" style="width:40px;height:40px; border: 2px solid #955AA4; border-radius: 20px" src="<%= single.user.image %>"> <a href="<%= url_for profile_view_path(single.user) -%>">Autor: <%= single.user.nickname -%></a>
+            <img class="mrg10r" style="width:40px;height:40px; border: 2px solid #955AA4; border-radius: 20px" src="<%= single.user.image %>"> Autor: <%= single.user.nickname -%>
             </div>
             <div class="postImg mrg10b" style="border-bottom: 2px solid #955AA4;  margin-left:-30px;"> </div>
 
