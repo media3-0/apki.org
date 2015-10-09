@@ -21,7 +21,7 @@ feature 'Zarządzanie newsami edukatorów' do
     visit school_educator_news_path
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
-      fill_in 'news_image', with: 'test_url'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
       fill_in 'wmd-input-content', with: 'test opisu'
     end
     click_button 'Zatwierdź'
@@ -35,12 +35,22 @@ feature 'Zarządzanie newsami edukatorów' do
   end
 
   scenario 'Nauczyciel może edytować swój news' do
-    news = News.create!(title: 'test', content: 'opis', image: 'test_ulr', user: @teacher)
     login @teacher
+    visit school_educator_news_path
+    within 'form.simple_form' do
+      fill_in 'news_title', with: 'test'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
+      fill_in 'wmd-input-content', with: 'test opisu'
+    end
+    click_button 'Zatwierdź'
+    expect(page).to have_css '.alert-success'
+
+    news = News.all.first
+
     visit school_educator_news_path + '?id=' + news.id.to_s
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test2'
-      fill_in 'news_image', with: 'test_url'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
       fill_in 'wmd-input-content', with: 'test opisu 2'
     end
     click_button 'Zatwierdź'
@@ -54,8 +64,20 @@ feature 'Zarządzanie newsami edukatorów' do
   end
 
   scenario 'Nauczyciel nie może edytować cudzego newsa' do
-    news = News.create!(title: 'test', content: 'opis', image: 'test_ulr', user: @teacher2)
+    login @teacher2
+    visit school_educator_news_path
+    within 'form.simple_form' do
+      fill_in 'news_title', with: 'test'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
+      fill_in 'wmd-input-content', with: 'test opisu'
+    end
+    click_button 'Zatwierdź'
+    expect(page).to have_css '.alert-success'
+
+    news = News.all.first
+
     login @teacher
+
     visit school_educator_news_path + '?id=' + news.id.to_s
     expect(current_path).not_to eq(view_news_path(news))
     expect(page).to have_css '.alert-danger'
@@ -68,7 +90,7 @@ feature 'Zarządzanie newsami edukatorów' do
     visit school_educator_news_path
     within 'form.simple_form' do
       fill_in 'news_title', with: ''
-      fill_in 'news_image', with: 'test_url'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
       fill_in 'wmd-input-content', with: 'test opisu 2'
     end
     click_button 'Zatwierdź'
@@ -78,7 +100,6 @@ feature 'Zarządzanie newsami edukatorów' do
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
-      fill_in 'news_image', with: ''
       fill_in 'wmd-input-content', with: 'test opisu 2'
     end
     click_button 'Zatwierdź'
@@ -88,7 +109,7 @@ feature 'Zarządzanie newsami edukatorów' do
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
-      fill_in 'news_image', with: 'test_url'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
       fill_in 'wmd-input-content', with: ''
     end
     click_button 'Zatwierdź'
@@ -99,12 +120,22 @@ feature 'Zarządzanie newsami edukatorów' do
   end
 
   scenario 'Walidacje formularza edycji newsa' do
-    news = News.create!(title: 'test', content: 'opis', image: 'test_ulr', user: @teacher)
     login @teacher
+    visit school_educator_news_path
+    within 'form.simple_form' do
+      fill_in 'news_title', with: 'test'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
+      fill_in 'wmd-input-content', with: 'test opisu'
+    end
+    click_button 'Zatwierdź'
+    expect(page).to have_css '.alert-success'
+
+    news = News.all.first
+
     visit school_educator_news_path + '?id=' + news.id.to_s
     within 'form.simple_form' do
       fill_in 'news_title', with: ''
-      fill_in 'news_image', with: 'test_url'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
       fill_in 'wmd-input-content', with: 'test opisu 2'
     end
     click_button 'Zatwierdź'
@@ -114,7 +145,6 @@ feature 'Zarządzanie newsami edukatorów' do
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
-      fill_in 'news_image', with: ''
       fill_in 'wmd-input-content', with: 'test opisu 2'
     end
     click_button 'Zatwierdź'
@@ -124,7 +154,7 @@ feature 'Zarządzanie newsami edukatorów' do
 
     within 'form.simple_form' do
       fill_in 'news_title', with: 'test'
-      fill_in 'news_image', with: 'test_url'
+      page.attach_file('news_image', Rails.root + 'spec/Fixtures/test.png')
       fill_in 'wmd-input-content', with: ''
     end
     click_button 'Zatwierdź'
