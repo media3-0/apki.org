@@ -107,6 +107,9 @@ gem 'pry-rails'
 # Tryb maintenance w prosty sposób
 gem 'turnout'
 
+# Upload obrazków
+gem 'simple_form_fancy_uploads'
+
 group :production do
   # Cachowanie w redisie
   unless Gem.win_platform?
