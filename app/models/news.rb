@@ -3,6 +3,8 @@ class News
   include Mongoid::Timestamps
   include Mongoid::Slug
 
+  mount_uploader :image, NewsImageUploader
+
   # paginacja
   paginates_per 10
 
@@ -21,7 +23,7 @@ class News
   rails_admin do
     edit do
       field :title
-      field :image
+      field :image, :carrierwave
       field :content, :ck_editor
       field :user do
         visible false

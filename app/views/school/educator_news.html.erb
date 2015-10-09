@@ -6,7 +6,7 @@
     <%= f.input :id, as: :hidden, :input_html => { :value => @news_id } -%>
     <%- end -%>
     <%= f.input :title, label: 'Tytuł:' %>
-    <%= f.input :image, label: 'Url obrazka:' -%>
+    <%= f.input :image, label: 'Url obrazka:', as: :image_preview, input_html: {preview_version: :thumb} -%>
     <%= f.input :content, label: 'Treść:', as: :pagedown, input_html: { preview: true, rows: 20 } %>
     <%= f.button :submit, value: 'Zatwierdź' %>
 <% end %>

@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   get 'course_front/list'
 
   get 'articles', to: 'articles#article'
+  get 'articles/all', to: 'articles#all_articles'
   get 'articles/categories', to: 'article_categories#list', as: 'articles_categories_list'
   get 'articles/category/:id', to: 'article_categories#index', as: 'articles_categories'
   get 'articles/:id', to: 'articles#view_article', as: 'view_article'
