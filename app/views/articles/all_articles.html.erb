@@ -1,16 +1,15 @@
 <h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Wszystkie artykuły</h2>
 
-<ul class="cbp_tmtimeline mrg20b news-timeline">
-    <%- @articles.each do |single| -%>
-    <li>
-        <time class="cbp_tmtime" datetime=""><span style="margin-top: -9px;"><small style="font-size: 50%"><%= single.created_at.strftime('%F') -%></small></span></time>
-
-
-        <div class="cbp_tmicon"></div>
-        <div class="cbp_tmlabel">
-            <h2><%= link_to single.title, view_article_path(single) -%></h2>
-        </div>
-    </li>
-    <%- end -%>
-</ul>
+<div class="table-responsive">
+    <table class="no-border hover list">
+        <tbody class="no-border-y">
+        <%- @articles.each do |single| -%>
+        <tr class="items">
+            <td><img src="<%= single.user.image -%>" style="width:24px;height:24px;vertical-align:middle"> <%= link_to single.title, view_article_path(single) -%></td>
+        </tr>
+        <%- end -%>
+        </tbody>
+    </table>
+</div>
+        
 <%= paginate @articles -%>
