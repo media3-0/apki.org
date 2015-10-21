@@ -20,7 +20,7 @@
     <!-- Date/Time -->
     <p style="float:left; margin-left:20px"><span class="glyphicon glyphicon-time"></span> Opublikowane <%= @article.created_at.strftime('%F %T') -%></p>
     <p style="float: right; margin-right:20px">
-        <span class="glyphicon glyphicon-user"></span> Autor: <%= @article.user.nickname -%>
+        <span class="glyphicon glyphicon-user"></span> Autor: <%- if @article.user.name.present? -%><%= @article.user.name -%><%- else -%><%= @article.user.nickname -%><%- end -%>
     </p>
 
     <div class="clearfix"></div>
