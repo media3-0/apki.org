@@ -178,7 +178,7 @@ GEM
     mongoid-grid_fs (2.2.1)
       mime-types (>= 1.0, < 3.0)
       mongoid (>= 3.0, < 6.0)
-    mongoid-slug (5.1.0)
+    mongoid-slug (5.1.1)
       mongoid (>= 3.0)
       mongoid-compatibility
       stringex (~> 2.0)
