@@ -5,7 +5,7 @@ class MainController < ApplicationController
   end
 
   def news
-    @news = News.order_by(created_at: 'desc').page params[:page]
+    @news = News.order_by(created_at: 'desc')#.page params[:page] # FIXME : paginacja
   end
 
   def view_news

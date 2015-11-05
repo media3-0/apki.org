@@ -4,6 +4,6 @@ class ArticlesController < ApplicationController
   end
 
   def all_articles
-    @articles = Article.all.page params[:page]
+    @articles = Article.all#.page params[:page] FIXME : paginacja
   end
 end
