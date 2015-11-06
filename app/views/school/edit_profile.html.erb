@@ -1,3 +1,5 @@
+<% content_for :title, " - Edycja profilu szkoły" %>
+
 <h3>Edycja profilu szkoły</h3>
 <%= simple_form_for @school,
                     url: url_for(action: 'edit_profile', controller: 'school'),

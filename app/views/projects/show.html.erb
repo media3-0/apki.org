@@ -1,3 +1,5 @@
+<% content_for :title, " - Projekt: " + @project.title %>
+
 <h2 class="text-center mrg20t" style="margin-bottom:5px"><img src="<% if @project.icon.empty? %><%= asset_path('a_holder.png') %><% else %><%= @project.icon %><% end %>" style="width:125px;height:125px"> <%= @project.title %></h2>
 
 <% if current_user == @project.user %>

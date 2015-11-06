@@ -1,3 +1,5 @@
+<% content_for :title, " - Artykuły" %>
+
 <h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Wszystkie artykuły</h2>
 
 <div class="table-responsive">
@@ -5,7 +7,7 @@
         <tbody class="no-border-y">
         <%- @articles.each do |single| -%>
         <tr class="items">
-            <td><img src="<%= single.user.image -%>" style="width:24px;height:24px;vertical-align:middle"> <%= link_to single.title, view_article_path(single) -%></td>
+            <td><img src="<%= single.user.image -%>" style="width:24px;height:24px;vertical-align:middle" alt="<%- if single.user.name.present? -%><%= single.user.name -%><%- else -%><%= single.user.nickname -%><%- end -%>"> <%= link_to single.title, view_article_path(single) -%></td>
         </tr>
         <%- end -%>
         </tbody>

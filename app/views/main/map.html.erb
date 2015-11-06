@@ -1,0 +1,45 @@
+<% content_for :title, " - Mapa strony" %>
+
+<h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Mapa strony</h2>
+
+
+<ul>
+    <li><a href="/">Strona główna</a></li>
+    <li><a href="/news">Aktualności</a>
+        <ul>
+            <%- @news.each do |single| -%>
+            <li><%= link_to single.title, view_news_path(single) -%></li>
+            <%- end -%>
+        </ul>
+    </li>
+    <li>Kursy
+        <ul>
+            <%- @courses.each do |single| -%>
+            <li><a href="/course_front/index?id=<%= single.id -%>"><%= single.data['title'] -%></a></li>
+            <%- end -%>
+        </ul>
+    </li>
+    <li><a href="/projects">Projekty</a>
+        <ul>
+            <%- @projects.each do |single| -%>
+            <li><%= link_to single.title, project_path(single) -%></li>
+            <%- end -%>
+        </ul>
+    </li>
+    <li><a href="/static/contest">Konkurs</a></li>
+    <li><a href="/articles/all">Nauka</a>
+        <ul>
+            <%- @articles.each do |single| -%>
+            <li><%= link_to single.title, view_article_path(single) -%></li>
+            <%- end -%>
+        </ul>
+    </li>
+    <li><a href="http://forum.apki.org">Forum</a></li>
+    <li><a href="/about_site">O serwisie</a></li>
+    <li><a href="/about">O projekcie</a></li>
+    <li><a href="/people">Zespół</a></li>
+    <li><a href="/idea">Idea</a></li>
+    <li><a href="/partners">Partnerzy</a></li>
+    <li><a href="/contact">Kontakt</a></li>
+    <li><a href="/mentors">Mentorzy</a></li>
+</ul>
