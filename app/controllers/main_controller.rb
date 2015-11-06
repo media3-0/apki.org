@@ -37,4 +37,12 @@ class MainController < ApplicationController
 
     render json: JSON.parse(response.body.to_s)
   end
+
+  def map
+    @news = News.all
+    @articles = Article.all
+    @categories = ArticleCategory.all
+    @courses = Course::CourseDatum.get_list(current_user)
+    @projects = Project.all
+  end
 end

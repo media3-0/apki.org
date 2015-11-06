@@ -39,7 +39,7 @@ GEM
     addressable (2.3.8)
     angularjs-rails (1.4.7)
     arel (6.0.3)
-    autoprefixer-rails (6.0.3)
+    autoprefixer-rails (6.1.0.1)
       execjs
       json
     better_errors (2.1.1)
