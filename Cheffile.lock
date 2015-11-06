@@ -1,57 +1,52 @@
 SITE
   remote: http://community.opscode.com/api/v1
   specs:
-    apt (2.7.0)
-    build-essential (2.2.3)
-    chef_handler (1.1.9)
-    dmg (2.2.2)
-    git (4.2.2)
-      build-essential (>= 0.0.0)
-      dmg (>= 0.0.0)
+    7-zip (1.0.2)
+      windows (>= 1.2.2)
+    apt (2.9.2)
+    ark (0.9.0)
+      7-zip (>= 0.0.0)
       windows (>= 0.0.0)
-      yum-epel (>= 0.0.0)
-    packagecloud (0.0.18)
-    python (1.4.6)
-      build-essential (>= 0.0.0)
-      yum-epel (>= 0.0.0)
-    runit (1.6.0)
-      packagecloud (>= 0.0.0)
-    windows (1.37.0)
-      chef_handler (>= 0.0.0)
-    yum (3.6.1)
-    yum-epel (0.6.0)
-      yum (~> 3.0)
-
-GIT
-  remote: https://github.com/ctrabold/chef-redis
-  ref: master
-  sha: e3a89f34d0f5b81867ae9e07a9404ac89e1ff61c
-  specs:
-    redis (0.0.4)
-
-GIT
-  remote: https://github.com/edelight/chef-mongodb
-  ref: 0.16.0
-  sha: ff69248e5b1453f6d3958d88b11bf9b0744525c8
-  specs:
-    mongodb (0.16.0)
+    build-essential (2.2.4)
+    chef_handler (1.2.0)
+    homebrew (1.13.0)
+      build-essential (>= 2.1.2)
+    mongodb (0.16.2)
       apt (>= 1.8.2)
       python (>= 0.0.0)
       runit (>= 1.5.0)
       yum (>= 3.0)
+    nodejs (2.4.2)
+      apt (>= 0.0.0)
+      ark (>= 0.0.0)
+      build-essential (>= 0.0.0)
+      homebrew (>= 0.0.0)
+      yum-epel (>= 0.0.0)
+    packagecloud (0.1.0)
+    python (1.4.6)
+      build-essential (>= 0.0.0)
+      yum-epel (>= 0.0.0)
+    ruby_build (0.8.0)
+    runit (1.7.4)
+      packagecloud (>= 0.0.0)
+    windows (1.38.3)
+      chef_handler (>= 0.0.0)
+    yum (3.8.2)
+    yum-epel (0.6.4)
+      yum (~> 3.2)
 
 GIT
-  remote: https://github.com/fnichol/chef-rvm
-  ref: v0.9.0
-  sha: 4a408e5d6c5a52c37388a799c516430263339849
+  remote: https://github.com/aminin/chef-rbenv
+  ref: master
+  sha: 9c8688dbffb79269385581b6aa518c5ba456f154
   specs:
-    rvm (0.9.0)
+    rbenv (0.7.3)
 
 DEPENDENCIES
   apt (>= 0)
   build-essential (>= 0)
-  git (>= 0)
   mongodb (>= 0)
-  redis (>= 0)
-  rvm (>= 0)
+  nodejs (>= 0)
+  rbenv (>= 0)
+  ruby_build (>= 0)
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <title>Apki.org</title>
+  <title>Apki.org<%= yield(:title) %></title>
   <meta name="description" content="Pierwsza w Polsce interaktywna platforma do nauki programowania." />
   <meta name="robots" content="index, follow, all" />
   <meta name="googlebot" content="index, follow, archive, snippet, all" />
@@ -33,6 +33,10 @@
               message: 'Ta strona korzysta z ciasteczek i innych technologii zbierające dane statystyczne. Przeczytaj naszą <a href="/static/privacy" target="_blank">politykę prywatności</a>.',
               explicitConsent:false,
               duration:0
+          });
+
+          $(function(){
+              $('.auto-tooltip').tooltip();
           });
       });
   </script>

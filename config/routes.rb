@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get 'news/:id', to: 'main#view_news', as: 'view_news'
   get 'main/forms_test'
   get 'main/free_editor'
+  get 'main/map'
   get 'course_front/index'
   get 'course_front/list'
 

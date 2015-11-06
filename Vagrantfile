@@ -1,68 +1,50 @@
-# encoding: utf-8
-# This file originally created at http://rove.io/1bfa94ed14bcf5ff2f329e0a77584495
-
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
+VAGRANTFILE_API_VERSION = '2'
 
-  config.vm.box = "opscode-ubuntu-12.04_chef-11.4.0"
-  config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_chef-11.4.0.box"
-  config.ssh.forward_agent = true
+# https://gorails.com/guides/using-vagrant-for-rails-development
+# https://supermarket.chef.io/cookbooks/mongodb#readme
+# http://sourabhbajaj.com/mac-setup/Vagrant/README.html
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Use Ubuntu 14.04 Trusty Tahr 64-bit as our operating system
+  config.vm.box = 'ubuntu/trusty64'
+
+  # Configurate the virtual machine to use 2GB of RAM
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ['modifyvm', :id, '--memory', '2048']
+    #vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    #vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+  end
 
   config.vm.network :forwarded_port, guest: 3000, host: 3000
   config.vm.network :forwarded_port, guest: 27017, host: 27018
-  config.vm.network :private_network, ip: '192.168.50.50'
-
-  # Dla niektórych przypadków wydajnościowo może pomóc wyłączenie DnsLookup (WEBrick only)
-  # http://stackoverflow.com/questions/19278596/running-rails-very-slow-inside-virtual-box-ubuntu-12-04/19284483#19284483
-
-  if !Gem.win_platform? # dla unixów ustawiamy system nfs zamiast shared folder. Znaczne zwiększenie wydajności
-    config.vm.synced_folder '.', '/vagrant', nfs: true 
-  end
-
-  config.vm.provider "virtualbox" do |v|
-    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-  end
+  #config.vm.network :private_network, ip: '192.168.50.50'
 
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = ["cookbooks"]
-    chef.add_recipe :apt
-    chef.add_recipe 'rvm::vagrant'
-    chef.add_recipe 'rvm::system'
-    chef.add_recipe 'git'
+    chef.cookbooks_path = %w(cookbooks)
+
+    chef.add_recipe 'apt'
+    chef.add_recipe 'nodejs'
+    chef.add_recipe 'ruby_build'
+    chef.add_recipe 'rbenv::user'
+    chef.add_recipe 'rbenv::vagrant'
     chef.add_recipe 'mongodb::default'
-    chef.add_recipe 'redis'
+
     chef.json = {
-      :rbenv   => {
-        :user_installs => [
-          {
-            :user   => "vagrant",
-            :rubies => [
-              "1.9.3-p484",
-              "2.0.0-p353"
-            ],
-            :global => "1.9.3-p484"
-          }
-        ]
-      },
-      :git     => {
-        :prefix => "/usr/local"
-      },
-      :mongodb => {
-        :dbpath  => "/var/lib/mongodb",
-        :logpath => "/var/log/mongodb",
-        :port    => "27017"
-      },
-      :redis   => {
-        :bind        => "127.0.0.1",
-        :port        => "6379",
-        :config_path => "/etc/redis/redis.conf",
-        :daemonize   => "yes",
-        :timeout     => "300",
-        :loglevel    => "notice"
-      }
+        rbenv: {
+            user_installs: [{
+                                user: 'vagrant',
+                                rubies: ['2.2.1'],
+                                global: '2.2.1',
+                                gems: {
+                                    '2.2.1' => [
+                                        { name: 'bundler'}
+                                    ]
+                                }
+                            }]
+        }
     }
   end
 end

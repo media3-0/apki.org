@@ -1,3 +1,5 @@
+<% content_for :title, " - Profil szkoły: " + @school.name %>
+
 <h3>Profil szkoły: <%= @school.name -%></h3>
 
 <%= raw parse_markdown(@school.description) if @school.description-%>

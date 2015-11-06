@@ -56,7 +56,7 @@ gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem 'mini_magick'
 
 # paginator
-gem 'kaminari'
+gem 'kaminari'#, :github => 'amatsuda/kaminari', ref: 'HEAD'
 
 # elastyczne formularze
 gem 'simple_form'
