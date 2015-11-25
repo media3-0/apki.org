@@ -872,6 +872,11 @@ code{
 
   display: block;
   overflow-x: auto;
+
+  .inline{
+    display: inline-block;
+    width: auto;
+  }
 }
 
 .partners img{
@@ -901,6 +906,7 @@ code{
   }
 }
 
+//WCAG #outline #border #focus
 *:focus{
   border:1px dotted $color-main !important;
 }

@@ -1,6 +1,30 @@
 require 'i18n'
 I18n.default_locale = :pl
 
+
+# FIXME : remove monkey patch
+require 'rails_admin/config/fields/types/string'
+require 'rails_admin/config/fields/types/bson_object_id'
+require 'mongoid'
+
+module RailsAdmin
+  module Config
+    module Fields
+      module Types
+        class BsonObjectId < RailsAdmin::Config::Fields::Types::String
+          OBJECT_ID = begin
+            if defined?(Moped::BSON)
+              Moped::BSON::ObjectId
+            elsif defined?(BSON::ObjectId)
+              BSON::ObjectId
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
 RailsAdmin.config do |config|
 
   ### Popular gems integration
