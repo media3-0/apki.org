@@ -873,9 +873,11 @@ code{
   display: block;
   overflow-x: auto;
 
-  .inline{
+  &.inline{
     display: inline-block;
     width: auto;
+    margin: 2px !important;
+    vertical-align: middle;
   }
 }
 
