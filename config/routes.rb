@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'projects/mine'
   post 'main/compile'
   post 'projects/repo/:id', to: 'projects#repo'
+  get 'projects/contest_projects'
+  post 'projects/vote/:id', to: 'projects#vote', as: 'projects_vote'
   resources :projects
   namespace :course do
     resources :course_data
