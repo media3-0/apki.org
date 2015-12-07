@@ -1,12 +1,30 @@
 class ProjectsController < ApplicationController
-  before_action :is_logged_in, only: [:mine, :new, :edit, :update, :destroy]
-  before_action :set_project, only: [:show, :edit, :update, :destroy, :repo]
+  before_action :is_logged_in, only: [:mine, :new, :edit, :update, :destroy, :vote]
+  before_action :set_project, only: [:show, :edit, :update, :destroy, :repo, :vote]
 
   #skip_before_action :verify_authenticity_token, only: []
 
   # GET /projects
   def index
     @projects = Project.all
+  end
+
+  def contest_projects
+    @projects = Project.where(contest: true).all
+    render :index
+  end
+
+  def vote
+    raise Exceptions::AccessDenied('Projekt nie jest konkursowy') unless @project.contest
+    raise Exceptions::AccessDenied('Już oddałeś głos na ten projekt') if @project.votes.include? current_user.id.to_s
+    raise Exceptions::AccessDenied('Już głosowałeś') if current_user.voted
+
+    @project.votes << current_user.id.to_s
+    @project.save!
+    current_user.voted = true
+    current_user.save!
+
+    redirect_to project_path(@project), notice: 'Pomyślnie oddano głos'
   end
 
   # GET /projects/1

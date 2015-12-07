@@ -43,3 +43,4 @@ bower.json
 /config/newrelic.yml
 
 /public/ace
+*.stackdump

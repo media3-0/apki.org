@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'projects/mine'
   post 'main/compile'
   post 'projects/repo/:id', to: 'projects#repo'
+  get 'projects/contest_projects'
+  post 'projects/vote/:id', to: 'projects#vote', as: 'projects_vote'
   resources :projects
   namespace :course do
     resources :course_data
@@ -41,6 +43,7 @@ Rails.application.routes.draw do
   get 'news/:id', to: 'main#view_news', as: 'view_news'
   get 'main/forms_test'
   get 'main/free_editor'
+  get 'main/map'
   get 'course_front/index'
   get 'course_front/list'
 

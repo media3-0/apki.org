@@ -1,3 +1,5 @@
+<% content_for :title, " - Aktualności" %>
+
 <h2 class="text-center mrg20t" style="margin-bottom:50px;margin-bottom:60px">Aktualności</h2>
 
 
@@ -10,7 +12,7 @@
         <div class="cbp_tmicon"></div>
         <div class="cbp_tmlabel">
             <h2><%= link_to single.title, view_news_path(single) -%></h2>
-            <img class="postImg" style="background-image: url('<%= single.image.url -%>'); background-position: center center; height: 200px; width:100%; margin-left:-30px;">
+            <img class="postImg" style="background-image: url('<%= single.image.url -%>'); background-position: center center; height: 200px; width:100%; margin-left:-30px;" alt="">
 
             <div class="mrg25a mrg0l">
             <img class="mrg10r" style="width:40px;height:40px; border: 2px solid #955AA4; border-radius: 20px" src="<%= single.user.image %>"> Autor: <%- if single.user.name.present? -%><%= single.user.name -%><%- else -%><%= single.user.nickname -%><%- end -%>
@@ -26,7 +28,7 @@
     </li>
     <%- end -%>
 </ul>
-<%= paginate @news -%>
+<%# paginate @news FIXME : paginacja -%>
 
         <script type="text/javascript">
             function resizePostImgs(){

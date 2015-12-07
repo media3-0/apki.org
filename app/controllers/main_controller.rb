@@ -5,7 +5,7 @@ class MainController < ApplicationController
   end
 
   def news
-    @news = News.order_by(created_at: 'desc').page params[:page]
+    @news = News.order_by(created_at: 'desc')#.page params[:page] # FIXME : paginacja
   end
 
   def view_news
@@ -36,5 +36,13 @@ class MainController < ApplicationController
     end
 
     render json: JSON.parse(response.body.to_s)
+  end
+
+  def map
+    @news = News.all
+    @articles = Article.all
+    @categories = ArticleCategory.all
+    @courses = Course::CourseDatum.get_list(current_user)
+    @projects = Project.all
   end
 end

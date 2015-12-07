@@ -2,10 +2,15 @@
     <div class="fullscreen background parallax" style="background-image:url('http://images5.alphacoders.com/430/430918.jpg');" data-img-width="1600" data-img-height="1200" data-diff="100">
         <div class="content-a">
             <div class="content-b player" data-property="{videoURL:'http://www.youtube.com/watch?v=6ZORzPbXqBo',containment:'.content-b',autoPlay:true, mute:true, startAt:0, opacity:1, showControls:false}">
-                <p>&nbsp;</p><br><p>&nbsp;</p>
-                <%= image_tag 'logo_main.png', alt: 'Apki.org' %><br>
-                <br><p>&nbsp;</p><br><p>&nbsp;</p><br><p>&nbsp;</p><br>
-                <h2>Pierwsza w Polsce całkowicie bezpłatna interaktywna<br><br>platforma do nauki programowania.</h2><br>
+                <span class="hidden-xs hidden-sm"><p>&nbsp;</p><br><p>&nbsp;</p>
+                    <%= image_tag 'logo_main.png', alt: 'Apki.org' %><br>
+                    <br><p>&nbsp;</p><br><p>&nbsp;</p><br><p>&nbsp;</p><br>
+                    <h2>Pierwsza w Polsce całkowicie bezpłatna interaktywna<br><br>platforma do nauki programowania.</h2><br>
+                </span>
+                <span class="hidden-md hidden-lg"><br>
+                    <%= image_tag 'logo_main.png', alt: 'Apki.org', style: 'max-width:60%;height:auto' %><br>
+                    <h4>Pierwsza w Polsce całkowicie bezpłatna interaktywna platforma do nauki programowania.</h4>
+                </span>
             </div>
         </div>
         <div class="content-c" style="position: relative; bottom:0; width:100%; margin-top:-105px;">
@@ -68,7 +73,7 @@
 
 
             /* set parallax background-position */
-            function parallaxPosition(e){
+            function parallaxPosition(){
                 var heightWindow = $(window).height();
                 var topWindow = $(window).scrollTop();
                 var bottomWindow = topWindow + heightWindow;
@@ -126,9 +131,9 @@
                     //$(window).focus(parallaxPosition);
                     $(window).scroll(parallaxPosition);
                     parallaxPosition();
-                }
 
-                <% unless (params[:movie]).present? %>$(".player").YTPlayer();<% end %>
+                    <% unless (params[:movie]).present? %>$(".player").YTPlayer();<% end %>
+                }
             });
 
             //SMOTH SCROLL:
@@ -180,7 +185,7 @@
                         <div class="level">
                         </div>
                         <%= image_tag 'a_holder.png', alt: 'Apki.org', class: 'course-icon' %><br>
-                        <h3>Już wkróce</h3><p>Niedługo pojawią się kolejne kursy...</p>
+                        <h3>Już wkrótce</h3><p>Niedługo pojawią się kolejne kursy...</p>
                     </div>
                 </div>
             </div>

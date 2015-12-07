@@ -1,62 +1,87 @@
-<h2 class="text-center mrg20t" style="margin-bottom:5px"><img src="<% if @project.icon.empty? %><%= asset_path('a_holder.png') %><% else %><%= @project.icon %><% end %>" style="width:125px;height:125px"> <%= @project.title %></h2>
+<% content_for :title, " - Projekt: " + @project.title %>
+
+<h2 class="text-center mrg20t" style="margin-bottom:5px"><img src="
+  <% if @project.icon.empty? %><%= asset_path('a_holder.png') %>
+  <% else %><%= @project.icon %>
+  <% end %>" style="width:125px;height:125px"> <%= @project.title %></h2>
+
 
 <% if current_user == @project.user %>
-<%= link_to 'Edytuj', edit_project_path(@project), class: 'btn btn-primary projectEditBtn' %>
+  <%= link_to 'Edytuj', edit_project_path(@project), class: 'btn btn-primary projectEditBtn' %>
 <% end %>
 <%= link_to 'Powrót do listy', projects_path, class: 'btn btn-secondary projectBackBtn' %>
 
 <div id="projectDetails" ng-app="projectDetailsApp" ng-controller="myCtrl" ng-init="initInfo('<%= @project.id %>')">
-    <div id="courseLoading" class="text-center col-md-10 col-md-offset-1" style="margin-top:60px" ng-hide="inited">
-        <i class="fa fa-cog fa-spin color-primary" style="font-size:48px"></i>
+  <div id="courseLoading" class="text-center col-md-10 col-md-offset-1" style="margin-top:60px" ng-hide="inited">
+    <i class="fa fa-cog fa-spin color-primary" style="font-size:48px"></i>
+  </div>
+  <div ng-hide="!inited">
+    <div class="text-center mrg20b" style="border-top:2px solid #e7e7e7">
+      <a ng-repeat="link in links" href="{{ link.url }}" ng-click="urlBtnRun(link.url)" target="_blank" class="btn btn-primary mrg10a mrg5t projectUrlBtn">{{ link.html|to_trusted }}</a>
     </div>
-    <div ng-hide="!inited">
-        <div class="text-center mrg20b" style="border-top:2px solid #e7e7e7">
-            <a ng-repeat="link in links" href="{{ link.url }}" ng-click="urlBtnRun(link.url)" target="_blank" class="btn btn-primary mrg10a mrg5t projectUrlBtn">{{ link.html|to_trusted }}</a>
-        </div>
-        <div class="clearfix"></div>
-        <div class="col-md-6">
-            <div class="projInfo">
-                <div class="col-md-4 text-right desc">Autor:</div><div class="col-md-8 pad20l descVal">{{ project.info.owner.login }}</div>
-                <div class="clearfix"></div>
-                <div class="col-md-4 text-right desc">Utworzono:</div><div class="col-md-8 pad20l descVal">{{ project.info.created_at }}</div>
-                <div class="clearfix"></div>
-                <div class="col-md-4 text-right desc">Główny język:</div><div class="col-md-8 pad20l descVal">{{ project.info.language }}</div>
-                <div class="clearfix"></div>
-                <div class="col-md-4 text-right desc">Ulubione:</div><div class="col-md-8 pad20l descVal">{{ project.info.stargazers_count }}</div>
-                <div class="clearfix"></div>
-                <div class="col-md-4 text-right desc">Obserwują:</div><div class="col-md-8 pad20l descVal">{{ project.info.watchers }}</div>
-                <div class="clearfix"></div>
-                <div class="col-md-4 text-right desc">Commitów:</div><div class="col-md-8 pad20l descVal">{{ project.commits.length }}</div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="projInfo mrg25t" ng-bind-html="project.readme|to_trusted" ng-if="project.readme != ''"></div>
-            <h3 ng-if="project.readme == ''">Brak informacji o projekcie.<br><br>Jeżeli jesteś jego autorem - utwórz plik README.md lub skorzystaj z kreatora GitHub.</h3>
-        </div>
-    </div>
+    <%- if @project.contest && current_user && !current_user.voted && !@project.votes.include?(current_user.id.to_s) -%>
+      <div class="clearfix"></div>
+      <div class="col-md-12 text-center">
+        <%= simple_form_for :vote, url: projects_vote_path(@project), method: 'post' do |f| -%>
+          <%= f.error_notification %>
+          <%= f.button :submit, value: 'Oddaj swój głos', class: 'btn btn-primary btn-lg', style: 'padding: 15px; padding-left: 30px; padding-right: 30px;' %>
+        <%- end -%>
+      </div>
+    <%- end -%>
+    <div class="clearfix"></div>
     <div class="col-md-6">
-        <h2>Uczestnicy</h2>
-        <div class="auhorsGrid text-left mrg20a mrg25b">
-            <img ng-repeat="author in project.contributors" title="{{ author.login }}" alt="{{ author.login }}" data-url="{{ author.html_url }}" src="{{ author.avatar_url }}" onclick="location.assign($(this).data('url'));" />
-        </div>
-        <h2>Ostatnie commity</h2>
-        <div class="mrg20a">
-            <ul class="cbp_tmtimeline">
-                <li ng-repeat="commit in project.commits | limitTo:5">
-                    <div class="cbp_tmicon"><img style="width:40px;height:40px" class="circular" src="{{ commit.author.avatar_url }}"></div>
-                    <div class="cbp_tmlabel">
-                        <h2>{{ commit.author.login }}<br><small>@ {{ commit.commit.author.date }}</small></h2>
-                        <p style="white-space: pre-wrap">{{ commit.commit.message }}</p>
-                    </div>
-                </li>
-                <li ng-if="project.commits.length>5">
-                    <div class="cbp_tmicon"></div>
-                    <div class="cbp_tmlabel">
-                        <div class="text-center">
-                        <a href="{{ project.info.html_url + '/commits/master' }}" target="_blank" class="btn btn-lg btn-default">Wyświetl wszystkie commity</a>
-                       </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
+      <div class="projInfo">
+        <div class="col-md-4 text-right desc">Autor:</div>
+        <div class="col-md-8 pad20l descVal">{{ project.info.owner.login }}</div>
+        <div class="clearfix"></div>
+        <div class="col-md-4 text-right desc">Utworzono:</div>
+        <div class="col-md-8 pad20l descVal">{{ project.info.created_at }}</div>
+        <div class="clearfix"></div>
+        <div class="col-md-4 text-right desc">Główny język:</div>
+        <div class="col-md-8 pad20l descVal">{{ project.info.language }}</div>
+        <div class="clearfix"></div>
+        <div class="col-md-4 text-right desc">Ulubione:</div>
+        <div class="col-md-8 pad20l descVal">{{ project.info.stargazers_count }}</div>
+        <div class="clearfix"></div>
+        <div class="col-md-4 text-right desc">Obserwują:</div>
+        <div class="col-md-8 pad20l descVal">{{ project.info.watchers }}</div>
+        <div class="clearfix"></div>
+        <div class="col-md-4 text-right desc">Commitów:</div>
+        <div class="col-md-8 pad20l descVal">{{ project.commits.length }}</div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="projInfo mrg25t" ng-bind-html="project.readme|to_trusted" ng-if="project.readme != ''"></div>
+      <h3 ng-if="project.readme == ''">Brak informacji o projekcie.<br><br>Jeżeli jesteś jego autorem - utwórz plik README.md lub skorzystaj z kreatora GitHub.</h3>
     </div>
+  </div>
+  <div class="col-md-6">
+    <h2>Uczestnicy</h2>
+
+    <div class="auhorsGrid text-left mrg20a mrg25b">
+      <img ng-repeat="author in project.contributors" title="{{ author.login }}" alt="{{ author.login }}" data-url="{{ author.html_url }}" src="{{ author.avatar_url }}" onclick="location.assign($(this).data('url'));"/>
+    </div>
+    <h2>Ostatnie commity</h2>
+
+    <div class="mrg20a">
+      <ul class="cbp_tmtimeline">
+        <li ng-repeat="commit in project.commits | limitTo:5">
+          <div class="cbp_tmicon"><img style="width:40px;height:40px" class="circular" src="{{ commit.author.avatar_url }}"></div>
+          <div class="cbp_tmlabel">
+            <h2>{{ commit.author.login }}<br>
+              <small>@ {{ commit.commit.author.date }}</small>
+            </h2>
+            <p style="white-space: pre-wrap">{{ commit.commit.message }}</p>
+          </div>
+        </li>
+        <li ng-if="project.commits.length>5">
+          <div class="cbp_tmicon"></div>
+          <div class="cbp_tmlabel">
+            <div class="text-center">
+              <a href="{{ project.info.html_url + '/commits/master' }}" target="_blank" class="btn btn-lg btn-default">Wyświetl wszystkie commity</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
