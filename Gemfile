@@ -137,7 +137,7 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
 
-  gem 'did_you_mean'
+  #gem 'did_you_mean'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
