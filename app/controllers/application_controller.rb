@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
-  private
+  protected
 
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
@@ -29,6 +29,8 @@ class ApplicationController < ActionController::Base
     end
     @current_user
   end
+
+  private
 
   def is_logged_in
     redirection 'Musisz być zalogowany aby mieć tu dostęp' unless current_user

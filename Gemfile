@@ -74,7 +74,7 @@ gem 'octokit', '~> 4'
 gem 'faraday-http-cache'
 
 # komunikacja z api forum
-gem 'discourse_api'
+# gem 'discourse_api'
 
 # silnik do tworzenia prostych skryptów (do sprawdzania zadań)
 gem 'dentaku', '~> 2'
@@ -151,6 +151,6 @@ gem 'newrelic_rpm', group: [:production]
 
 # deploy
 group :development do
-  gem 'mina', require: false
+  gem 'mina', '~> 0.3.8', require: false
   gem 'mina-multistage', require: false
 end

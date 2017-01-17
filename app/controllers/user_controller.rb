@@ -3,7 +3,7 @@ class UserController < ApplicationController
 
   def profile
     @user = User.find(params[:id])
-    @forum = Discourse.instance.get_user @user.nickname
+    #@forum = Discourse.instance.get_user @user.nickname
   end
 
   def edit_profile
