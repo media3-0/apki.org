@@ -74,7 +74,7 @@ gem 'octokit', '~> 4'
 gem 'faraday-http-cache'
 
 # komunikacja z api forum
-gem 'discourse_api'
+# gem 'discourse_api'
 
 # silnik do tworzenia prostych skryptów (do sprawdzania zadań)
 gem 'dentaku', '~> 2'
@@ -137,7 +137,7 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
 
-  gem 'did_you_mean'
+  #gem 'did_you_mean'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
@@ -151,6 +151,6 @@ gem 'newrelic_rpm', group: [:production]
 
 # deploy
 group :development do
-  gem 'mina', require: false
+  gem 'mina', '~> 0.3.8', require: false
   gem 'mina-multistage', require: false
 end
