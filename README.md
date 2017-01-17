@@ -1,6 +1,6 @@
 # apki.org 
 
-[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Dependency Status](https://gemnasium.com/media3-0/apki.org.svg)](https://gemnasium.com/media3-0/apki.org) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org) [![Test Coverage](https://codeclimate.com/github/media3-0/apki.org/badges/coverage.svg)](https://codeclimate.com/github/media3-0/apki.org/coverage) [![Stories in Ready](https://badge.waffle.io/media3-0/apki.org.svg?label=ready&title=Ready)](http://waffle.io/media3-0/apki.org) [![GitHub version](https://badge.fury.io/gh/media3-0%2Fapki.org.png)](https://badge.fury.io/gh/media3-0%2Fapki.org)
+[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Dependency Status](https://gemnasium.com/media3-0/apki.org.svg)](https://gemnasium.com/media3-0/apki.org) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org) [![GitHub version](https://badge.fury.io/gh/media3-0%2Fapki.org.svg)](https://badge.fury.io/gh/media3-0%2Fapki.org)
 
 Informacje o rozwoju projektu można znaleźć na naszym [devblogu](http://devblog.apki.org)
 
@@ -39,4 +39,4 @@ Aby uruchomić wszystkie testy po zainstalowaniu zależności wystarczy wykonać
 
 Status testów dla MRI 2.1 oraz 2.2 jest na bieżąco monitorowany na Travis CI. 
 
-[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Test Coverage](https://codeclimate.com/github/media3-0/apki.org/badges/coverage.svg)](https://codeclimate.com/github/media3-0/apki.org/coverage) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org)
+[![Build Status](https://travis-ci.org/media3-0/apki.org.svg?branch=master)](https://travis-ci.org/media3-0/apki.org) [![Code Climate](https://codeclimate.com/github/media3-0/apki.org/badges/gpa.svg)](https://codeclimate.com/github/media3-0/apki.org)
